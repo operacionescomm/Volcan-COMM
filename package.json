@@ -1,0 +1,20 @@
+{
+  "name": "volcan-comm-visual-engine",
+  "version": "0.1.0",
+  "description": "Motor visual multi-mina para reportes VOLCAN - COMM",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check config/operations.js && node --check config/slides.js && node --check services/browser.js && node --check services/renderer.js && node --check services/normalizers.js",
+    "install:browser": "node install-browser.js",
+    "postinstall": "node install-browser.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "puppeteer": "23.11.1"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}

@@ -3,7 +3,7 @@ services:
     name: volcan-comm-visual-engine
     runtime: node
     plan: free
-    buildCommand: npm ci
+    buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /health
     envVars:

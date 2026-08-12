@@ -8,11 +8,23 @@ La primera versión valida la arquitectura multi-mina con el dashboard **Inciden
 
 Scopes soportados:
 
-- `VOLCAN`: consolidado de Andaychagua, San Cristóbal - Carahuacra, Cerro Pasco y Chungar.
+- `VOLCAN`
 - `ANDAYCHAGUA`
 - `SAN_CRISTOBAL_CARAHUACRA`
 - `CERRO_PASCO`
 - `CHUNGAR`
+- `ROMINA`
+- `TICLIO`
+- `SAN_CRISTOBAL`
+
+## Importante: el consolidado depende del reporte
+
+VOLCAN no usa exactamente las mismas unidades en todos los dashboards actuales. Por eso el motor no fija una sola composición global.
+
+- `INC_REQ / VOLCAN`: Andaychagua + San Cristóbal - Carahuacra + Cerro Pasco + Chungar + Romina + Ticlio.
+- `TOP10 / VOLCAN`: Andaychagua + San Cristóbal - Carahuacra + Cerro Pasco + Chungar.
+
+Esta diferencia queda configurada en `config/operations.js` mediante `REPORT_SCOPE_MEMBERS`.
 
 ## Arquitectura
 
@@ -29,17 +41,25 @@ Google Sheets → Apps Script → Render → Express/EJS → Puppeteer → PNG 1
 
 El `POST /render/slide12` acepta `scope`, `periodo`, KPIs y filas por unidad minera. Si `RENDER_API_KEY` está definida, requiere el header `x-api-key`.
 
-## Datos de muestra
+## Datos de muestra del slide 12
 
-Los datos de prueba de mayo de 2026 se tomaron del dashboard actual de VOLCAN en Google Sheets:
+Los datos de prueba de mayo de 2026 se tomaron del dashboard actual `Incidentes vs Requerimientos` del Google Sheet de VOLCAN:
 
 | Scope | Incidentes | Requerimientos | Total |
 |---|---:|---:|---:|
-| VOLCAN | 185 | 566 | 751 |
+| VOLCAN | 210 | 837 | 1047 |
 | Andaychagua | 71 | 169 | 240 |
 | San Cristóbal - Carahuacra | 59 | 119 | 178 |
 | Cerro Pasco | 1 | 67 | 68 |
 | Chungar | 54 | 211 | 265 |
+| Romina | 3 | 94 | 97 |
+| Ticlio | 22 | 177 | 199 |
+
+`San Cristóbal` existe como sección independiente en el dashboard, pero no forma parte del consolidado VOLCAN del slide 12 actual.
+
+## Render
+
+La primera versión usa `npm install` porque el repositorio fue inicializado desde cero y todavía no contiene `package-lock.json`.
 
 ## Siguiente etapa
 

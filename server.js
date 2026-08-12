@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { SCOPES, getScope } = require('./config/operations');
+const { SCOPES, REPORT_SCOPE_MEMBERS, getScope } = require('./config/operations');
 const { SLIDES, getSlideConfig } = require('./config/slides');
 const { normalizeIncReq } = require('./services/normalizers');
 const { renderTemplateToHtml, renderTemplateToPng } = require('./services/renderer');
@@ -19,11 +19,12 @@ app.get('/', (req, res) => {
   res.json({
     ok: true,
     service: APP_NAME,
-    version: '0.1.0',
+    version: '0.1.1',
     activeSlides: Object.entries(SLIDES)
       .filter(([, config]) => config.active)
       .map(([number, config]) => ({ number: Number(number), ...config })),
     scopes: Object.keys(SCOPES),
+    reportScopeMembers: REPORT_SCOPE_MEMBERS,
     tests: {
       html: '/test-slide12?scope=VOLCAN',
       png: '/test-slide12-png?scope=VOLCAN'
@@ -35,7 +36,7 @@ app.get('/health', (req, res) => {
   res.json({
     ok: true,
     service: APP_NAME,
-    version: '0.1.0',
+    version: '0.1.1',
     timestamp: new Date().toISOString()
   });
 });
@@ -52,7 +53,8 @@ app.get('/browser-status', (req, res) => {
 app.get('/scopes', (req, res) => {
   res.json({
     ok: true,
-    scopes: SCOPES
+    scopes: SCOPES,
+    reportScopeMembers: REPORT_SCOPE_MEMBERS
   });
 });
 
@@ -64,7 +66,7 @@ function requireApiKey(req, res, next) {
 }
 
 function buildSlide12Data(body = {}) {
-  const scope = getScope(body.scope || 'VOLCAN');
+  const scope = getScope(body.scope || 'VOLCAN', 'INC_REQ');
   return normalizeIncReq(body, scope);
 }
 
@@ -109,17 +111,20 @@ app.post('/render/slide12', requireApiKey, async (req, res) => {
 });
 
 function getSampleSlide12(scopeKey) {
-  const scope = getScope(scopeKey);
+  const scope = getScope(scopeKey, 'INC_REQ');
 
   const rows = [
     { unidad: 'Andaychagua', incidentes: 71, requerimientos: 169 },
     { unidad: 'San Cristóbal - Carahuacra', incidentes: 59, requerimientos: 119 },
     { unidad: 'Cerro Pasco', incidentes: 1, requerimientos: 67 },
-    { unidad: 'Chungar', incidentes: 54, requerimientos: 211 }
+    { unidad: 'Chungar', incidentes: 54, requerimientos: 211 },
+    { unidad: 'Romina', incidentes: 3, requerimientos: 94 },
+    { unidad: 'Ticlio', incidentes: 22, requerimientos: 177 },
+    { unidad: 'San Cristóbal', incidentes: 47, requerimientos: 85 }
   ];
 
   const selectedRows = scope.tipo === 'consolidado'
-    ? rows
+    ? rows.filter(row => scope.minas.includes(row.unidad))
     : rows.filter(row => scope.minas.includes(row.unidad));
 
   return normalizeIncReq({

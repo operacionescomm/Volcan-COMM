@@ -1,0 +1,80 @@
+:root {
+  --comm-navy: #0b2f5d;
+  --comm-blue: #1d70b7;
+  --comm-sky: #54a8d8;
+  --comm-orange: #ed862f;
+  --comm-bg: #f6f8fb;
+  --comm-text: #10233f;
+  --comm-muted: #6f7f92;
+  --comm-line: #e5ebf2;
+}
+
+.comm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 999px;
+  background: #edf5fb;
+  color: var(--comm-blue);
+  font-size: 11px;
+  font-weight: 900;
+  padding: 7px 11px;
+  text-transform: uppercase;
+  letter-spacing: .35px;
+}
+
+.comm-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--comm-sky);
+}
+
+.comm-logo-mark {
+  display: inline-block;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+}
+
+.comm-logo-mark small {
+  display: block;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: .35px;
+  opacity: .85;
+  margin-top: 2px;
+}
+
+.placeholder-shell {
+  width: 1600px;
+  height: 900px;
+  padding: 60px;
+  background: linear-gradient(180deg, #fff, #f6f8fb);
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--comm-text);
+}
+
+.placeholder-card {
+  height: 100%;
+  border: 1px solid var(--comm-line);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 14px 30px rgba(16,35,63,.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.placeholder-card h1 {
+  margin: 0 0 12px;
+  color: var(--comm-navy);
+  font-size: 40px;
+}
+
+.placeholder-card p {
+  margin: 0;
+  color: var(--comm-muted);
+  font-size: 18px;
+}

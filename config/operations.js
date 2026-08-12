@@ -4,12 +4,7 @@ const SCOPES = {
     nombre: 'VOLCAN',
     titulo: 'VOLCAN - CONSOLIDADO',
     tipo: 'consolidado',
-    minas: [
-      'Andaychagua',
-      'San Cristóbal - Carahuacra',
-      'Cerro Pasco',
-      'Chungar'
-    ]
+    minas: []
   },
 
   ANDAYCHAGUA: {
@@ -42,6 +37,52 @@ const SCOPES = {
     titulo: 'U.M. CHUNGAR',
     tipo: 'mina',
     minas: ['Chungar']
+  },
+
+  ROMINA: {
+    key: 'ROMINA',
+    nombre: 'Romina',
+    titulo: 'U.M. ROMINA',
+    tipo: 'mina',
+    minas: ['Romina']
+  },
+
+  TICLIO: {
+    key: 'TICLIO',
+    nombre: 'Ticlio',
+    titulo: 'U.M. TICLIO',
+    tipo: 'mina',
+    minas: ['Ticlio']
+  },
+
+  SAN_CRISTOBAL: {
+    key: 'SAN_CRISTOBAL',
+    nombre: 'San Cristóbal',
+    titulo: 'U.M. SAN CRISTÓBAL',
+    tipo: 'mina',
+    minas: ['San Cristóbal']
+  }
+};
+
+const REPORT_SCOPE_MEMBERS = {
+  INC_REQ: {
+    VOLCAN: [
+      'Andaychagua',
+      'San Cristóbal - Carahuacra',
+      'Cerro Pasco',
+      'Chungar',
+      'Romina',
+      'Ticlio'
+    ]
+  },
+
+  TOP10: {
+    VOLCAN: [
+      'Andaychagua',
+      'San Cristóbal - Carahuacra',
+      'Cerro Pasco',
+      'Chungar'
+    ]
   }
 };
 
@@ -55,20 +96,32 @@ function normalizeScopeKey(value) {
     .replace(/^_+|_+$/g, '');
 }
 
-function getScope(scope) {
+function getScope(scope, reportKey = 'INC_REQ') {
   const key = normalizeScopeKey(scope);
-  const config = SCOPES[key];
+  const base = SCOPES[key];
 
-  if (!config) {
+  if (!base) {
     const valid = Object.keys(SCOPES).join(', ');
     throw new Error(`Scope no reconocido: ${scope}. Valores válidos: ${valid}`);
   }
 
-  return config;
+  if (base.tipo !== 'consolidado') return { ...base, minas: [...base.minas] };
+
+  const reportMembers = REPORT_SCOPE_MEMBERS[reportKey]?.[key];
+  if (!reportMembers) {
+    throw new Error(`No existe composición del scope ${key} para el reporte ${reportKey}`);
+  }
+
+  return {
+    ...base,
+    minas: [...reportMembers],
+    reportKey
+  };
 }
 
 module.exports = {
   SCOPES,
+  REPORT_SCOPE_MEMBERS,
   getScope,
   normalizeScopeKey
 };

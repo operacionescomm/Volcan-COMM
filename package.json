@@ -1,6 +1,6 @@
 {
   "name": "volcan-comm-visual-engine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Motor visual multi-mina para reportes VOLCAN - COMM",
   "main": "server.js",
   "scripts": {

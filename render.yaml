@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: volcan-comm-visual-engine
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: APP_NAME
+        value: Volcan-COMM Visual Engine
+      - key: OPERATION_NAME
+        value: VOLCAN
+      - key: PUPPETEER_CACHE_DIR
+        value: /opt/render/project/src/.cache/puppeteer
+      - key: RENDER_API_KEY
+        generateValue: true

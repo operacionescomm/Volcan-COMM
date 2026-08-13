@@ -54,6 +54,18 @@ function buildSlide12Data(body = {}) {
   return normalizeIncReq(body, scope);
 }
 
+function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) {
+  const normalized = normalizeYauliAtenciones({
+    ...body,
+    titulo: body.titulo || titulo
+  });
+
+  return {
+    ...normalized,
+    unidadNombre: body.unidadNombre || unidadNombre
+  };
+}
+
 app.get('/test-slide12-png', async (req, res) => {
   try {
     const slide = getSlideConfig(12);

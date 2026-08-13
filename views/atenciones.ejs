@@ -128,7 +128,7 @@
     <div class="kpi" style="--c1:#19c2aa;--c2:#009f8e;--line:#a5e8dd"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 16 17l7 11 7-17 13 25H5Z"/><path d="m13 30 7-8 5 7 6-9"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">YAULI</div><div class="kpi-value"><%= kpis.yauli %></div></div></div>
     <div class="kpi" style="--c1:#ff8745;--c2:#eb5c12;--line:#ffc7a8"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 16 17l7 11 7-17 13 25H5Z"/><path d="M12 33h25"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">CHUNGAR</div><div class="kpi-value"><%= kpis.chungar %></div></div></div>
     <div class="kpi" style="--c1:#2c84ea;--c2:#1457c7;--line:#b7d3f7"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M9 18h30l3 20H6l3-20Z"/><path d="M15 18c1-6 17-6 18 0M12 28h24M17 38v-5m14 5v-5"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">CERRO PASCO</div><div class="kpi-value"><%= kpis.cerroPasco %></div></div></div>
-    <div class="kpi" style="--c1:#ffc72e;--c2:#f0a500;--line:#ffe6a0"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M24 42s13-12 13-24a13 13 0 1 0-26 0c0 12 13 24 13 24Z"/><circle cx="24" cy="18" r="5"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">ALPAMARCA</div><div class="kpi-value"><%= kpis.alpamarca %></div></div></div>
+    <div class="kpi" style="--c1:#ffc72e;--c2:#f0a500;--line:#ffe6a0"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M24 42s13-12 13-24a13 13 0 1 0-26 0c0 12 13 24 13 24Z"/><circle cx="24" cy="18" r="5"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">ROMINA</div><div class="kpi-value"><%= kpis.romina %></div></div></div>
     <div class="kpi long" style="--c1:#4d8fe8;--c2:#185abe;--line:#afcdf5"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M8 32h32M12 32v-7c0-7 5-13 12-14 7 1 12 7 12 14v7M18 12v10m12-10v10M7 36h34"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">INTERIOR MINA (IM)</div><div class="kpi-value"><%= kpis.im %></div></div></div>
     <div class="kpi long" style="--c1:#ff8745;--c2:#eb5c12;--line:#ffc7a8"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 17 15l7 12 8-16 11 25H5Z"/><path d="M13 34h27"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">SUPERFICIE (SUP)</div><div class="kpi-value"><%= kpis.sup %></div></div></div>
   </section>
@@ -145,11 +145,11 @@
           {key:'cerroPasco', color:'#3b79cf', label:'U.M Cerro Pasco'},
           {key:'chungar', color:'#f36a17', label:'U.M Chungar'},
           {key:'yauli', color:'#8b8b8b', label:'U.M Yauli'},
-          {key:'alpamarca', color:'#f2ab00', label:'U.M Alpamarca'}
+          {key:'romina', color:'#f2ab00', label:'U.M Romina'}
         ];
         function labelY(key, value) {
           const y = sy(value);
-          if (key === 'alpamarca') {
+          if (key === 'romina') {
             return value <= 35
               ? Math.max(mt + 12, y - 12)
               : Math.min(mt + ph - 5, y + 22);

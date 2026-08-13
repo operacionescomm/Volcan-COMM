@@ -74,8 +74,8 @@ function buildInsight({ scopeConfig, incidentes, requerimientos, totalAtenciones
 function normalizeAtencionesSeries(raw = []) {
   if (!Array.isArray(raw)) return [];
   return raw.map(item => {
-    if (Array.isArray(item)) return { mes: String(item[0] || '').trim(), yauli: toNumber(item[1]), chungar: toNumber(item[2]), cerroPasco: toNumber(item[3]), alpamarca: toNumber(item[4]), total: toNumber(item[5]) };
-    return { mes: String(item?.mes || item?.periodo || '').trim(), yauli: toNumber(item?.yauli ?? item?.umYauli ?? 0), chungar: toNumber(item?.chungar ?? item?.umChungar ?? 0), cerroPasco: toNumber(item?.cerroPasco ?? item?.cerro ?? item?.umCerroPasco ?? 0), alpamarca: toNumber(item?.alpamarca ?? item?.umAlpamarca ?? 0), total: toNumber(item?.total ?? 0) };
+    if (Array.isArray(item)) return { mes: String(item[0] || '').trim(), yauli: toNumber(item[1]), chungar: toNumber(item[2]), cerroPasco: toNumber(item[3]), romina: toNumber(item[4]), total: toNumber(item[5]) };
+    return { mes: String(item?.mes || item?.periodo || '').trim(), yauli: toNumber(item?.yauli ?? item?.umYauli ?? 0), chungar: toNumber(item?.chungar ?? item?.umChungar ?? 0), cerroPasco: toNumber(item?.cerroPasco ?? item?.cerro ?? item?.umCerroPasco ?? 0), romina: toNumber(item?.romina ?? item?.umRomina ?? 0), total: toNumber(item?.total ?? 0) };
   }).filter(item => item.mes);
 }
 
@@ -111,17 +111,17 @@ function normalizeAtenciones(body = {}) {
   const yauli = toNumber(kpis.yauli ?? body.yauli ?? latestUM.yauli ?? 0);
   const chungar = toNumber(kpis.chungar ?? body.chungar ?? latestUM.chungar ?? 0);
   const cerroPasco = toNumber(kpis.cerroPasco ?? body.cerroPasco ?? latestUM.cerroPasco ?? 0);
-  const alpamarca = toNumber(kpis.alpamarca ?? body.alpamarca ?? latestUM.alpamarca ?? 0);
+  const romina = toNumber(kpis.romina ?? body.romina ?? latestUM.romina ?? 0);
   const im = toNumber(kpis.im ?? body.im ?? latestImSup.im ?? 0);
   const sup = toNumber(kpis.sup ?? body.sup ?? latestImSup.sup ?? 0);
-  const maxUM = Math.max(100, ...seriesUM.flatMap(item => [item.yauli, item.chungar, item.cerroPasco, item.alpamarca]));
+  const maxUM = Math.max(100, ...seriesUM.flatMap(item => [item.yauli, item.chungar, item.cerroPasco, item.romina]));
   const maxImSup = Math.max(100, ...seriesImSup.flatMap(item => [item.im, item.sup]));
-  const unidades = [ { key: 'yauli', nombre: 'YAULI', valor: yauli }, { key: 'chungar', nombre: 'CHUNGAR', valor: chungar }, { key: 'cerroPasco', nombre: 'CERRO PASCO', valor: cerroPasco }, { key: 'alpamarca', nombre: 'ALPAMARCA', valor: alpamarca } ];
+  const unidades = [ { key: 'yauli', nombre: 'YAULI', valor: yauli }, { key: 'chungar', nombre: 'CHUNGAR', valor: chungar }, { key: 'cerroPasco', nombre: 'CERRO PASCO', valor: cerroPasco }, { key: 'romina', nombre: 'ROMINA', valor: romina } ];
   const lider = unidades.slice().sort((a, b) => b.valor - a.valor)[0] || { nombre: '-', valor: 0 };
   const segundo = unidades.slice().sort((a, b) => b.valor - a.valor)[1] || { nombre: '-', valor: 0 };
   const resumen1 = body.resumen1 || `En ${periodo}, ${lider.nombre} lidera las atenciones por U.M. con ${lider.valor}, seguido de ${segundo.nombre} con ${segundo.valor}.`;
   const resumen2 = body.resumen2 || `Interior Mina (IM) registró ${im} atenciones y Superficie (SUP) ${sup}, ${im >= sup ? 'manteniendo la mayor demanda en interior mina' : 'con mayor demanda registrada en superficie'}.`;
-  return { titulo: body.titulo || 'ATENCIONES EN LA OPERACIÓN', periodo, periodoRaw, kpis: { yauli, chungar, cerroPasco, alpamarca, im, sup }, seriesUM, seriesImSup, maxUM, maxImSup, resumen1, resumen2 };
+  return { titulo: body.titulo || 'ATENCIONES EN LA OPERACIÓN', periodo, periodoRaw, kpis: { yauli, chungar, cerroPasco, romina, im, sup }, seriesUM, seriesImSup, maxUM, maxImSup, resumen1, resumen2 };
 }
 
 function normalizeYauliAtenciones(body = {}) {

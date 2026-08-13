@@ -194,7 +194,9 @@ function getSampleUnidadAtenciones(unidadNombre) {
         ['feb-26',185],['mar-26',260],['abr-26',237],['may-26',265],['jun-26',329],['jul-26',339]
       ],
       seriesImSup: [
-        ['jul-26',245,94,339]
+        ['jun-25',166,61,227],['jul-25',168,59,227],['ago-25',178,78,256],['sept-25',176,63,239],
+        ['oct-25',170,72,242],['nov-25',172,66,238],['dic-25',191,72,263],['ene-26',133,73,206],
+        ['feb-26',126,59,185],['mar-26',174,86,260],['abr-26',179,58,237],['may-26',157,108,265]
       ],
       resumen1: 'En julio 2026, U.M. Chungar registró 339 atenciones.',
       resumen2: 'Interior Mina alcanzó 245 atenciones y Superficie 94.',

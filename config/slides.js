@@ -5,19 +5,19 @@ const SLIDES = {
     active: true,
     description: 'Incidentes vs Requerimientos por scope'
   },
-  10: {
+  14: {
     key: 'atenciones',
     template: 'atenciones',
-    active: false,
-    description: 'Módulo preparado para siguiente etapa'
+    active: true,
+    description: 'Atenciones en la Operación - VOLCAN'
   },
-  14: {
+  15: {
     key: 'top-requerimientos',
     template: 'top-requerimientos',
     active: false,
     description: 'Módulo preparado para siguiente etapa'
   },
-  15: {
+  16: {
     key: 'top-incidentes',
     template: 'top-incidentes',
     active: false,

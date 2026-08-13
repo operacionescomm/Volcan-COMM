@@ -18,22 +18,22 @@ const SLIDES = {
     description: 'Cantidad de Atenciones - U.M. Yauli'
   },
   16: {
-    key: 'top-requerimientos',
-    template: 'top-requerimientos',
-    active: false,
-    description: 'Módulo preparado para siguiente etapa'
+    key: 'chungar-atenciones',
+    template: 'unidad-atenciones',
+    active: true,
+    description: 'Cantidad de Atenciones - U.M. Chungar'
   },
   17: {
-    key: 'top-incidentes',
-    template: 'top-incidentes',
-    active: false,
-    description: 'Módulo preparado para siguiente etapa'
+    key: 'cerro-pasco-atenciones',
+    template: 'unidad-atenciones',
+    active: true,
+    description: 'Cantidad de Atenciones - U.M. Cerro Pasco'
   },
   18: {
-    key: 'valorizacion',
-    template: 'valorizacion',
-    active: false,
-    description: 'Módulo preparado para siguiente etapa'
+    key: 'romina-atenciones',
+    template: 'unidad-atenciones',
+    active: true,
+    description: 'Cantidad de Atenciones - U.M. Romina'
   },
   19: {
     key: 'top-suministros-costo',

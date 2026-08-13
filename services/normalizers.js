@@ -74,7 +74,7 @@ function normalizeIncReq(body = {}, scopeConfig) {
   const liderAtenciones = rows.slice().sort((a, b) => b.total - a.total)[0] || null;
 
   const titulo = body.titulo || `${scopeConfig.titulo} - ${body.periodo || 'Periodo'} - Incidentes vs Requerimientos`;
-  const scopeLabel = scopeConfig.tipo === 'consolidado' ? 'Consolidado 4 minas' : 'Unidad minera';
+  const scopeLabel = scopeConfig.tipo === 'consolidado' ? 'Consolidado' : 'Unidad minera';
 
   return {
     titulo,
@@ -119,9 +119,129 @@ function buildInsight({ scopeConfig, incidentes, requerimientos, totalAtenciones
   return base + `Predominan los ${predominio}; los requerimientos representan ${pctRequerimientosNum.toFixed(0)}% del total del periodo.`;
 }
 
+function normalizeAtencionesSeries(raw = []) {
+  if (!Array.isArray(raw)) return [];
+
+  return raw
+    .map(item => {
+      if (Array.isArray(item)) {
+        return {
+          mes: String(item[0] || '').trim(),
+          yauli: toNumber(item[1]),
+          chungar: toNumber(item[2]),
+          cerroPasco: toNumber(item[3]),
+          alpamarca: toNumber(item[4]),
+          total: toNumber(item[5])
+        };
+      }
+
+      return {
+        mes: String(item?.mes || item?.periodo || '').trim(),
+        yauli: toNumber(item?.yauli ?? item?.umYauli ?? 0),
+        chungar: toNumber(item?.chungar ?? item?.umChungar ?? 0),
+        cerroPasco: toNumber(item?.cerroPasco ?? item?.cerro ?? item?.umCerroPasco ?? 0),
+        alpamarca: toNumber(item?.alpamarca ?? item?.umAlpamarca ?? 0),
+        total: toNumber(item?.total ?? 0)
+      };
+    })
+    .filter(item => item.mes);
+}
+
+function normalizeImSupSeries(raw = []) {
+  if (!Array.isArray(raw)) return [];
+
+  return raw
+    .map(item => {
+      if (Array.isArray(item)) {
+        return {
+          mes: String(item[0] || '').trim(),
+          im: toNumber(item[1]),
+          sup: toNumber(item[2]),
+          total: toNumber(item[3]) || toNumber(item[1]) + toNumber(item[2])
+        };
+      }
+
+      const im = toNumber(item?.im ?? item?.interiorMina ?? 0);
+      const sup = toNumber(item?.sup ?? item?.superficie ?? 0);
+      return {
+        mes: String(item?.mes || item?.periodo || '').trim(),
+        im,
+        sup,
+        total: toNumber(item?.total ?? 0) || im + sup
+      };
+    })
+    .filter(item => item.mes);
+}
+
+function humanPeriod(value) {
+  const text = String(value || '').trim();
+  if (!text) return 'Periodo';
+
+  const months = {
+    ene: 'Enero', feb: 'Febrero', mar: 'Marzo', abr: 'Abril', may: 'Mayo', jun: 'Junio',
+    jul: 'Julio', ago: 'Agosto', sept: 'Septiembre', sep: 'Septiembre', oct: 'Octubre', nov: 'Noviembre', dic: 'Diciembre'
+  };
+  const match = text.toLowerCase().match(/^([a-záéíóú]+)[-\s](\d{2,4})$/i);
+  if (!match) return text;
+  const key = match[1].normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const year = match[2].length === 2 ? `20${match[2]}` : match[2];
+  return `${months[key] || match[1]} ${year}`;
+}
+
+function normalizeAtenciones(body = {}) {
+  const seriesUM = normalizeAtencionesSeries(body.seriesUM || body.mesesUM || body.unidades || []);
+  const seriesImSup = normalizeImSupSeries(body.seriesImSup || body.mesesImSup || body.imSup || []);
+
+  const latestUM = seriesUM[seriesUM.length - 1] || {};
+  const latestImSup = seriesImSup[seriesImSup.length - 1] || {};
+  const kpis = body.kpis || {};
+
+  const periodoRaw = body.periodo || latestUM.mes || latestImSup.mes || 'Periodo';
+  const periodo = humanPeriod(periodoRaw);
+
+  const yauli = toNumber(kpis.yauli ?? body.yauli ?? latestUM.yauli ?? 0);
+  const chungar = toNumber(kpis.chungar ?? body.chungar ?? latestUM.chungar ?? 0);
+  const cerroPasco = toNumber(kpis.cerroPasco ?? body.cerroPasco ?? latestUM.cerroPasco ?? 0);
+  const alpamarca = toNumber(kpis.alpamarca ?? body.alpamarca ?? latestUM.alpamarca ?? 0);
+  const im = toNumber(kpis.im ?? body.im ?? latestImSup.im ?? 0);
+  const sup = toNumber(kpis.sup ?? body.sup ?? latestImSup.sup ?? 0);
+
+  const maxUM = Math.max(100, ...seriesUM.flatMap(item => [item.yauli, item.chungar, item.cerroPasco, item.alpamarca]));
+  const maxImSup = Math.max(100, ...seriesImSup.flatMap(item => [item.im, item.sup]));
+
+  const unidades = [
+    { key: 'yauli', nombre: 'YAULI', valor: yauli },
+    { key: 'chungar', nombre: 'CHUNGAR', valor: chungar },
+    { key: 'cerroPasco', nombre: 'CERRO PASCO', valor: cerroPasco },
+    { key: 'alpamarca', nombre: 'ALPAMARCA', valor: alpamarca }
+  ];
+  const lider = unidades.slice().sort((a, b) => b.valor - a.valor)[0] || { nombre: '-', valor: 0 };
+  const segundo = unidades.slice().sort((a, b) => b.valor - a.valor)[1] || { nombre: '-', valor: 0 };
+
+  const resumen1 = body.resumen1 || `En ${periodo}, ${lider.nombre} lidera las atenciones por U.M. con ${lider.valor}, seguido de ${segundo.nombre} con ${segundo.valor}.`;
+  const resumen2 = body.resumen2 || `Interior Mina (IM) registró ${im} atenciones y Superficie (SUP) ${sup}, ${im >= sup ? 'manteniendo la mayor demanda en interior mina' : 'con mayor demanda registrada en superficie'}.`;
+
+  return {
+    titulo: body.titulo || 'ATENCIONES EN LA OPERACIÓN',
+    periodo,
+    periodoRaw,
+    kpis: { yauli, chungar, cerroPasco, alpamarca, im, sup },
+    seriesUM,
+    seriesImSup,
+    maxUM,
+    maxImSup,
+    resumen1,
+    resumen2
+  };
+}
+
 module.exports = {
   toNumber,
   pct,
   normalizeRows,
-  normalizeIncReq
+  normalizeIncReq,
+  normalizeAtencionesSeries,
+  normalizeImSupSeries,
+  normalizeAtenciones,
+  humanPeriod
 };

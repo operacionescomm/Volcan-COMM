@@ -25,7 +25,7 @@ const SLIDES = {
   },
   17: {
     key: 'cerro-pasco-atenciones',
-    template: 'unidad-atenciones',
+    template: 'cerro-pasco-atenciones',
     active: true,
     description: 'Cantidad de Atenciones - U.M. Cerro Pasco'
   },

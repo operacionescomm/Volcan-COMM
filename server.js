@@ -72,6 +72,16 @@ function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) {
   };
 }
 
+function hasUnitPayload(body = {}) {
+  return Boolean(
+    (Array.isArray(body.seriesTotal) && body.seriesTotal.length) ||
+    (Array.isArray(body.seriesImSup) && body.seriesImSup.length) ||
+    Number(body.totalMes) > 0 ||
+    Number(body.im) > 0 ||
+    Number(body.sup) > 0
+  );
+}
+
 app.get('/test-slide12-png', async (req, res) => {
   try {
     const slide = getSlideConfig(12);
@@ -168,7 +178,70 @@ function getSampleSlide15() {
 }
 
 function getSampleUnidadAtenciones(unidadNombre) {
-  return normalizeUnidadAtenciones({
+  const key = String(unidadNombre || '').toLowerCase();
+  const titulo = `CANTIDAD DE ATENCIONES – U.M. ${unidadNombre.toUpperCase()}`;
+
+  const presets = {
+    chungar: {
+      periodo: 'jul-26',
+      totalMes: 339,
+      acumulado12: 3059,
+      im: 245,
+      sup: 94,
+      promedioDia: 10.9,
+      seriesTotal: [
+        ['ago-25',256],['sept-25',239],['oct-25',242],['nov-25',238],['dic-25',263],['ene-26',206],
+        ['feb-26',185],['mar-26',260],['abr-26',237],['may-26',265],['jun-26',329],['jul-26',339]
+      ],
+      seriesImSup: [
+        ['jul-26',245,94,339]
+      ],
+      resumen1: 'En julio 2026, U.M. Chungar registró 339 atenciones.',
+      resumen2: 'Interior Mina alcanzó 245 atenciones y Superficie 94.',
+      resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
+    },
+    'cerro pasco': {
+      periodo: 'jul-26',
+      totalMes: 39,
+      acumulado12: 856,
+      im: 21,
+      sup: 18,
+      promedioDia: 1.3,
+      seriesTotal: [
+        ['ago-25',80],['sept-25',81],['oct-25',83],['nov-25',83],['dic-25',86],['ene-26',83],
+        ['feb-26',79],['mar-26',66],['abr-26',77],['may-26',68],['jun-26',31],['jul-26',39]
+      ],
+      seriesImSup: [
+        ['ago-25',41,39,80],['sept-25',52,29,81],['oct-25',37,46,83],['nov-25',22,61,83],
+        ['dic-25',10,76,86],['ene-26',47,36,83],['feb-26',25,54,79],['mar-26',40,26,66],
+        ['abr-26',30,47,77],['may-26',32,36,68],['jun-26',13,18,31],['jul-26',21,18,39]
+      ],
+      resumen1: 'En julio 2026, U.M. Cerro Pasco registró 39 atenciones.',
+      resumen2: 'Interior Mina alcanzó 21 atenciones y Superficie 18.',
+      resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
+    },
+    romina: {
+      periodo: 'jul-26',
+      totalMes: 100,
+      acumulado12: 819,
+      im: 76,
+      sup: 24,
+      promedioDia: 3.2,
+      seriesTotal: [
+        ['sept-25',8],['oct-25',32],['nov-25',68],['dic-25',64],['ene-26',54],['feb-26',95],
+        ['mar-26',102],['abr-26',97],['may-26',97],['jun-26',102],['jul-26',100]
+      ],
+      seriesImSup: [
+        ['sept-25',3,5,8],['oct-25',29,3,32],['nov-25',35,33,68],['dic-25',30,34,64],['ene-26',47,7,54],
+        ['feb-26',85,10,95],['mar-26',48,54,102],['abr-26',67,30,97],['may-26',43,54,97],['jun-26',83,19,102],['jul-26',76,24,100]
+      ],
+      resumen1: 'En julio 2026, U.M. Romina registró 100 atenciones.',
+      resumen2: 'Interior Mina alcanzó 76 atenciones y Superficie 24.',
+      resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
+    }
+  };
+
+  const fallback = {
     periodo: 'jul-26',
     totalMes: 0,
     acumulado12: 0,
@@ -180,7 +253,12 @@ function getSampleUnidadAtenciones(unidadNombre) {
     resumen1: `Vista de prueba para U.M. ${unidadNombre}.`,
     resumen2: 'Los valores reales serán enviados automáticamente desde Google Apps Script.',
     resumen3: 'Endpoint activo y preparado para recibir la data de la unidad minera.'
-  }, unidadNombre, `CANTIDAD DE ATENCIONES – U.M. ${unidadNombre.toUpperCase()}`);
+  };
+
+  return normalizeUnidadAtenciones({
+    ...(presets[key] || fallback),
+    titulo
+  }, unidadNombre, titulo);
 }
 
 function registerUnidadSlide(slideNumber, unidadNombre) {
@@ -209,7 +287,9 @@ function registerUnidadSlide(slideNumber, unidadNombre) {
   app.post(`/render/slide${slideNumber}`, requireApiKey, async (req, res) => {
     try {
       const slide = getSlideConfig(slideNumber);
-      const data = normalizeUnidadAtenciones(req.body || {}, unidadNombre, titulo);
+      const data = hasUnitPayload(req.body || {})
+        ? normalizeUnidadAtenciones(req.body || {}, unidadNombre, titulo)
+        : getSampleUnidadAtenciones(unidadNombre);
       res.type('png').end(await renderTemplateToPng(slide.template, data));
     } catch (error) {
       console.error(`[render/slide${slideNumber}]`, error);

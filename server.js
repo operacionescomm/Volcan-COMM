@@ -23,12 +23,18 @@ app.get('/', (req, res) => {
     activeSlides: [
       { number: 12, key: 'incidentes-requerimientos' },
       { number: 14, key: 'atenciones' },
-      { number: 15, key: 'yauli-atenciones' }
+      { number: 15, key: 'yauli-atenciones' },
+      { number: 16, key: 'chungar-atenciones' },
+      { number: 17, key: 'cerro-pasco-atenciones' },
+      { number: 18, key: 'romina-atenciones' }
     ],
     tests: {
       slide12: '/test-slide12-png?scope=VOLCAN',
       slide14: '/test-slide14-png',
-      slide15: '/test-slide15-png'
+      slide15: '/test-slide15-png',
+      slide16: '/test-slide16-png',
+      slide17: '/test-slide17-png',
+      slide18: '/test-slide18-png'
     }
   });
 });
@@ -160,6 +166,61 @@ function getSampleSlide15() {
     ]
   });
 }
+
+function getSampleUnidadAtenciones(unidadNombre) {
+  return normalizeUnidadAtenciones({
+    periodo: 'jul-26',
+    totalMes: 0,
+    acumulado12: 0,
+    im: 0,
+    sup: 0,
+    promedioDia: 0,
+    seriesTotal: [],
+    seriesImSup: [],
+    resumen1: `Vista de prueba para U.M. ${unidadNombre}.`,
+    resumen2: 'Los valores reales serán enviados automáticamente desde Google Apps Script.',
+    resumen3: 'Endpoint activo y preparado para recibir la data de la unidad minera.'
+  }, unidadNombre, `CANTIDAD DE ATENCIONES – U.M. ${unidadNombre.toUpperCase()}`);
+}
+
+function registerUnidadSlide(slideNumber, unidadNombre) {
+  const titulo = `CANTIDAD DE ATENCIONES – U.M. ${unidadNombre.toUpperCase()}`;
+
+  app.get(`/test-slide${slideNumber}`, async (req, res) => {
+    try {
+      const slide = getSlideConfig(slideNumber);
+      res.type('html').send(await renderTemplateToHtml(slide.template, getSampleUnidadAtenciones(unidadNombre)));
+    } catch (error) {
+      console.error(`[test-slide${slideNumber}]`, error);
+      res.status(500).send(String(error));
+    }
+  });
+
+  app.get(`/test-slide${slideNumber}-png`, async (req, res) => {
+    try {
+      const slide = getSlideConfig(slideNumber);
+      res.type('png').end(await renderTemplateToPng(slide.template, getSampleUnidadAtenciones(unidadNombre)));
+    } catch (error) {
+      console.error(`[test-slide${slideNumber}-png]`, error);
+      res.status(500).send(String(error));
+    }
+  });
+
+  app.post(`/render/slide${slideNumber}`, requireApiKey, async (req, res) => {
+    try {
+      const slide = getSlideConfig(slideNumber);
+      const data = normalizeUnidadAtenciones(req.body || {}, unidadNombre, titulo);
+      res.type('png').end(await renderTemplateToPng(slide.template, data));
+    } catch (error) {
+      console.error(`[render/slide${slideNumber}]`, error);
+      res.status(500).json({ ok: false, error: String(error) });
+    }
+  });
+}
+
+registerUnidadSlide(16, 'Chungar');
+registerUnidadSlide(17, 'Cerro Pasco');
+registerUnidadSlide(18, 'Romina');
 
 app.listen(PORT, () => console.log(`${APP_NAME} v0.3 activo en http://localhost:${PORT}`));
 

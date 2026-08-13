@@ -8,201 +8,171 @@
   html, body { margin: 0; width: 1600px; height: 900px; overflow: hidden; }
   body {
     font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg, #ffffff 0%, #f7fbff 68%, #eef7ff 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 66%, #eef7ff 100%);
     color: #0b2f67;
   }
-  .slide { position: relative; width: 1600px; height: 900px; padding: 20px 30px 18px; }
+  .slide { position: relative; width: 1600px; height: 900px; padding: 18px 30px 18px; overflow: hidden; }
   .brand-curve {
-    position: absolute; right: 0; top: 0; width: 405px; height: 112px;
-    border-bottom-left-radius: 210px 108px;
-    background: linear-gradient(140deg, #123f86 0%, #07366f 65%, #062e61 100%);
-    box-shadow: inset 16px 0 0 rgba(43,132,218,.28);
+    position: absolute; z-index: 1; right: 0; top: 0;
+    width: 395px; height: 116px;
+    border-bottom-left-radius: 220px 112px;
+    background: linear-gradient(145deg, #164a91 0%, #0a3d7c 48%, #062f64 100%);
+    box-shadow: inset 17px 0 0 rgba(54,139,226,.28);
     display: flex; align-items: center; justify-content: flex-end;
-    padding-right: 38px; color: #fff;
+    padding: 24px 38px 0 0; color: #fff;
   }
-  .brand-word { font-weight: 800; font-size: 38px; letter-spacing: 2px; }
-  .brand-sub { font-size: 8px; letter-spacing: 1px; text-align: right; margin-top: 2px; }
-  .header { height: 100px; padding-left: 38px; position: relative; }
+  .brand-word { font-weight: 800; font-size: 38px; letter-spacing: 2px; line-height: 1; }
+  .brand-sub { font-size: 8px; letter-spacing: 1px; text-align: right; margin-top: 5px; opacity: .95; }
+  .header {
+    position: relative; z-index: 3;
+    height: 105px; padding-left: 40px; padding-top: 3px;
+    width: 1120px;
+  }
   .header::before {
-    content: ''; position: absolute; left: 0; top: 0; width: 15px; height: 67px;
-    border-radius: 10px; background: linear-gradient(180deg, #1168ef, #12b6c5);
+    content: ''; position: absolute; left: 0; top: 0;
+    width: 15px; height: 67px; border-radius: 10px;
+    background: linear-gradient(180deg, #1168ef, #12b6c5);
   }
-  h1 { margin: 0; font-size: 46px; line-height: 1.05; color: #07184f; letter-spacing: .2px; font-weight: 800; }
-  .subtitle { margin-top: 11px; display: flex; align-items: center; gap: 9px; font-size: 20px; color: #18386d; }
+  h1 {
+    margin: 0; font-size: 45px; line-height: 1.05;
+    color: #07184f; letter-spacing: .2px; font-weight: 800;
+    white-space: nowrap;
+  }
+  .subtitle {
+    position: absolute; left: 40px; top: 61px; z-index: 4;
+    display: flex; align-items: center; gap: 9px;
+    font-size: 19px; color: #18386d; white-space: nowrap;
+  }
+  .subtitle strong { color: #0b5ec7; }
   .calendar {
-    width: 24px; height: 24px; border: 3px solid #1269e8; border-radius: 5px; position: relative;
+    width: 22px; height: 22px; border: 3px solid #1269e8;
+    border-radius: 5px; position: relative; flex: 0 0 auto;
   }
   .calendar::before { content: ''; position: absolute; left: 2px; right: 2px; top: 6px; height: 3px; background: #1269e8; }
-  .calendar::after { content: ''; position: absolute; left: 5px; right: 5px; top: -6px; height: 8px; border-left: 3px solid #1269e8; border-right: 3px solid #1269e8; }
-  .subtitle strong { color: #0b5ec7; }
-
-  .kpi-row { height: 139px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; padding-top: 3px; }
+  .calendar::after { content: ''; position: absolute; left: 4px; right: 4px; top: -6px; height: 8px; border-left: 3px solid #1269e8; border-right: 3px solid #1269e8; }
+  .kpi-row { height: 137px; display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 18px; padding-top: 3px; }
   .kpi {
-    position: relative; background: rgba(255,255,255,.96); border-radius: 18px;
-    box-shadow: 0 8px 19px rgba(17,68,126,.12); border: 1.5px solid var(--line);
-    padding: 19px 15px 14px 105px; min-width: 0;
+    background: rgba(255,255,255,.98); border-radius: 18px;
+    box-shadow: 0 8px 19px rgba(17,68,126,.11); border: 1.5px solid var(--line);
+    display: grid; grid-template-columns: 66px minmax(0,1fr); align-items: center;
+    column-gap: 13px; padding: 14px 13px 13px 16px; min-width: 0; overflow: hidden;
   }
   .kpi-icon {
-    position: absolute; left: 23px; top: 25px; width: 68px; height: 68px; border-radius: 50%;
+    width: 62px; height: 62px; border-radius: 50%;
     background: linear-gradient(145deg, var(--c1), var(--c2));
-    box-shadow: 0 7px 14px color-mix(in srgb, var(--c1) 28%, transparent);
+    box-shadow: 0 7px 14px rgba(20,70,125,.16);
     display: flex; align-items: center; justify-content: center; color: #fff;
   }
-  .kpi-icon svg { width: 38px; height: 38px; fill: none; stroke: white; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-  .kpi-month { font-size: 15px; color: #132657; font-weight: 700; margin-bottom: 4px; }
-  .kpi-name { font-size: 18px; color: var(--c2); font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .kpi-value { font-size: 43px; line-height: 1; margin-top: 5px; color: var(--c2); font-weight: 800; }
-
-  .charts { height: 479px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+  .kpi-icon svg { width: 35px; height: 35px; fill: none; stroke: white; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .kpi-content { min-width: 0; align-self: center; }
+  .kpi-month { font-size: 14px; color: #132657; font-weight: 700; margin-bottom: 3px; white-space: nowrap; }
+  .kpi-name { font-size: 16px; color: var(--c2); font-weight: 800; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kpi.long .kpi-name { font-size: 15px; }
+  .kpi-value { font-size: 38px; line-height: 1; margin-top: 6px; color: var(--c2); font-weight: 800; white-space: nowrap; }
+  .charts { height: 478px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
   .panel {
-    background: rgba(255,255,255,.98); border: 1px solid #dbe8f4; border-radius: 22px;
-    box-shadow: 0 10px 22px rgba(18,71,125,.12); padding: 17px 20px 14px; overflow: hidden;
+    background: rgba(255,255,255,.99); border: 1px solid #dbe8f4; border-radius: 22px;
+    box-shadow: 0 10px 22px rgba(18,71,125,.11); padding: 17px 20px 14px; overflow: hidden;
   }
   .panel-title { height: 46px; display: flex; align-items: center; gap: 13px; font-size: 20px; font-weight: 800; color: #0b2e6b; }
   .panel-icon {
-    width: 43px; height: 43px; border-radius: 50%; background: linear-gradient(145deg,#2e92ea,#174fb1);
-    display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 5px 10px rgba(31,91,179,.23);
+    width: 43px; height: 43px; border-radius: 50%; flex: 0 0 auto;
+    background: linear-gradient(145deg,#2e92ea,#174fb1); display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 5px 10px rgba(31,91,179,.23);
   }
   .panel-icon svg { width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2.2; }
-  .chart-svg { width: 100%; height: 378px; display: block; }
+  .chart-svg { width: 100%; height: 377px; display: block; overflow: visible; }
   .gridline { stroke: #cddbea; stroke-dasharray: 5 4; stroke-width: 1; }
   .axis-label { font-size: 12px; fill: #1b3565; font-weight: 600; }
-  .point-label { font-size: 12px; fill: #111; font-weight: 700; text-anchor: middle; }
-  .legend { display: flex; justify-content: center; gap: 22px; font-size: 13px; color: #1a396d; font-weight: 600; margin-top: -3px; }
+  .point-label { font-size: 11.5px; fill: #111; font-weight: 700; text-anchor: middle; }
+  .legend { display: flex; justify-content: center; gap: 22px; font-size: 13px; color: #1a396d; font-weight: 600; margin-top: -2px; }
   .legend-item { display: flex; align-items: center; gap: 7px; }
   .legend-line { width: 25px; height: 4px; border-radius: 3px; background: var(--legend); }
   .legend-box { width: 13px; height: 13px; background: var(--legend); }
-
   .summary {
     height: 87px; margin-top: 16px; border: 1px solid #d6e5f4; border-radius: 18px;
-    background: rgba(255,255,255,.98); box-shadow: 0 7px 18px rgba(20,72,127,.1);
+    background: rgba(255,255,255,.99); box-shadow: 0 7px 18px rgba(20,72,127,.09);
     display: grid; grid-template-columns: 285px 1fr; align-items: center; padding: 8px 25px;
   }
   .summary-title { display: flex; align-items: center; gap: 18px; padding-right: 25px; border-right: 2px solid #5e97df; }
   .summary-circle {
-    width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(145deg,#2d8de2,#1651b1);
+    width: 64px; height: 64px; border-radius: 50%; flex: 0 0 auto; background: linear-gradient(145deg,#2d8de2,#1651b1);
     display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 12px rgba(22,81,177,.25);
   }
   .summary-circle svg { width: 34px; height: 34px; stroke: #fff; fill: none; stroke-width: 2.2; }
   .summary-label { font-size: 20px; font-weight: 800; color: #0b2e6b; line-height: 1.15; }
   .summary-lines { padding-left: 34px; display: grid; gap: 11px; font-size: 16px; color: #173b77; }
   .summary-line { display: flex; align-items: center; gap: 12px; }
-  .check {
-    width: 22px; height: 22px; border-radius: 50%; background: #1556b6; color: #fff;
-    display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex: 0 0 auto;
-  }
+  .check { width: 22px; height: 22px; border-radius: 50%; background: #1556b6; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex: 0 0 auto; }
   .bottom-rule { position: absolute; left: 30px; right: 30px; bottom: 8px; height: 5px; border-radius: 5px; background: linear-gradient(90deg,#0a3471,#0e64bd); }
 </style>
 </head>
 <body>
 <div class="slide">
-  <div class="brand-curve">
-    <div><div class="brand-word">COMM</div><div class="brand-sub">COMMUNICATIONS</div></div>
-  </div>
-
+  <div class="brand-curve"><div><div class="brand-word">COMM</div><div class="brand-sub">COMMUNICATIONS</div></div></div>
   <header class="header">
     <h1><%= titulo %></h1>
-    <div class="subtitle"><span class="calendar"></span>Datos al mes más reciente: <strong><%= periodo %></strong></div>
+    <div class="subtitle"><span class="calendar"></span><span>Datos al mes más reciente: <strong><%= periodo %></strong></span></div>
   </header>
-
   <% const monthName = String(periodo).split(' ')[0]; %>
   <section class="kpi-row">
-    <div class="kpi" style="--c1:#19c2aa;--c2:#009f8e;--line:#a5e8dd">
-      <div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 16 17l7 11 7-17 13 25H5Z"/><path d="m13 30 7-8 5 7 6-9"/></svg></div>
-      <div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">YAULI</div><div class="kpi-value"><%= kpis.yauli %></div>
-    </div>
-    <div class="kpi" style="--c1:#ff8745;--c2:#eb5c12;--line:#ffc7a8">
-      <div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 16 17l7 11 7-17 13 25H5Z"/><path d="M12 33h25"/></svg></div>
-      <div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">CHUNGAR</div><div class="kpi-value"><%= kpis.chungar %></div>
-    </div>
-    <div class="kpi" style="--c1:#2c84ea;--c2:#1457c7;--line:#b7d3f7">
-      <div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M9 18h30l3 20H6l3-20Z"/><path d="M15 18c1-6 17-6 18 0M12 28h24M17 38v-5m14 5v-5"/></svg></div>
-      <div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">CERRO PASCO</div><div class="kpi-value"><%= kpis.cerroPasco %></div>
-    </div>
-    <div class="kpi" style="--c1:#ffc72e;--c2:#f0a500;--line:#ffe6a0">
-      <div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M24 42s13-12 13-24a13 13 0 1 0-26 0c0 12 13 24 13 24Z"/><circle cx="24" cy="18" r="5"/></svg></div>
-      <div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">ALPAMARCA</div><div class="kpi-value"><%= kpis.alpamarca %></div>
-    </div>
-    <div class="kpi" style="--c1:#4d8fe8;--c2:#185abe;--line:#afcdf5">
-      <div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M8 32h32M12 32v-7c0-7 5-13 12-14 7 1 12 7 12 14v7M18 12v10m12-10v10M7 36h34"/></svg></div>
-      <div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">INTERIOR MINA (IM)</div><div class="kpi-value"><%= kpis.im %></div>
-    </div>
-    <div class="kpi" style="--c1:#ff8745;--c2:#eb5c12;--line:#ffc7a8">
-      <div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 17 15l7 12 8-16 11 25H5Z"/><path d="M13 34h27"/></svg></div>
-      <div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">SUPERFICIE (SUP)</div><div class="kpi-value"><%= kpis.sup %></div>
-    </div>
+    <div class="kpi" style="--c1:#19c2aa;--c2:#009f8e;--line:#a5e8dd"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 16 17l7 11 7-17 13 25H5Z"/><path d="m13 30 7-8 5 7 6-9"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">YAULI</div><div class="kpi-value"><%= kpis.yauli %></div></div></div>
+    <div class="kpi" style="--c1:#ff8745;--c2:#eb5c12;--line:#ffc7a8"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 16 17l7 11 7-17 13 25H5Z"/><path d="M12 33h25"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">CHUNGAR</div><div class="kpi-value"><%= kpis.chungar %></div></div></div>
+    <div class="kpi" style="--c1:#2c84ea;--c2:#1457c7;--line:#b7d3f7"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M9 18h30l3 20H6l3-20Z"/><path d="M15 18c1-6 17-6 18 0M12 28h24M17 38v-5m14 5v-5"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">CERRO PASCO</div><div class="kpi-value"><%= kpis.cerroPasco %></div></div></div>
+    <div class="kpi" style="--c1:#ffc72e;--c2:#f0a500;--line:#ffe6a0"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M24 42s13-12 13-24a13 13 0 1 0-26 0c0 12 13 24 13 24Z"/><circle cx="24" cy="18" r="5"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">ALPAMARCA</div><div class="kpi-value"><%= kpis.alpamarca %></div></div></div>
+    <div class="kpi long" style="--c1:#4d8fe8;--c2:#185abe;--line:#afcdf5"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M8 32h32M12 32v-7c0-7 5-13 12-14 7 1 12 7 12 14v7M18 12v10m12-10v10M7 36h34"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">INTERIOR MINA (IM)</div><div class="kpi-value"><%= kpis.im %></div></div></div>
+    <div class="kpi long" style="--c1:#ff8745;--c2:#eb5c12;--line:#ffc7a8"><div class="kpi-icon"><svg viewBox="0 0 48 48"><path d="M5 36 17 15l7 12 8-16 11 25H5Z"/><path d="M13 34h27"/></svg></div><div class="kpi-content"><div class="kpi-month">Mes <%= monthName %></div><div class="kpi-name">SUPERFICIE (SUP)</div><div class="kpi-value"><%= kpis.sup %></div></div></div>
   </section>
-
   <section class="charts">
     <div class="panel">
       <div class="panel-title"><span class="panel-icon"><svg viewBox="0 0 32 32"><polyline points="4,24 10,17 15,20 22,10 28,14"/><path d="M4 5v22h24"/></svg></span>VOLCAN – TENDENCIA DE ATENCIONES POR U.M.</div>
       <%
-        const umW = 730, umH = 338, ml = 58, mr = 18, mt = 18, mb = 58;
+        const umW = 730, umH = 338, ml = 62, mr = 32, mt = 18, mb = 58;
         const pw = umW - ml - mr, ph = umH - mt - mb;
         const yMaxUM = Math.max(100, Math.ceil(maxUM / 100) * 100);
         const sx = i => ml + (seriesUM.length <= 1 ? pw/2 : i * pw/(seriesUM.length-1));
         const sy = v => mt + ph - (Number(v || 0)/yMaxUM)*ph;
         const defs = [
-          ['cerroPasco','#3b79cf','U.M Cerro Pasco'],
-          ['chungar','#f36a17','U.M Chungar'],
-          ['yauli','#8b8b8b','U.M Yauli'],
-          ['alpamarca','#f2ab00','U.M Alpamarca']
+          {key:'cerroPasco', color:'#3b79cf', label:'U.M Cerro Pasco'},
+          {key:'chungar', color:'#f36a17', label:'U.M Chungar'},
+          {key:'yauli', color:'#8b8b8b', label:'U.M Yauli'},
+          {key:'alpamarca', color:'#f2ab00', label:'U.M Alpamarca'}
         ];
+        function labelY(key, value) {
+          const y = sy(value);
+          if (key === 'alpamarca') return value < 35 ? Math.max(mt + 10, y - 10) : Math.min(mt + ph - 4, y + 18);
+          return Math.max(mt + 10, y - 10);
+        }
       %>
       <svg class="chart-svg" viewBox="0 0 730 338">
-        <% for (let t=0;t<=yMaxUM;t+=100) { const yy=sy(t); %>
-          <line class="gridline" x1="<%=ml%>" y1="<%=yy%>" x2="<%=umW-mr%>" y2="<%=yy%>"/>
-          <text class="axis-label" x="<%=ml-12%>" y="<%=yy+4%>" text-anchor="end"><%=t%></text>
-        <% } %>
-        <% defs.forEach(([key,color]) => { const pts=seriesUM.map((d,i)=>`${sx(i)},${sy(d[key])}`).join(' '); %>
-          <polyline points="<%=pts%>" fill="none" stroke="<%=color%>" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-          <% seriesUM.forEach((d,i)=>{ %>
-            <circle cx="<%=sx(i)%>" cy="<%=sy(d[key])%>" r="4.5" fill="<%=color%>"/>
-            <text class="point-label" x="<%=sx(i)%>" y="<%=Math.max(11,sy(d[key])-9)%>"><%=d[key]%></text>
-          <% }) %>
-        <% }) %>
-        <% seriesUM.forEach((d,i)=>{ %><text class="axis-label" x="<%=sx(i)%>" y="<%=umH-27%>" text-anchor="middle"><%=d.mes%></text><% }) %>
-        <text class="axis-label" transform="rotate(-90 13 165)" x="13" y="165" text-anchor="middle" style="font-size:14px;font-weight:800">ATENCIONES</text>
+        <% for (let t=0;t<=yMaxUM;t+=100) { const yy=sy(t); %><line class="gridline" x1="<%=ml%>" y1="<%=yy%>" x2="<%=umW-mr%>" y2="<%=yy%>"/><text class="axis-label" x="<%=ml-12%>" y="<%=yy+4%>" text-anchor="end"><%=t%></text><% } %>
+        <% defs.forEach(def => { const pts=seriesUM.map((d,i)=>`${sx(i)},${sy(d[def.key])}`).join(' '); %><polyline points="<%=pts%>" fill="none" stroke="<%=def.color%>" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><% seriesUM.forEach((d,i)=>{ const val=Number(d[def.key]||0); %><circle cx="<%=sx(i)%>" cy="<%=sy(val)%>" r="4.4" fill="<%=def.color%>"/><text class="point-label" x="<%=sx(i)%>" y="<%=labelY(def.key,val)%>"><%=val%></text><% }) %><% }) %>
+        <% seriesUM.forEach((d,i)=>{ %><text class="axis-label" x="<%=sx(i)%>" y="<%=umH-18%>" text-anchor="middle"><%=d.mes%></text><% }) %>
+        <text class="axis-label" x="14" y="170" transform="rotate(-90 14 170)" text-anchor="middle" style="font-size:14px;font-weight:800">ATENCIONES</text>
       </svg>
-      <div class="legend">
-        <% defs.forEach(([key,color,label])=>{ %><span class="legend-item"><i class="legend-line" style="--legend:<%=color%>"></i><%=label%></span><% }) %>
-      </div>
+      <div class="legend"><% defs.forEach(def=>{ %><div class="legend-item"><span class="legend-line" style="--legend:<%=def.color%>"></span><%=def.label%></div><% }) %></div>
     </div>
-
     <div class="panel">
-      <div class="panel-title"><span class="panel-icon"><svg viewBox="0 0 32 32"><path d="M5 27V16h5v11M14 27V8h5v19M23 27V12h5v15"/></svg></span>VOLCAN – ATENCIONES IM vs SUP</div>
+      <div class="panel-title"><span class="panel-icon"><svg viewBox="0 0 32 32"><path d="M5 26V15h5v11M14 26V8h5v18M23 26V12h5v14"/></svg></span>VOLCAN – ATENCIONES IM vs SUP</div>
       <%
-        const bW=730,bH=338,bml=60,bmr=12,bmt=18,bmb=58;
-        const bpw=bW-bml-bmr,bph=bH-bmt-bmb;
-        const yMaxB=Math.max(100,Math.ceil(maxImSup/100)*100);
-        const gy=i=>bml+(i+0.5)*bpw/seriesImSup.length;
-        const by=v=>bmt+bph-(Number(v||0)/yMaxB)*bph;
-        const barW=Math.min(17,bpw/seriesImSup.length/3.1);
+        const bw = 730, bh = 338, bl = 60, br = 25, bt = 18, bb = 58;
+        const bpw = bw - bl - br, bph = bh - bt - bb;
+        const yMaxB = Math.max(100, Math.ceil(maxImSup / 100) * 100);
+        const by = v => bt + bph - (Number(v||0)/yMaxB)*bph;
+        const groupW = bpw / Math.max(1,seriesImSup.length);
+        const barW = Math.min(18, groupW*.32);
       %>
       <svg class="chart-svg" viewBox="0 0 730 338">
-        <% for(let t=0;t<=yMaxB;t+=100){const yy=by(t);%>
-          <line class="gridline" x1="<%=bml%>" y1="<%=yy%>" x2="<%=bW-bmr%>" y2="<%=yy%>"/>
-          <text class="axis-label" x="<%=bml-12%>" y="<%=yy+4%>" text-anchor="end"><%=t%></text>
-        <% } %>
-        <% seriesImSup.forEach((d,i)=>{ const cx=gy(i); const y1=by(d.im),y2=by(d.sup),base=by(0); %>
-          <rect x="<%=cx-barW-2%>" y="<%=y1%>" width="<%=barW%>" height="<%=base-y1%>" fill="#3b73ca"/>
-          <rect x="<%=cx+2%>" y="<%=y2%>" width="<%=barW%>" height="<%=base-y2%>" fill="#f07a2b"/>
-          <text class="point-label" x="<%=cx-barW/2-2%>" y="<%=Math.max(12,y1-7)%>"><%=d.im%></text>
-          <text class="point-label" x="<%=cx+barW/2+2%>" y="<%=Math.max(12,y2-7)%>"><%=d.sup%></text>
-          <text class="axis-label" x="<%=cx%>" y="<%=bH-27%>" text-anchor="middle"><%=d.mes%></text>
-        <% }) %>
-        <text class="axis-label" transform="rotate(-90 14 165)" x="14" y="165" text-anchor="middle" style="font-size:14px;font-weight:800">ATENCIONES</text>
+        <% for (let t=0;t<=yMaxB;t+=100) { const yy=by(t); %><line class="gridline" x1="<%=bl%>" y1="<%=yy%>" x2="<%=bw-br%>" y2="<%=yy%>"/><text class="axis-label" x="<%=bl-12%>" y="<%=yy+4%>" text-anchor="end"><%=t%></text><% } %>
+        <% seriesImSup.forEach((d,i)=>{ const cx=bl+groupW*i+groupW/2; const x1=cx-barW-2; const x2=cx+2; %><rect x="<%=x1%>" y="<%=by(d.im)%>" width="<%=barW%>" height="<%=bt+bph-by(d.im)%>" fill="#3d78cb"/><rect x="<%=x2%>" y="<%=by(d.sup)%>" width="<%=barW%>" height="<%=bt+bph-by(d.sup)%>" fill="#f17a2d"/><text class="point-label" x="<%=x1+barW/2%>" y="<%=Math.max(bt+10,by(d.im)-7)%>"><%=d.im%></text><text class="point-label" x="<%=x2+barW/2%>" y="<%=Math.max(bt+10,by(d.sup)-7)%>"><%=d.sup%></text><text class="axis-label" x="<%=cx%>" y="<%=bh-18%>" text-anchor="middle"><%=d.mes%></text><% }) %>
+        <text class="axis-label" x="14" y="170" transform="rotate(-90 14 170)" text-anchor="middle" style="font-size:14px;font-weight:800">ATENCIONES</text>
       </svg>
-      <div class="legend"><span class="legend-item"><i class="legend-box" style="--legend:#3b73ca"></i>IM</span><span class="legend-item"><i class="legend-box" style="--legend:#f07a2b"></i>SUP</span></div>
+      <div class="legend"><div class="legend-item"><span class="legend-box" style="--legend:#3d78cb"></span>IM</div><div class="legend-item"><span class="legend-box" style="--legend:#f17a2d"></span>SUP</div></div>
     </div>
   </section>
-
   <section class="summary">
-    <div class="summary-title"><span class="summary-circle"><svg viewBox="0 0 40 40"><path d="M20 5v15h14A14 14 0 1 1 20 5Z"/><path d="M24 4a14 14 0 0 1 12 12H24V4Z"/></svg></span><span class="summary-label">RESUMEN<br>EJECUTIVO</span></div>
-    <div class="summary-lines">
-      <div class="summary-line"><span class="check">✓</span><span><%= resumen1 %></span></div>
-      <div class="summary-line"><span class="check">✓</span><span><%= resumen2 %></span></div>
-    </div>
+    <div class="summary-title"><div class="summary-circle"><svg viewBox="0 0 48 48"><path d="M24 7a17 17 0 1 0 17 17H24V7Z"/><path d="M29 7v12h12A17 17 0 0 0 29 7Z"/><path d="M14 34h20"/></svg></div><div class="summary-label">RESUMEN<br>EJECUTIVO</div></div>
+    <div class="summary-lines"><div class="summary-line"><span class="check">✓</span><span><%= resumen1 %></span></div><div class="summary-line"><span class="check">✓</span><span><%= resumen2 %></span></div></div>
   </section>
   <div class="bottom-rule"></div>
 </div>

@@ -3,6 +3,7 @@ const path = require('path');
 const { SCOPES, REPORT_SCOPE_MEMBERS, getScope } = require('./config/operations');
 const { getSlideConfig } = require('./config/slides');
 const { normalizeIncReq, normalizeAtenciones, normalizeYauliAtenciones } = require('./services/normalizers');
+const { normalizeIncReqTrend } = require('./services/incidentes-requerimientos-trend');
 const { renderTemplateToHtml, renderTemplateToPng } = require('./services/renderer');
 const { closeBrowser, resolveChromeExecutable } = require('./services/browser');
 
@@ -19,14 +20,15 @@ app.get('/', (req, res) => {
   res.json({
     ok: true,
     service: APP_NAME,
-    version: '0.3.0',
+    version: '0.4.0',
     activeSlides: [
       { number: 12, key: 'incidentes-requerimientos' },
       { number: 14, key: 'atenciones' },
       { number: 15, key: 'yauli-atenciones' },
       { number: 16, key: 'chungar-atenciones' },
       { number: 17, key: 'cerro-pasco-atenciones' },
-      { number: 18, key: 'romina-atenciones' }
+      { number: 18, key: 'romina-atenciones' },
+      { number: 19, key: 'incidentes-requerimientos-volcan' }
     ],
     tests: {
       slide12: '/test-slide12-png?scope=VOLCAN',
@@ -34,12 +36,13 @@ app.get('/', (req, res) => {
       slide15: '/test-slide15-png',
       slide16: '/test-slide16-png',
       slide17: '/test-slide17-png',
-      slide18: '/test-slide18-png'
+      slide18: '/test-slide18-png',
+      slide19: '/test-slide19-png'
     }
   });
 });
 
-app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: '0.3.0', timestamp: new Date().toISOString() }));
+app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: '0.4.0', timestamp: new Date().toISOString() }));
 
 app.get('/browser-status', (req, res) => {
   const executablePath = resolveChromeExecutable();
@@ -61,24 +64,15 @@ function buildSlide12Data(body = {}) {
 }
 
 function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) {
-  const normalized = normalizeYauliAtenciones({
-    ...body,
-    titulo: body.titulo || titulo
-  });
-
-  return {
-    ...normalized,
-    unidadNombre: body.unidadNombre || unidadNombre
-  };
+  const normalized = normalizeYauliAtenciones({ ...body, titulo: body.titulo || titulo });
+  return { ...normalized, unidadNombre: body.unidadNombre || unidadNombre };
 }
 
 function hasUnitPayload(body = {}) {
   return Boolean(
     (Array.isArray(body.seriesTotal) && body.seriesTotal.length) ||
     (Array.isArray(body.seriesImSup) && body.seriesImSup.length) ||
-    Number(body.totalMes) > 0 ||
-    Number(body.im) > 0 ||
-    Number(body.sup) > 0
+    Number(body.totalMes) > 0 || Number(body.im) > 0 || Number(body.sup) > 0
   );
 }
 
@@ -116,12 +110,10 @@ app.get('/test-slide14', async (req, res) => {
   try { res.type('html').send(await renderTemplateToHtml('atenciones', getSampleSlide14())); }
   catch (error) { console.error('[test-slide14]', error); res.status(500).send(String(error)); }
 });
-
 app.get('/test-slide14-png', async (req, res) => {
   try { res.type('png').end(await renderTemplateToPng('atenciones', getSampleSlide14())); }
   catch (error) { console.error('[test-slide14-png]', error); res.status(500).send(String(error)); }
 });
-
 app.post('/render/slide14', requireApiKey, async (req, res) => {
   try { res.type('png').end(await renderTemplateToPng('atenciones', normalizeAtenciones(req.body || {}))); }
   catch (error) { console.error('[render/slide14]', error); res.status(500).json({ ok: false, error: String(error) }); }
@@ -146,12 +138,10 @@ app.get('/test-slide15', async (req, res) => {
   try { res.type('html').send(await renderTemplateToHtml('yauli-atenciones', getSampleSlide15())); }
   catch (error) { console.error('[test-slide15]', error); res.status(500).send(String(error)); }
 });
-
 app.get('/test-slide15-png', async (req, res) => {
   try { res.type('png').end(await renderTemplateToPng('yauli-atenciones', getSampleSlide15())); }
   catch (error) { console.error('[test-slide15-png]', error); res.status(500).send(String(error)); }
 });
-
 app.post('/render/slide15', requireApiKey, async (req, res) => {
   try { res.type('png').end(await renderTemplateToPng('yauli-atenciones', normalizeYauliAtenciones(req.body || {}))); }
   catch (error) { console.error('[render/slide15]', error); res.status(500).json({ ok: false, error: String(error) }); }
@@ -159,12 +149,7 @@ app.post('/render/slide15', requireApiKey, async (req, res) => {
 
 function getSampleSlide15() {
   return normalizeYauliAtenciones({
-    periodo: 'jul-26',
-    totalMes: 630,
-    acumulado12: 7320,
-    im: 483,
-    sup: 147,
-    promedioDia: 20.3,
+    periodo: 'jul-26', totalMes: 630, acumulado12: 7320, im: 483, sup: 147, promedioDia: 20.3,
     seriesTotal: [
       ['ago-25',562],['sept-25',611],['oct-25',603],['nov-25',613],['dic-25',709],['ene-26',599],
       ['feb-26',530],['mar-26',619],['abr-26',577],['may-26',617],['jun-26',650],['jul-26',630]
@@ -180,123 +165,46 @@ function getSampleSlide15() {
 function getSampleUnidadAtenciones(unidadNombre) {
   const key = String(unidadNombre || '').toLowerCase();
   const titulo = `CANTIDAD DE ATENCIONES – U.M. ${unidadNombre.toUpperCase()}`;
-
   const presets = {
     chungar: {
-      periodo: 'jul-26',
-      totalMes: 339,
-      acumulado12: 3059,
-      im: 245,
-      sup: 94,
-      promedioDia: 10.9,
-      seriesTotal: [
-        ['ago-25',256],['sept-25',239],['oct-25',242],['nov-25',238],['dic-25',263],['ene-26',206],
-        ['feb-26',185],['mar-26',260],['abr-26',237],['may-26',265],['jun-26',329],['jul-26',339]
-      ],
-      seriesImSup: [
-        ['jun-25',166,61,227],['jul-25',168,59,227],['ago-25',178,78,256],['sept-25',176,63,239],
-        ['oct-25',170,72,242],['nov-25',172,66,238],['dic-25',191,72,263],['ene-26',133,73,206],
-        ['feb-26',126,59,185],['mar-26',174,86,260],['abr-26',179,58,237],['may-26',157,108,265]
-      ],
-      resumen1: 'En julio 2026, U.M. Chungar registró 339 atenciones.',
-      resumen2: 'Interior Mina alcanzó 245 atenciones y Superficie 94.',
-      resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
+      periodo: 'jul-26', totalMes: 339, acumulado12: 3059, im: 245, sup: 94, promedioDia: 10.9,
+      seriesTotal: [['ago-25',256],['sept-25',239],['oct-25',242],['nov-25',238],['dic-25',263],['ene-26',206],['feb-26',185],['mar-26',260],['abr-26',237],['may-26',265],['jun-26',329],['jul-26',339]],
+      seriesImSup: [['jun-25',166,61,227],['jul-25',168,59,227],['ago-25',178,78,256],['sept-25',176,63,239],['oct-25',170,72,242],['nov-25',172,66,238],['dic-25',191,72,263],['ene-26',133,73,206],['feb-26',126,59,185],['mar-26',174,86,260],['abr-26',179,58,237],['may-26',157,108,265]],
+      resumen1: 'En julio 2026, U.M. Chungar registró 339 atenciones.', resumen2: 'Interior Mina alcanzó 245 atenciones y Superficie 94.', resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
     },
     'cerro pasco': {
-      periodo: 'jul-26',
-      totalMes: 39,
-      acumulado12: 856,
-      im: 21,
-      sup: 18,
-      promedioDia: 1.3,
-      seriesTotal: [
-        ['ago-25',80],['sept-25',81],['oct-25',83],['nov-25',83],['dic-25',86],['ene-26',83],
-        ['feb-26',79],['mar-26',66],['abr-26',77],['may-26',68],['jun-26',31],['jul-26',39]
-      ],
-      seriesImSup: [
-        ['ago-25',41,39,80],['sept-25',52,29,81],['oct-25',37,46,83],['nov-25',22,61,83],
-        ['dic-25',10,76,86],['ene-26',47,36,83],['feb-26',25,54,79],['mar-26',40,26,66],
-        ['abr-26',30,47,77],['may-26',32,36,68],['jun-26',13,18,31],['jul-26',21,18,39]
-      ],
-      resumen1: 'En julio 2026, U.M. Cerro Pasco registró 39 atenciones.',
-      resumen2: 'Interior Mina alcanzó 21 atenciones y Superficie 18.',
-      resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
+      periodo: 'jul-26', totalMes: 39, acumulado12: 856, im: 21, sup: 18, promedioDia: 1.3,
+      seriesTotal: [['ago-25',80],['sept-25',81],['oct-25',83],['nov-25',83],['dic-25',86],['ene-26',83],['feb-26',79],['mar-26',66],['abr-26',77],['may-26',68],['jun-26',31],['jul-26',39]],
+      seriesImSup: [['ago-25',41,39,80],['sept-25',52,29,81],['oct-25',37,46,83],['nov-25',22,61,83],['dic-25',10,76,86],['ene-26',47,36,83],['feb-26',25,54,79],['mar-26',40,26,66],['abr-26',30,47,77],['may-26',32,36,68],['jun-26',13,18,31],['jul-26',21,18,39]],
+      resumen1: 'En julio 2026, U.M. Cerro Pasco registró 39 atenciones.', resumen2: 'Interior Mina alcanzó 21 atenciones y Superficie 18.', resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
     },
     romina: {
-      periodo: 'jul-26',
-      totalMes: 100,
-      acumulado12: 819,
-      im: 76,
-      sup: 24,
-      promedioDia: 3.2,
-      seriesTotal: [
-        ['sept-25',8],['oct-25',32],['nov-25',68],['dic-25',64],['ene-26',54],['feb-26',95],
-        ['mar-26',102],['abr-26',97],['may-26',97],['jun-26',102],['jul-26',100]
-      ],
-      seriesImSup: [
-        ['sept-25',3,5,8],['oct-25',29,3,32],['nov-25',35,33,68],['dic-25',30,34,64],['ene-26',47,7,54],
-        ['feb-26',85,10,95],['mar-26',48,54,102],['abr-26',67,30,97],['may-26',43,54,97],['jun-26',83,19,102],['jul-26',76,24,100]
-      ],
-      resumen1: 'En julio 2026, U.M. Romina registró 100 atenciones.',
-      resumen2: 'Interior Mina alcanzó 76 atenciones y Superficie 24.',
-      resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
+      periodo: 'jul-26', totalMes: 100, acumulado12: 819, im: 76, sup: 24, promedioDia: 3.2,
+      seriesTotal: [['sept-25',8],['oct-25',32],['nov-25',68],['dic-25',64],['ene-26',54],['feb-26',95],['mar-26',102],['abr-26',97],['may-26',97],['jun-26',102],['jul-26',100]],
+      seriesImSup: [['sept-25',3,5,8],['oct-25',29,3,32],['nov-25',35,33,68],['dic-25',30,34,64],['ene-26',47,7,54],['feb-26',85,10,95],['mar-26',48,54,102],['abr-26',67,30,97],['may-26',43,54,97],['jun-26',83,19,102],['jul-26',76,24,100]],
+      resumen1: 'En julio 2026, U.M. Romina registró 100 atenciones.', resumen2: 'Interior Mina alcanzó 76 atenciones y Superficie 24.', resumen3: 'Se cargó una muestra manual de julio mientras se conecta el Apps Script.'
     }
   };
-
-  const fallback = {
-    periodo: 'jul-26',
-    totalMes: 0,
-    acumulado12: 0,
-    im: 0,
-    sup: 0,
-    promedioDia: 0,
-    seriesTotal: [],
-    seriesImSup: [],
-    resumen1: `Vista de prueba para U.M. ${unidadNombre}.`,
-    resumen2: 'Los valores reales serán enviados automáticamente desde Google Apps Script.',
-    resumen3: 'Endpoint activo y preparado para recibir la data de la unidad minera.'
-  };
-
-  return normalizeUnidadAtenciones({
-    ...(presets[key] || fallback),
-    titulo
-  }, unidadNombre, titulo);
+  const fallback = { periodo:'jul-26', totalMes:0, acumulado12:0, im:0, sup:0, promedioDia:0, seriesTotal:[], seriesImSup:[], resumen1:`Vista de prueba para U.M. ${unidadNombre}.`, resumen2:'Los valores reales serán enviados automáticamente desde Google Apps Script.', resumen3:'Endpoint activo y preparado para recibir la data de la unidad minera.' };
+  return normalizeUnidadAtenciones({ ...(presets[key] || fallback), titulo }, unidadNombre, titulo);
 }
 
 function registerUnidadSlide(slideNumber, unidadNombre) {
   const titulo = `CANTIDAD DE ATENCIONES – U.M. ${unidadNombre.toUpperCase()}`;
-
   app.get(`/test-slide${slideNumber}`, async (req, res) => {
-    try {
-      const slide = getSlideConfig(slideNumber);
-      res.type('html').send(await renderTemplateToHtml(slide.template, getSampleUnidadAtenciones(unidadNombre)));
-    } catch (error) {
-      console.error(`[test-slide${slideNumber}]`, error);
-      res.status(500).send(String(error));
-    }
+    try { const slide = getSlideConfig(slideNumber); res.type('html').send(await renderTemplateToHtml(slide.template, getSampleUnidadAtenciones(unidadNombre))); }
+    catch (error) { console.error(`[test-slide${slideNumber}]`, error); res.status(500).send(String(error)); }
   });
-
   app.get(`/test-slide${slideNumber}-png`, async (req, res) => {
-    try {
-      const slide = getSlideConfig(slideNumber);
-      res.type('png').end(await renderTemplateToPng(slide.template, getSampleUnidadAtenciones(unidadNombre)));
-    } catch (error) {
-      console.error(`[test-slide${slideNumber}-png]`, error);
-      res.status(500).send(String(error));
-    }
+    try { const slide = getSlideConfig(slideNumber); res.type('png').end(await renderTemplateToPng(slide.template, getSampleUnidadAtenciones(unidadNombre))); }
+    catch (error) { console.error(`[test-slide${slideNumber}-png]`, error); res.status(500).send(String(error)); }
   });
-
   app.post(`/render/slide${slideNumber}`, requireApiKey, async (req, res) => {
     try {
       const slide = getSlideConfig(slideNumber);
-      const data = hasUnitPayload(req.body || {})
-        ? normalizeUnidadAtenciones(req.body || {}, unidadNombre, titulo)
-        : getSampleUnidadAtenciones(unidadNombre);
+      const data = hasUnitPayload(req.body || {}) ? normalizeUnidadAtenciones(req.body || {}, unidadNombre, titulo) : getSampleUnidadAtenciones(unidadNombre);
       res.type('png').end(await renderTemplateToPng(slide.template, data));
-    } catch (error) {
-      console.error(`[render/slide${slideNumber}]`, error);
-      res.status(500).json({ ok: false, error: String(error) });
-    }
+    } catch (error) { console.error(`[render/slide${slideNumber}]`, error); res.status(500).json({ ok:false, error:String(error) }); }
   });
 }
 
@@ -304,13 +212,40 @@ registerUnidadSlide(16, 'Chungar');
 registerUnidadSlide(17, 'Cerro Pasco');
 registerUnidadSlide(18, 'Romina');
 
-app.listen(PORT, () => console.log(`${APP_NAME} v0.3 activo en http://localhost:${PORT}`));
+function getSampleSlide19() {
+  return normalizeIncReqTrend({
+    titulo: 'INCIDENTES VS REQUERIMIENTOS – VOLCAN',
+    periodo: 'jul-26',
+    acumuladoIncidentes: 2558,
+    acumuladoRequerimientos: 9051,
+    acumuladoTotal: 11609,
+    series: [
+      ['ago-25',216,682,898], ['sept-25',233,706,939], ['oct-25',216,744,960], ['nov-25',211,791,1002],
+      ['dic-25',225,897,1122], ['ene-26',213,729,942], ['feb-26',152,552,704], ['mar-26',171,616,787],
+      ['abr-26',220,768,988], ['may-26',210,837,1047], ['jun-26',240,872,1112], ['jul-26',251,857,1108]
+    ]
+  });
+}
+
+app.get('/test-slide19', async (req, res) => {
+  try { const slide = getSlideConfig(19); res.type('html').send(await renderTemplateToHtml(slide.template, getSampleSlide19())); }
+  catch (error) { console.error('[test-slide19]', error); res.status(500).send(String(error)); }
+});
+app.get('/test-slide19-png', async (req, res) => {
+  try { const slide = getSlideConfig(19); res.type('png').end(await renderTemplateToPng(slide.template, getSampleSlide19())); }
+  catch (error) { console.error('[test-slide19-png]', error); res.status(500).send(String(error)); }
+});
+app.post('/render/slide19', requireApiKey, async (req, res) => {
+  try { const slide = getSlideConfig(19); res.type('png').end(await renderTemplateToPng(slide.template, normalizeIncReqTrend(req.body || {}))); }
+  catch (error) { console.error('[render/slide19]', error); res.status(500).json({ ok:false, error:String(error) }); }
+});
+
+app.listen(PORT, () => console.log(`${APP_NAME} v0.4 activo en http://localhost:${PORT}`));
 
 async function shutdown(signal) {
   console.log(`[shutdown] ${signal}`);
   await closeBrowser();
   process.exit(0);
 }
-
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));

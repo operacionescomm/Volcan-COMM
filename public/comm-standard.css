@@ -46,6 +46,21 @@
   margin-top: 2px;
 }
 
+/*
+ * Footer corporativo para los dashboards que muestran la URL de COMM.
+ * Se aplica solo cuando .footer contiene texto, por lo que no altera los
+ * footers decorativos vacíos de los slides 14–18.
+ */
+.footer:not(:empty) {
+  padding-left: 78px !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='24' r='18'/%3E%3Cpath d='M6 24h36M24 6c5.7 5.2 8.7 11.2 8.7 18S29.7 36.8 24 42M24 6c-5.7 5.2-8.7 11.2-8.7 18S18.3 36.8 24 42M10 15c8.7 4 19.3 4 28 0M10 33c8.7-4 19.3-4 28 0'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(90deg,#104ea9,#073b7d) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: 26px center, center !important;
+  background-size: 34px 34px, 100% 100% !important;
+}
+
 .placeholder-shell {
   width: 1600px;
   height: 900px;

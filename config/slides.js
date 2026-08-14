@@ -37,7 +37,7 @@ const SLIDES = {
   },
   19: {
     key: 'incidentes-requerimientos-volcan',
-    template: 'incidentes-requerimientos-volcan',
+    template: 'incidentes-requerimientos-volcan-v2',
     active: true,
     description: 'Incidentes vs Requerimientos - VOLCAN acumulado y tendencia'
   }

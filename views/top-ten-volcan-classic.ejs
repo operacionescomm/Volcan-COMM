@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title><%= titulo %></title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1600px;height:900px;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#0b2d67}
+.slide{position:relative;width:1600px;height:900px;padding:24px 52px 0;background:linear-gradient(135deg,#fff 0%,#fbfdff 72%,#f4f8fd 100%);overflow:hidden}
+.brand{position:absolute;right:0;top:0;width:410px;height:94px;border-bottom-left-radius:235px 98px;background:linear-gradient(145deg,#0d478e,#073772 60%,#062d61);display:flex;align-items:center;justify-content:flex-end;padding-right:38px;color:#fff;z-index:2}
+.brand-mark{display:flex;align-items:center;gap:12px}.brand-globe{width:43px;height:43px}.brand-globe svg{width:43px;height:43px;stroke:#fff;fill:none;stroke-width:1.8}.brand-word{font-size:40px;font-weight:800;letter-spacing:1px}
+.header{height:78px;padding-right:420px;position:relative;z-index:3}.title{font-size:39px;font-weight:800;line-height:1.05;color:#0b2f6c;white-space:nowrap}.underline{width:82px;height:5px;border-radius:3px;background:#f26b12;margin-top:14px}
+.notes{height:118px;display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}.note{background:#fff;border:1px solid #d8e4ef;border-radius:17px;box-shadow:0 7px 17px rgba(20,64,111,.10);padding:18px 22px;display:grid;grid-template-columns:54px 1fr;align-items:center;gap:14px}.note-icon{width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#247ed6,#124ca6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:27px;font-weight:900}.note-text{font-size:18px;line-height:1.22;color:#173b70;font-weight:700}.note-text strong{font-size:24px;color:#ef650e}
+.main{height:572px;display:grid;grid-template-columns:1.38fr .88fr;gap:18px;margin-top:12px}.panel{background:#fff;border:1px solid #dbe5ef;border-radius:18px;box-shadow:0 7px 17px rgba(20,64,111,.10);overflow:hidden}.chart-panel{padding:15px 18px 12px}.table-panel{padding:15px 16px 12px}.panel-title{height:36px;font-size:21px;font-weight:800;color:#0b2f6c;display:flex;align-items:center;justify-content:center;text-transform:uppercase}.chart-svg{width:100%;height:492px;display:block;overflow:visible}.grid{stroke:#d5dde8;stroke-width:1;stroke-dasharray:5 5}.axis{font-size:12px;fill:#173b69;font-weight:700}.cat{font-size:12px;fill:#173b69;font-weight:700}.bar-label{font-size:13px;fill:#0b2f6c;font-weight:900;text-anchor:end}.pct-label{font-size:12px;fill:#ef650e;font-weight:900;text-anchor:middle}.rank{font-size:12px;fill:#fff;font-weight:900;text-anchor:middle}.legend{height:24px;display:flex;align-items:center;justify-content:center;gap:28px;font-size:13px;font-weight:700;color:#29466f}.leg{display:flex;align-items:center;gap:7px}.legbox{width:22px;height:10px;background:#1765c1}.legpct{width:28px;height:4px;background:#ef6b12;border-radius:2px}
+table{width:100%;border-collapse:collapse;font-size:13px;color:#183d70}th{background:#0d4a98;color:#fff;font-size:13px;line-height:1.05;padding:9px 7px;text-align:center}td{padding:7px 7px;border-bottom:1px solid #dfe7ef;vertical-align:middle}td:first-child{font-weight:700}.num{text-align:center;font-weight:800;color:#1557a5}.pctnum{text-align:center;font-weight:900;color:#ef650e}.rankcell{width:32px;text-align:center;font-weight:900;color:#fff;background:#1765c1;border-bottom:1px solid #fff}.footer{position:absolute;left:0;right:0;bottom:0;height:66px;background:linear-gradient(90deg,#0d4a98,#063774);color:#fff;display:flex;align-items:center;padding-left:50px;overflow:hidden}.footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:15px;font-size:22px;letter-spacing:.2px}.footer-inner strong{font-size:25px;letter-spacing:.5px}.footer-globe{width:34px;height:34px}.footer-globe svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:2}.footer-orange{position:absolute;right:-22px;bottom:-28px;width:180px;height:104px;background:#ff6f12;border-radius:70% 0 0 0;transform:rotate(-7deg)}
+</style>
+</head>
+<body>
+<%
+const rows = Array.isArray(items) ? items : [];
+const maxCant = Math.max(1, ...rows.map(r => Number(r.cant || 0)));
+function fmt(n){ return Number(n || 0).toLocaleString('en-US'); }
+function pctText(v){ return `${Math.round(Number(v || 0) * 100)}%`; }
+%>
+<div class="slide">
+  <div class="brand"><div class="brand-mark"><span class="brand-globe"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg></span><span class="brand-word">COMM</span></div></div>
+  <header class="header"><div class="title"><%= titulo %></div><div class="underline"></div></header>
+  <section class="notes">
+    <div class="note"><div class="note-icon">1</div><div class="note-text"><%= notaMesPrefix %> <strong><%= fmt(totalMes) %></strong> <%= tipoPlural %> en <%= alcance %>.</div></div>
+    <div class="note"><div class="note-icon">Σ</div><div class="note-text"><%= notaAcumuladoPrefix %> <strong><%= fmt(totalAcumulado) %></strong> <%= tipoPlural %> en <%= alcance %>.</div></div>
+  </section>
+  <main class="main">
+    <section class="panel chart-panel">
+      <div class="panel-title">Ranking acumulado</div>
+      <svg class="chart-svg" viewBox="0 0 870 492">
+        <% const x0=270, y0=28, rowH=43, maxW=480; for(let g=0; g<=5; g++){ const x=x0+(maxW/5)*g; %>
+          <line class="grid" x1="<%= x %>" y1="18" x2="<%= x %>" y2="452"/>
+          <text class="axis" x="<%= x %>" y="474" text-anchor="middle"><%= Math.round(maxCant*g/5) %></text>
+        <% } %>
+        <% rows.forEach((r,i)=>{ const y=y0+i*rowH; const bw=(Number(r.cant||0)/maxCant)*maxW; const pctX=Math.min(836,x0+bw+54); %>
+          <text class="cat" x="258" y="<%= y+17 %>" text-anchor="end"><%= r.nombre.length > 34 ? r.nombre.slice(0,34)+'…' : r.nombre %></text>
+          <circle cx="22" cy="<%= y+12 %>" r="13" fill="#1765c1"/><text class="rank" x="22" y="<%= y+17 %>"><%= i+1 %></text>
+          <rect x="<%= x0 %>" y="<%= y %>" width="<%= bw %>" height="25" rx="6" fill="#1765c1"/>
+          <rect x="<%= Math.max(x0+6,x0+bw-58) %>" y="<%= y+3 %>" width="52" height="19" rx="9.5" fill="#fff" opacity=".95"/>
+          <text class="bar-label" x="<%= Math.max(x0+52,x0+bw-11) %>" y="<%= y+18 %>"><%= fmt(r.cant) %></text>
+          <rect x="<%= pctX-22 %>" y="<%= y+2 %>" width="44" height="22" rx="11" fill="#fff" stroke="#ef6b12" stroke-width="1.5"/>
+          <text class="pct-label" x="<%= pctX %>" y="<%= y+18 %>"><%= pctText(r.pct) %></text>
+        <% }) %>
+        <text class="axis" x="<%= x0+maxW/2 %>" y="489" text-anchor="middle">Cantidad acumulada</text>
+      </svg>
+      <div class="legend"><span class="leg"><i class="legbox"></i>Cantidad</span><span class="leg"><i class="legpct"></i>% acumulado</span></div>
+    </section>
+    <section class="panel table-panel">
+      <div class="panel-title">Top 10 detallado</div>
+      <table>
+        <thead><tr><th>#</th><th><%= tipoSingular.toUpperCase() %></th><% if (showMesColumn) { %><th><%= mesCorto.toUpperCase() %></th><% } %><th>CANT.</th><th>%</th></tr></thead>
+        <tbody>
+        <% rows.forEach((r,i)=>{ %>
+          <tr><td class="rankcell"><%= i+1 %></td><td><%= r.nombre %></td><% if (showMesColumn) { %><td class="num"><%= fmt(r.mesValor) %></td><% } %><td class="num"><%= fmt(r.cant) %></td><td class="pctnum"><%= pctText(r.pct) %></td></tr>
+        <% }) %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span class="footer-globe"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="footer-orange"></span></footer>
+</div>
+</body>
+</html>

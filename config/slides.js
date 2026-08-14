@@ -64,6 +64,24 @@ const SLIDES = {
     template: 'incidentes-requerimientos-unidad-classic',
     active: true,
     description: 'Incidentes vs Requerimientos - Yauli Ticlio'
+  },
+  24: {
+    key: 'incidentes-requerimientos-chungar',
+    template: 'incidentes-requerimientos-unidad-classic',
+    active: true,
+    description: 'Incidentes vs Requerimientos - Chungar'
+  },
+  25: {
+    key: 'incidentes-requerimientos-cerro-pasco',
+    template: 'incidentes-requerimientos-unidad-classic',
+    active: true,
+    description: 'Incidentes vs Requerimientos - Cerro Pasco'
+  },
+  26: {
+    key: 'incidentes-requerimientos-romina',
+    template: 'incidentes-requerimientos-unidad-classic',
+    active: true,
+    description: 'Incidentes vs Requerimientos - Romina'
   }
 };
 

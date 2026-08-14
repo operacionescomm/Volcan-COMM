@@ -52,6 +52,18 @@ const SLIDES = {
     template: 'incidentes-requerimientos-unidad-classic',
     active: true,
     description: 'Incidentes vs Requerimientos - Yauli San Cristóbal-Carahuacra'
+  },
+  22: {
+    key: 'incidentes-requerimientos-andaychagua',
+    template: 'incidentes-requerimientos-unidad-classic',
+    active: true,
+    description: 'Incidentes vs Requerimientos - Yauli Andaychagua'
+  },
+  23: {
+    key: 'incidentes-requerimientos-ticlio',
+    template: 'incidentes-requerimientos-unidad-classic',
+    active: true,
+    description: 'Incidentes vs Requerimientos - Yauli Ticlio'
   }
 };
 

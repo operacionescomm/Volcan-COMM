@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   res.json({
     ok: true,
     service: APP_NAME,
-    version: '0.5.0',
+    version: '0.6.0',
     activeSlides: [
       { number: 12, key: 'incidentes-requerimientos' },
       { number: 14, key: 'atenciones' },
@@ -30,7 +30,8 @@ app.get('/', (req, res) => {
       { number: 17, key: 'cerro-pasco-atenciones' },
       { number: 18, key: 'romina-atenciones' },
       { number: 19, key: 'incidentes-requerimientos-volcan' },
-      { number: 20, key: 'incidentes-requerimientos-yauli' }
+      { number: 20, key: 'incidentes-requerimientos-yauli' },
+      { number: 21, key: 'incidentes-requerimientos-scr-car' }
     ],
     tests: {
       slide12: '/test-slide12-png?scope=VOLCAN',
@@ -40,12 +41,13 @@ app.get('/', (req, res) => {
       slide17: '/test-slide17-png',
       slide18: '/test-slide18-png',
       slide19: '/test-slide19-png',
-      slide20: '/test-slide20-png'
+      slide20: '/test-slide20-png',
+      slide21: '/test-slide21-png'
     }
   });
 });
 
-app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: '0.5.0', timestamp: new Date().toISOString() }));
+app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: '0.6.0', timestamp: new Date().toISOString() }));
 
 app.get('/browser-status', (req, res) => {
   const executablePath = resolveChromeExecutable();
@@ -69,6 +71,13 @@ function buildSlide12Data(body = {}) {
 function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) {
   const normalized = normalizeYauliAtenciones({ ...body, titulo: body.titulo || titulo });
   return { ...normalized, unidadNombre: body.unidadNombre || unidadNombre };
+}
+
+function normalizeIncReqClassic(body = {}, unidadNombre, tituloVisual) {
+  return {
+    ...normalizeIncReqUnidad(body, unidadNombre),
+    tituloVisual: body.tituloVisual || tituloVisual
+  };
 }
 
 function hasUnitPayload(body = {}) {
@@ -244,8 +253,9 @@ app.post('/render/slide19', requireApiKey, async (req, res) => {
 });
 
 function getSampleSlide20() {
-  return normalizeIncReqUnidad({
+  return normalizeIncReqClassic({
     titulo: 'INCIDENTES VS REQUERIMIENTOS – U.M. YAULI',
+    tituloVisual: 'Incidentes vs Requerimientos Yauli',
     periodo: 'jul-26',
     series: [
       ['ago-25',147,415,562], ['sept-25',163,448,611], ['oct-25',149,454,603], ['nov-25',144,469,613],
@@ -254,7 +264,7 @@ function getSampleSlide20() {
     ],
     resumen1: 'En julio 2026, U.M. Yauli registró 630 atenciones clasificadas.',
     resumen2: '152 fueron incidentes (24%) y 478 fueron requerimientos (76%).'
-  }, 'U.M. Yauli');
+  }, 'U.M. Yauli', 'Incidentes vs Requerimientos Yauli');
 }
 
 app.get('/test-slide20', async (req, res) => {
@@ -266,11 +276,45 @@ app.get('/test-slide20-png', async (req, res) => {
   catch (error) { console.error('[test-slide20-png]', error); res.status(500).send(String(error)); }
 });
 app.post('/render/slide20', requireApiKey, async (req, res) => {
-  try { const slide = getSlideConfig(20); res.type('png').end(await renderTemplateToPng(slide.template, normalizeIncReqUnidad(req.body || {}, 'U.M. Yauli'))); }
-  catch (error) { console.error('[render/slide20]', error); res.status(500).json({ ok:false, error:String(error) }); }
+  try {
+    const slide = getSlideConfig(20);
+    const data = normalizeIncReqClassic(req.body || {}, 'U.M. Yauli', 'Incidentes vs Requerimientos Yauli');
+    res.type('png').end(await renderTemplateToPng(slide.template, data));
+  } catch (error) { console.error('[render/slide20]', error); res.status(500).json({ ok:false, error:String(error) }); }
 });
 
-app.listen(PORT, () => console.log(`${APP_NAME} v0.5 activo en http://localhost:${PORT}`));
+function getSampleSlide21() {
+  return normalizeIncReqClassic({
+    titulo: 'INCIDENTES VS REQUERIMIENTOS YAULI (SCR-CAR)',
+    tituloVisual: 'Incidentes vs Requerimientos Yauli (SCR-CAR)',
+    periodo: 'jul-26',
+    series: [
+      ['ago-25',67,128,195], ['sept-25',71,158,229], ['oct-25',64,158,222], ['nov-25',62,145,207],
+      ['dic-25',68,166,234], ['ene-26',66,163,229], ['feb-26',53,109,162], ['mar-26',65,116,181],
+      ['abr-26',67,143,210], ['may-26',59,119,178], ['jun-26',56,117,173], ['jul-26',57,120,177]
+    ],
+    resumen1: 'En julio 2026, San Cristóbal-Carahuacra registró 177 atenciones clasificadas.',
+    resumen2: '57 fueron incidentes (32%) y 120 fueron requerimientos (68%).'
+  }, 'San Cristóbal-Carahuacra', 'Incidentes vs Requerimientos Yauli (SCR-CAR)');
+}
+
+app.get('/test-slide21', async (req, res) => {
+  try { const slide = getSlideConfig(21); res.type('html').send(await renderTemplateToHtml(slide.template, getSampleSlide21())); }
+  catch (error) { console.error('[test-slide21]', error); res.status(500).send(String(error)); }
+});
+app.get('/test-slide21-png', async (req, res) => {
+  try { const slide = getSlideConfig(21); res.type('png').end(await renderTemplateToPng(slide.template, getSampleSlide21())); }
+  catch (error) { console.error('[test-slide21-png]', error); res.status(500).send(String(error)); }
+});
+app.post('/render/slide21', requireApiKey, async (req, res) => {
+  try {
+    const slide = getSlideConfig(21);
+    const data = normalizeIncReqClassic(req.body || {}, 'San Cristóbal-Carahuacra', 'Incidentes vs Requerimientos Yauli (SCR-CAR)');
+    res.type('png').end(await renderTemplateToPng(slide.template, data));
+  } catch (error) { console.error('[render/slide21]', error); res.status(500).json({ ok:false, error:String(error) }); }
+});
+
+app.listen(PORT, () => console.log(`${APP_NAME} v0.6 activo en http://localhost:${PORT}`));
 
 async function shutdown(signal) {
   console.log(`[shutdown] ${signal}`);

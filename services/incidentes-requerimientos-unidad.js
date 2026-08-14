@@ -48,7 +48,7 @@ function normalizeIncReqUnidad(body = {}, unidadNombre = 'Unidad') {
 
   const nombre = body.unidadNombre || unidadNombre;
   return {
-    titulo: body.titulo || `INCIDENTES VS REQUERIMIENTOS – ${nombre.toUpperCase()}`,
+    titulo: body.titulo || `Incidentes vs Requerimientos ${nombre}`,
     unidadNombre: nombre,
     periodo,
     periodoRaw,

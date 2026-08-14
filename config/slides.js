@@ -67,7 +67,7 @@ const SLIDES = {
   },
   24: {
     key: 'incidentes-requerimientos-chungar',
-    template: 'incidentes-requerimientos-unidad-classic',
+    template: 'incidentes-requerimientos-chungar-classic',
     active: true,
     description: 'Incidentes vs Requerimientos - Chungar'
   },

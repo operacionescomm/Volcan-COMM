@@ -40,6 +40,12 @@ const SLIDES = {
     template: 'incidentes-requerimientos-volcan-v2',
     active: true,
     description: 'Incidentes vs Requerimientos - VOLCAN acumulado y tendencia'
+  },
+  20: {
+    key: 'incidentes-requerimientos-yauli',
+    template: 'incidentes-requerimientos-unidad',
+    active: true,
+    description: 'Incidentes vs Requerimientos - U.M. Yauli mensual y tendencia'
   }
 };
 

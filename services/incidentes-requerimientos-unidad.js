@@ -48,6 +48,7 @@ function normalizeIncReqUnidad(body = {}, unidadNombre = 'Unidad') {
 
   const nombre = body.unidadNombre || unidadNombre;
   return {
+    ...body,
     titulo: body.titulo || `Incidentes vs Requerimientos ${nombre}`,
     unidadNombre: nombre,
     periodo,
@@ -65,4 +66,4 @@ function normalizeIncReqUnidad(body = {}, unidadNombre = 'Unidad') {
   };
 }
 
-module.exports = { normalizeIncReqUnidad };
+module.exports = { normalizeIncReqUnidad, normalizeSeries };

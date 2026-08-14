@@ -57,6 +57,29 @@
   background-size: 34px 34px, 100% 100% !important;
 }
 
+/*
+ * Layout seguro para la familia clásica de Incidentes vs Requerimientos.
+ * Reserva espacio real sobre el footer para que Resumen Ejecutivo nunca quede
+ * oculto. Esta regla aplica al slide 19 y a la plantilla compartida 20–26.
+ */
+.slide:has(.classic-footer) .header {
+  height: 62px !important;
+}
+
+.slide:has(.classic-footer) .kpis {
+  height: 120px !important;
+  margin-top: 8px !important;
+}
+
+.slide:has(.classic-footer) .kpi {
+  height: 112px !important;
+}
+
+.slide:has(.classic-footer) .summary {
+  height: 86px !important;
+  margin-top: 10px !important;
+}
+
 .placeholder-shell {
   width: 1600px;
   height: 900px;

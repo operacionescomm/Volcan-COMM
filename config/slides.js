@@ -46,6 +46,12 @@ const SLIDES = {
     template: 'incidentes-requerimientos-unidad-classic',
     active: true,
     description: 'Incidentes vs Requerimientos - U.M. Yauli mensual y tendencia'
+  },
+  21: {
+    key: 'incidentes-requerimientos-scr-car',
+    template: 'incidentes-requerimientos-unidad-classic',
+    active: true,
+    description: 'Incidentes vs Requerimientos - Yauli San Cristóbal-Carahuacra'
   }
 };
 

@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   res.json({
     ok: true,
     service: APP_NAME,
-    version: '0.6.0',
+    version: '0.7.0',
     activeSlides: [
       { number: 12, key: 'incidentes-requerimientos' },
       { number: 14, key: 'atenciones' },
@@ -31,7 +31,9 @@ app.get('/', (req, res) => {
       { number: 18, key: 'romina-atenciones' },
       { number: 19, key: 'incidentes-requerimientos-volcan' },
       { number: 20, key: 'incidentes-requerimientos-yauli' },
-      { number: 21, key: 'incidentes-requerimientos-scr-car' }
+      { number: 21, key: 'incidentes-requerimientos-scr-car' },
+      { number: 22, key: 'incidentes-requerimientos-andaychagua' },
+      { number: 23, key: 'incidentes-requerimientos-ticlio' }
     ],
     tests: {
       slide12: '/test-slide12-png?scope=VOLCAN',
@@ -42,12 +44,14 @@ app.get('/', (req, res) => {
       slide18: '/test-slide18-png',
       slide19: '/test-slide19-png',
       slide20: '/test-slide20-png',
-      slide21: '/test-slide21-png'
+      slide21: '/test-slide21-png',
+      slide22: '/test-slide22-png',
+      slide23: '/test-slide23-png'
     }
   });
 });
 
-app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: '0.6.0', timestamp: new Date().toISOString() }));
+app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: '0.7.0', timestamp: new Date().toISOString() }));
 
 app.get('/browser-status', (req, res) => {
   const executablePath = resolveChromeExecutable();
@@ -314,7 +318,69 @@ app.post('/render/slide21', requireApiKey, async (req, res) => {
   } catch (error) { console.error('[render/slide21]', error); res.status(500).json({ ok:false, error:String(error) }); }
 });
 
-app.listen(PORT, () => console.log(`${APP_NAME} v0.6 activo en http://localhost:${PORT}`));
+function getSampleSlide22() {
+  return normalizeIncReqClassic({
+    titulo: 'INCIDENTES VS REQUERIMIENTOS YAULI (ANDAYCHAGUA)',
+    tituloVisual: 'Incidentes vs Requerimientos Yauli (Andaychagua)',
+    periodo: 'jul-26',
+    series: [
+      ['ago-25',72,144,216], ['sept-25',75,173,248], ['oct-25',75,149,224], ['nov-25',69,170,239],
+      ['dic-25',75,187,262], ['ene-26',67,158,225], ['feb-26',69,165,234], ['mar-26',75,182,257],
+      ['abr-26',73,161,234], ['may-26',71,169,240], ['jun-26',68,194,262], ['jul-26',66,193,259]
+    ],
+    resumen1: 'En julio 2026, Andaychagua registró 259 atenciones clasificadas.',
+    resumen2: '66 fueron incidentes (25%) y 193 fueron requerimientos (75%).'
+  }, 'Andaychagua', 'Incidentes vs Requerimientos Yauli (Andaychagua)');
+}
+
+app.get('/test-slide22', async (req, res) => {
+  try { const slide = getSlideConfig(22); res.type('html').send(await renderTemplateToHtml(slide.template, getSampleSlide22())); }
+  catch (error) { console.error('[test-slide22]', error); res.status(500).send(String(error)); }
+});
+app.get('/test-slide22-png', async (req, res) => {
+  try { const slide = getSlideConfig(22); res.type('png').end(await renderTemplateToPng(slide.template, getSampleSlide22())); }
+  catch (error) { console.error('[test-slide22-png]', error); res.status(500).send(String(error)); }
+});
+app.post('/render/slide22', requireApiKey, async (req, res) => {
+  try {
+    const slide = getSlideConfig(22);
+    const data = normalizeIncReqClassic(req.body || {}, 'Andaychagua', 'Incidentes vs Requerimientos Yauli (Andaychagua)');
+    res.type('png').end(await renderTemplateToPng(slide.template, data));
+  } catch (error) { console.error('[render/slide22]', error); res.status(500).json({ ok:false, error:String(error) }); }
+});
+
+function getSampleSlide23() {
+  return normalizeIncReqClassic({
+    titulo: 'INCIDENTES VS REQUERIMIENTOS YAULI (TICLIO)',
+    tituloVisual: 'Incidentes vs Requerimientos Yauli (Ticlio)',
+    periodo: 'jul-26',
+    series: [
+      ['ago-25',8,143,151], ['sept-25',19,117,136], ['oct-25',10,147,157], ['nov-25',13,154,167],
+      ['dic-25',15,198,213], ['ene-26',12,133,145], ['feb-26',15,119,134], ['mar-26',23,158,181],
+      ['abr-26',18,115,133], ['may-26',22,177,199], ['jun-26',31,184,215], ['jul-26',29,165,194]
+    ],
+    resumen1: 'En julio 2026, Ticlio registró 194 atenciones clasificadas.',
+    resumen2: '29 fueron incidentes (15%) y 165 fueron requerimientos (85%).'
+  }, 'Ticlio', 'Incidentes vs Requerimientos Yauli (Ticlio)');
+}
+
+app.get('/test-slide23', async (req, res) => {
+  try { const slide = getSlideConfig(23); res.type('html').send(await renderTemplateToHtml(slide.template, getSampleSlide23())); }
+  catch (error) { console.error('[test-slide23]', error); res.status(500).send(String(error)); }
+});
+app.get('/test-slide23-png', async (req, res) => {
+  try { const slide = getSlideConfig(23); res.type('png').end(await renderTemplateToPng(slide.template, getSampleSlide23())); }
+  catch (error) { console.error('[test-slide23-png]', error); res.status(500).send(String(error)); }
+});
+app.post('/render/slide23', requireApiKey, async (req, res) => {
+  try {
+    const slide = getSlideConfig(23);
+    const data = normalizeIncReqClassic(req.body || {}, 'Ticlio', 'Incidentes vs Requerimientos Yauli (Ticlio)');
+    res.type('png').end(await renderTemplateToPng(slide.template, data));
+  } catch (error) { console.error('[render/slide23]', error); res.status(500).json({ ok:false, error:String(error) }); }
+});
+
+app.listen(PORT, () => console.log(`${APP_NAME} v0.7 activo en http://localhost:${PORT}`));
 
 async function shutdown(signal) {
   console.log(`[shutdown] ${signal}`);

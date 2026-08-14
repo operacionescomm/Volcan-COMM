@@ -36,10 +36,10 @@ const SLIDES = {
     description: 'Cantidad de Atenciones - U.M. Romina'
   },
   19: {
-    key: 'top-suministros-costo',
-    template: 'top-suministros-costo',
-    active: false,
-    description: 'Módulo preparado para siguiente etapa'
+    key: 'incidentes-requerimientos-volcan',
+    template: 'incidentes-requerimientos-volcan',
+    active: true,
+    description: 'Incidentes vs Requerimientos - VOLCAN acumulado y tendencia'
   }
 };
 

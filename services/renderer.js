@@ -7,10 +7,11 @@ const ROOT = path.join(__dirname, '..');
 const VIEW_DIR = path.join(ROOT, 'views');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 
-function applyTemplateOverrides(templateName, html) {
-  if (templateName !== 'incidentes-requerimientos-unidad') return html;
+function applyTemplateOverrides(templateName, html, data = {}) {
+  let output = html;
 
-  const overrideCss = `
+  if (templateName === 'incidentes-requerimientos-unidad') {
+    const overrideCss = `
 <style id="inc-req-unidad-standard-overrides">
 /* Estándar visual slides 20–26:
    porcentaje de incidentes = cápsula naranja,
@@ -31,9 +32,24 @@ function applyTemplateOverrides(templateName, html) {
 }
 </style>`;
 
-  return html.includes('</head>')
-    ? html.replace('</head>', `${overrideCss}\n</head>`)
-    : `${overrideCss}\n${html}`;
+    output = output.includes('</head>')
+      ? output.replace('</head>', `${overrideCss}\n</head>`)
+      : `${overrideCss}\n${output}`;
+  }
+
+  /*
+   * La plantilla clásica aprobada nació con el título de Yauli fijo.
+   * Para reutilizar exactamente el mismo layout en los slides 20–26,
+   * permitimos reemplazar solo ese encabezado mediante tituloVisual.
+   */
+  if (templateName === 'incidentes-requerimientos-unidad-classic' && data.tituloVisual) {
+    output = output.replace(
+      'Incidentes vs Requerimientos Yauli',
+      String(data.tituloVisual)
+    );
+  }
+
+  return output;
 }
 
 async function renderTemplateToHtml(templateName, data) {
@@ -43,7 +59,7 @@ async function renderTemplateToHtml(templateName, data) {
   }
 
   const html = await ejs.renderFile(templatePath, data, { async: false });
-  return applyTemplateOverrides(templateName, html);
+  return applyTemplateOverrides(templateName, html, data);
 }
 
 async function htmlToPng(html) {

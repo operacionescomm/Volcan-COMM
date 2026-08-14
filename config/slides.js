@@ -82,6 +82,18 @@ const SLIDES = {
     template: 'incidentes-requerimientos-unidad-classic',
     active: true,
     description: 'Incidentes vs Requerimientos - Romina'
+  },
+  27: {
+    key: 'top-ten-requerimientos-volcan',
+    template: 'top-ten-volcan-classic',
+    active: true,
+    description: 'Top Ten Requerimientos - VOLCAN acumulado'
+  },
+  28: {
+    key: 'top-ten-incidentes-volcan',
+    template: 'top-ten-volcan-classic',
+    active: true,
+    description: 'Top Ten Incidentes - VOLCAN acumulado'
   }
 };
 

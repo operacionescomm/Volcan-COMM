@@ -4,6 +4,7 @@ const { SCOPES, REPORT_SCOPE_MEMBERS, getScope } = require('./config/operations'
 const { getSlideConfig } = require('./config/slides');
 const { normalizeIncReq, normalizeAtenciones, normalizeYauliAtenciones } = require('./services/normalizers');
 const { normalizeIncReqTrend } = require('./services/incidentes-requerimientos-trend');
+const { normalizeIncReqUnidad } = require('./services/incidentes-requerimientos-unidad');
 const { renderTemplateToHtml, renderTemplateToPng } = require('./services/renderer');
 const { closeBrowser, resolveChromeExecutable } = require('./services/browser');
 
@@ -20,7 +21,7 @@ app.get('/', (req, res) => {
   res.json({
     ok: true,
     service: APP_NAME,
-    version: '0.4.0',
+    version: '0.5.0',
     activeSlides: [
       { number: 12, key: 'incidentes-requerimientos' },
       { number: 14, key: 'atenciones' },
@@ -28,7 +29,8 @@ app.get('/', (req, res) => {
       { number: 16, key: 'chungar-atenciones' },
       { number: 17, key: 'cerro-pasco-atenciones' },
       { number: 18, key: 'romina-atenciones' },
-      { number: 19, key: 'incidentes-requerimientos-volcan' }
+      { number: 19, key: 'incidentes-requerimientos-volcan' },
+      { number: 20, key: 'incidentes-requerimientos-yauli' }
     ],
     tests: {
       slide12: '/test-slide12-png?scope=VOLCAN',
@@ -37,12 +39,13 @@ app.get('/', (req, res) => {
       slide16: '/test-slide16-png',
       slide17: '/test-slide17-png',
       slide18: '/test-slide18-png',
-      slide19: '/test-slide19-png'
+      slide19: '/test-slide19-png',
+      slide20: '/test-slide20-png'
     }
   });
 });
 
-app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: '0.4.0', timestamp: new Date().toISOString() }));
+app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: '0.5.0', timestamp: new Date().toISOString() }));
 
 app.get('/browser-status', (req, res) => {
   const executablePath = resolveChromeExecutable();
@@ -240,7 +243,34 @@ app.post('/render/slide19', requireApiKey, async (req, res) => {
   catch (error) { console.error('[render/slide19]', error); res.status(500).json({ ok:false, error:String(error) }); }
 });
 
-app.listen(PORT, () => console.log(`${APP_NAME} v0.4 activo en http://localhost:${PORT}`));
+function getSampleSlide20() {
+  return normalizeIncReqUnidad({
+    titulo: 'INCIDENTES VS REQUERIMIENTOS – U.M. YAULI',
+    periodo: 'jul-26',
+    series: [
+      ['ago-25',147,415,562], ['sept-25',163,448,611], ['oct-25',149,454,603], ['nov-25',144,469,613],
+      ['dic-25',158,551,709], ['ene-26',145,454,599], ['feb-26',137,393,530], ['mar-26',163,456,619],
+      ['abr-26',158,419,577], ['may-26',152,465,617], ['jun-26',155,495,650], ['jul-26',152,478,630]
+    ],
+    resumen1: 'En julio 2026, U.M. Yauli registró 630 atenciones clasificadas.',
+    resumen2: '152 fueron incidentes (24%) y 478 fueron requerimientos (76%).'
+  }, 'U.M. Yauli');
+}
+
+app.get('/test-slide20', async (req, res) => {
+  try { const slide = getSlideConfig(20); res.type('html').send(await renderTemplateToHtml(slide.template, getSampleSlide20())); }
+  catch (error) { console.error('[test-slide20]', error); res.status(500).send(String(error)); }
+});
+app.get('/test-slide20-png', async (req, res) => {
+  try { const slide = getSlideConfig(20); res.type('png').end(await renderTemplateToPng(slide.template, getSampleSlide20())); }
+  catch (error) { console.error('[test-slide20-png]', error); res.status(500).send(String(error)); }
+});
+app.post('/render/slide20', requireApiKey, async (req, res) => {
+  try { const slide = getSlideConfig(20); res.type('png').end(await renderTemplateToPng(slide.template, normalizeIncReqUnidad(req.body || {}, 'U.M. Yauli'))); }
+  catch (error) { console.error('[render/slide20]', error); res.status(500).json({ ok:false, error:String(error) }); }
+});
+
+app.listen(PORT, () => console.log(`${APP_NAME} v0.5 activo en http://localhost:${PORT}`));
 
 async function shutdown(signal) {
   console.log(`[shutdown] ${signal}`);

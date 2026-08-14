@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title><%= tituloVisual || titulo %></title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1600px;height:900px;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#fff 0%,#f8fbff 72%,#eef5ff 100%);color:#0b2d67}
+.slide{position:relative;width:1600px;height:900px;padding:18px 34px 86px;overflow:hidden}
+.brand{position:absolute;right:0;top:0;width:405px;height:98px;border-bottom-left-radius:250px 98px;background:linear-gradient(145deg,#0f4d98,#073b7c 58%,#062f67);display:flex;align-items:center;justify-content:flex-end;padding-right:45px;color:#fff;box-shadow:inset 18px 0 0 rgba(63,145,229,.22)}
+.brand-word{font-size:39px;font-weight:800;letter-spacing:2px}
+.header{height:82px;padding-right:410px;display:flex;align-items:center;justify-content:center}
+.title{font-size:44px;line-height:1;font-weight:900;color:#1f4f97;letter-spacing:.2px;text-shadow:0 3px 3px rgba(0,0,0,.24);white-space:nowrap}
+.content{display:grid;grid-template-columns:1fr 360px;grid-template-rows:380px 334px;gap:14px 22px;height:714px}
+.panel{background:#fff;border:1px solid #8bb7e6;box-shadow:0 7px 16px rgba(18,67,121,.08);overflow:hidden}
+.panel.chart{padding:14px 18px 8px}.panel.mainchart{grid-column:1;grid-row:1}.panel.piepanel{grid-column:2;grid-row:1;padding:32px 22px 15px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}.bottom{grid-column:1 / span 2;grid-row:2;display:grid;grid-template-columns:1fr 1fr;gap:0}.bottom .panel{border-top:none;border-bottom:none;border-left:none;border-radius:0}.bottom .panel:first-child{border-right:2px solid #8bb7e6}.bottom .panel:last-child{border-right:none}.ctitle{height:42px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#40516b;letter-spacing:.7px;text-transform:uppercase}.chart-svg{width:100%;height:278px;display:block;overflow:visible}.mainchart .chart-svg{height:284px}.grid{stroke:#dce5ee;stroke-width:1}.axis{font-size:12px;fill:#30486a;font-weight:600}.bar-label{font-size:13px;fill:#374b69;font-weight:700;text-anchor:middle}.line-label{font-size:13px;fill:#374b69;font-weight:700}.legend{height:26px;display:flex;align-items:center;justify-content:center;gap:28px;font-size:13px;color:#30486a}.leg{display:flex;align-items:center;gap:6px}.box{width:34px;height:8px;background:#5b9bd5}.line{width:34px;height:4px;background:#ed7d31;border-radius:4px;position:relative}.line:before,.line:after{content:'';position:absolute;top:-3px;width:9px;height:9px;background:#ed7d31;border-radius:50%;border:1px solid rgba(255,255,255,.9)}.line:before{left:7px}.line:after{right:7px}
+.pie-title{font-size:22px;color:#6a6f78;margin:10px 0 28px}.pie-svg{width:220px;height:220px;overflow:visible}.pie-legend{margin-top:12px;display:flex;align-items:center;justify-content:center;gap:11px;color:#6b6f75;font-size:13px}.pie-leg{display:flex;align-items:center;gap:4px}.sq{width:10px;height:10px;display:inline-block}.footer{position:absolute;left:0;right:0;bottom:0;height:80px;background:linear-gradient(90deg,#074b8c,#06447f);display:flex;align-items:center;padding-left:56px;color:#fff;font-size:34px;letter-spacing:.4px}.footer .lite{font-weight:400}.footer strong{font-weight:900}.footer small{font-size:29px}.footer:after{content:'';position:absolute;right:-35px;bottom:-50px;width:200px;height:120px;border-radius:70% 0 0 0;background:#f57c1f;transform:rotate(-4deg)}
+</style>
+</head>
+<body>
+<% 
+const defaultCharts = [
+  { titulo: 'CHUNGAR', series: series || [] },
+  { titulo: 'SOPORTE CHUNGAR', series: [
+    ['ago-25',48,114,162], ['sept-25',55,98,153], ['oct-25',48,108,156], ['nov-25',54,107,161],
+    ['dic-25',58,133,191], ['ene-26',55,82,137], ['abr-26',45,109,154], ['may-26',47,119,166],
+    ['jun-26',77,155,232], ['jul-26',82,173,255]
+  ] },
+  { titulo: 'AUTOMATIZACION CHUNGAR', series: [
+    ['ago-25',13,81,94], ['sept-25',8,78,86], ['oct-25',9,77,86], ['nov-25',6,71,77],
+    ['dic-25',2,70,72], ['ene-26',1,68,69], ['abr-26',9,74,83], ['may-26',7,92,99],
+    ['jun-26',6,91,97], ['jul-26',7,77,84]
+  ] }
+];
+const rawCharts = (typeof charts !== 'undefined' && Array.isArray(charts) && charts.length) ? charts : defaultCharts;
+function cleanSeries(raw){
+  return (Array.isArray(raw) ? raw : []).map(item => Array.isArray(item) ? {
+    mes: String(item[0] || ''), incidentes: Number(item[1] || 0), requerimientos: Number(item[2] || 0), total: Number(item[3] || 0) || Number(item[1] || 0) + Number(item[2] || 0)
+  } : item).filter(d => d && d.mes);
+}
+function niceMax(value){ return Math.max(100, Math.ceil(Number(value || 0) / 50) * 50); }
+function chartSvg(chart, opts={}){
+  const data = cleanSeries(chart.series);
+  const w = opts.w || 1050, h = opts.h || 270, ml = 28, mr = 24, mt = 16, mb = 42;
+  const pw = w - ml - mr, ph = h - mt - mb;
+  const ymax = niceMax(Math.max(...data.flatMap(d => [d.incidentes, d.requerimientos]), 100));
+  const sx = i => ml + (data.length <= 1 ? pw / 2 : i * pw / (data.length - 1));
+  const sy = v => mt + ph - (Number(v || 0) / ymax) * ph;
+  const barW = opts.barW || 34;
+  const tick = ymax <= 100 ? 20 : 50;
+  const reqPts = data.map((d,i) => `${sx(i)},${sy(d.requerimientos)}`).join(' ');
+%>
+<svg class="chart-svg" viewBox="0 0 <%= w %> <%= h %>">
+  <% for(let t=0;t<=ymax;t+=tick){ const y=sy(t); %>
+    <line class="grid" x1="<%= ml %>" y1="<%= y %>" x2="<%= w-mr %>" y2="<%= y %>"/>
+    <text class="axis" x="<%= ml-12 %>" y="<%= y+4 %>" text-anchor="end"><%= t %></text>
+  <% } %>
+  <% data.forEach((d,i)=>{ const x=sx(i)-barW/2; const y=sy(d.incidentes); %>
+    <defs><linearGradient id="bar<%= opts.id || 'x' %><%= i %>" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6aa6df"/><stop offset="1" stop-color="#3f8ed0"/></linearGradient></defs>
+    <rect x="<%= x %>" y="<%= y %>" width="<%= barW %>" height="<%= mt+ph-y %>" fill="url(#bar<%= opts.id || 'x' %><%= i %>)"/>
+    <text class="bar-label" x="<%= sx(i) %>" y="<%= y-9 %>"><%= d.incidentes %></text>
+    <text class="axis" x="<%= sx(i) %>" y="<%= h-16 %>" text-anchor="middle"><%= d.mes %></text>
+  <% }) %>
+  <polyline points="<%= reqPts %>" fill="none" stroke="#ed7d31" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <% data.forEach((d,i)=>{ const lx = Math.min(w-mr-22, sx(i)+14); %>
+    <circle cx="<%= sx(i) %>" cy="<%= sy(d.requerimientos) %>" r="5" fill="#ed7d31" stroke="#fff" stroke-width="2"/>
+    <text class="line-label" x="<%= lx %>" y="<%= sy(d.requerimientos)+5 %>"><%= d.requerimientos %></text>
+  <% }) %>
+</svg>
+<% }
+function piePath(cx, cy, r, startDeg, endDeg){
+  const rad = Math.PI / 180;
+  const x1 = cx + r * Math.cos(startDeg * rad), y1 = cy + r * Math.sin(startDeg * rad);
+  const x2 = cx + r * Math.cos(endDeg * rad), y2 = cy + r * Math.sin(endDeg * rad);
+  const large = endDeg - startDeg > 180 ? 1 : 0;
+  return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z`;
+}
+const pie = (typeof pieItems !== 'undefined' && Array.isArray(pieItems) && pieItems.length) ? pieItems : [
+  { label: String(incidentesMes), value: incidentesMes, color: '#5b9bd5' },
+  { label: String(requerimientosMes), value: requerimientosMes, color: '#ed7d31' },
+  { label: String(totalMes), value: totalMes, color: '#a5a5a5' }
+];
+const pieTotal = Number(pie[2]?.value || totalMes || 0) || (Number(pie[0]?.value || 0) + Number(pie[1]?.value || 0));
+const pInc = pieTotal ? (Number(pie[0]?.value || 0) / pieTotal) * 100 : 0;
+const pReq = pieTotal ? (Number(pie[1]?.value || 0) / pieTotal) * 100 : 0;
+%>
+<div class="slide">
+  <div class="brand"><div class="brand-word">COMM</div></div>
+  <header class="header"><div class="title"><%= tituloVisual || titulo %></div></header>
+  <main class="content">
+    <section class="panel chart mainchart">
+      <div class="ctitle"><%= rawCharts[0]?.titulo || 'CHUNGAR' %></div>
+      <% chartSvg(rawCharts[0], { w: 1080, h: 280, barW: 36, id:'main' }); %>
+      <div class="legend"><div class="leg"><span class="box"></span>Incidente</div><div class="leg"><span class="line"></span>Requerimiento</div></div>
+    </section>
+    <aside class="panel piepanel">
+      <div class="pie-title"><%= mesCorto || 'Julio' %></div>
+      <svg class="pie-svg" viewBox="0 0 220 220">
+        <path d="<%= piePath(110,110,84,-90,-90 + (pInc/100)*360) %>" fill="#9dc3e6" stroke="#ed7d31" stroke-width="1"/>
+        <path d="<%= piePath(110,110,84,-90 + (pInc/100)*360,270) %>" fill="#f4a582" stroke="#ed7d31" stroke-width="1"/>
+        <text x="148" y="74" fill="#40516b" font-size="14" font-weight="700"><%= pInc.toFixed(0) %>%</text>
+        <text x="50" y="156" fill="#40516b" font-size="14" font-weight="700"><%= pReq.toFixed(0) %>%</text>
+      </svg>
+      <div class="pie-legend">
+        <% pie.forEach(item=>{ %><div class="pie-leg"><span class="sq" style="background:<%= item.color %>"></span><span><%= item.label %></span></div><% }) %>
+      </div>
+    </aside>
+    <section class="bottom">
+      <section class="panel chart">
+        <div class="ctitle"><%= rawCharts[1]?.titulo || 'SOPORTE CHUNGAR' %></div>
+        <% chartSvg(rawCharts[1] || rawCharts[0], { w: 720, h: 255, barW: 26, id:'sup' }); %>
+        <div class="legend"><div class="leg"><span class="box"></span>Incidente</div><div class="leg"><span class="line"></span>Requerimiento</div></div>
+      </section>
+      <section class="panel chart">
+        <div class="ctitle"><%= rawCharts[2]?.titulo || 'AUTOMATIZACION CHUNGAR' %></div>
+        <% chartSvg(rawCharts[2] || rawCharts[0], { w: 720, h: 255, barW: 26, id:'auto' }); %>
+        <div class="legend"><div class="leg"><span class="box"></span>Incidente</div><div class="leg"><span class="line"></span>Requerimiento</div></div>
+      </section>
+    </section>
+  </main>
+  <footer class="footer"><span class="lite">www.</span><strong>COMMUNICATIONS</strong><small>.com.pe</small></footer>
+</div>
+</body>
+</html>

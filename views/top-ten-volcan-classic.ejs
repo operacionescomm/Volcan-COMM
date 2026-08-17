@@ -80,7 +80,7 @@ const pctFloor = -0.04;
           <text class="bar-value" x="<%= cx %>" y="<%= Math.max(18,y-10) %>"><%= fmt(val) %></text>
         <% }) %>
         <polyline points="<%= points %>" fill="none" stroke="#ef6b12" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <% rows.forEach((r,i)=>{ const cx=sx(i), pct=pctVal(r), py=syP(pct), label=pctText(pct), labelW=Math.max(34,label.length*7+10), preferUp=py-24, useBelow=preferUp<mt+8, ly=useBelow?py+20:py-16, ry=ly-13; %>
+        <% rows.forEach((r,i)=>{ const cx=sx(i), pct=pctVal(r), py=syP(pct), label=pctText(pct), labelW=Math.max(34,label.length*7+10), ly=Math.max(mt+14,py-16), ry=ly-13; %>
           <circle class="point" cx="<%= cx %>" cy="<%= py %>" r="4.2"/>
           <rect x="<%= cx-labelW/2 %>" y="<%= ry %>" width="<%= labelW %>" height="18" rx="9" fill="#fff" stroke="#ef6b12" stroke-width="1.2"/>
           <text class="pct-label" x="<%= cx %>" y="<%= ly %>"><%= label %></text>

@@ -5,18 +5,19 @@ const { normalizeIncReqTrend } = require('./services/incidentes-requerimientos-t
 const { normalizeIncReqUnidad } = require('./services/incidentes-requerimientos-unidad');
 const { renderTemplateToHtml, renderTemplateToPng } = require('./services/renderer');
 const { closeBrowser, resolveChromeExecutable } = require('./services/browser');
+const { getRootCauseComparisonSample, getCerroRootCauseSample } = require('./services/root-cause-samples');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const APP_NAME = process.env.APP_NAME || 'Volcan-COMM Visual Engine';
 const API_KEY = String(process.env.RENDER_API_KEY || '').trim();
-const VERSION = '0.8.0';
+const VERSION = '0.9.0';
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-const ACTIVE_SLIDES = [19,20,21,22,23,24,25,26,27,28];
+const ACTIVE_SLIDES = [19,20,21,22,23,24,25,26,27,28,29,30,31,32];
 app.get('/', (req, res) => res.json({
   ok:true, service:APP_NAME, version:VERSION,
   activeSlides: ACTIVE_SLIDES.map(number => ({ number, key:getSlideConfig(number).key })),
@@ -47,10 +48,16 @@ const TOP_TEN_SAMPLES = {
   ]}
 };
 function normalizeTopTen(body={},fallback={}){ const src=Array.isArray(body.items)&&body.items.length?body.items:fallback.items; return {...fallback,...body,items:(src||[]).map(item=>Array.isArray(item)?{nombre:item[0],mesValor:Number(item[1]||0),cant:Number(item[2]||0),pct:Number(item[3]||0)}:{nombre:String(item.nombre||item.categoria||''),mesValor:Number(item.mesValor||item.jul||0),cant:Number(item.cant||item.cantidad||item.total||0),pct:Number(item.pct||item.porcentaje||0)}).filter(i=>i.nombre)}; }
-function getSampleTopTen(n){ const p=TOP_TEN_SAMPLES[Number(n)]; if(!p) throw new Error(`No hay muestra Top Ten para slide ${n}`); return normalizeTopTen(p,p); }
 
 function slide19Sample(){ return normalizeIncReqTrend({titulo:'INCIDENTES VS REQUERIMIENTOS – VOLCAN',periodo:'jul-26',acumuladoIncidentes:2558,acumuladoRequerimientos:9051,acumuladoTotal:11609,series:[['ago-25',216,682,898],['sept-25',233,706,939],['oct-25',216,744,960],['nov-25',211,791,1002],['dic-25',225,897,1122],['ene-26',213,729,942],['feb-26',152,552,704],['mar-26',171,616,787],['abr-26',220,768,988],['may-26',210,837,1047],['jun-26',240,872,1112],['jul-26',251,857,1108]]}); }
-function dataFor(n, body={}){ if(n===19) return Object.keys(body).length?normalizeIncReqTrend(body):slide19Sample(); if(n>=20&&n<=26){const p=INC_REQ_UNIT_SAMPLES[n]; return Object.keys(body).length?normalizeIncReqClassic(body,p.unidadNombre,p.tituloVisual):getSampleIncReqUnit(n);} if(n>=27&&n<=28) return normalizeTopTen(body,TOP_TEN_SAMPLES[n]); throw new Error(`Slide no soportado: ${n}`); }
+function dataFor(n, body={}){
+  if(n===19) return Object.keys(body).length?normalizeIncReqTrend(body):slide19Sample();
+  if(n>=20&&n<=26){const p=INC_REQ_UNIT_SAMPLES[n]; return Object.keys(body).length?normalizeIncReqClassic(body,p.unidadNombre,p.tituloVisual):getSampleIncReqUnit(n);}
+  if(n>=27&&n<=28) return normalizeTopTen(body,TOP_TEN_SAMPLES[n]);
+  if(n>=29&&n<=31) return Object.keys(body).length ? body : getRootCauseComparisonSample(n);
+  if(n===32) return Object.keys(body).length ? body : getCerroRootCauseSample();
+  throw new Error(`Slide no soportado: ${n}`);
+}
 function register(n){ app.get(`/test-slide${n}`,async(req,res)=>{try{const s=getSlideConfig(n); res.type('html').send(await renderTemplateToHtml(s.template,dataFor(n)));}catch(e){console.error(`[test-slide${n}]`,e);res.status(500).send(String(e));}}); app.get(`/test-slide${n}-png`,async(req,res)=>{try{const s=getSlideConfig(n); res.type('png').end(await renderTemplateToPng(s.template,dataFor(n)));}catch(e){console.error(`[test-slide${n}-png]`,e);res.status(500).send(String(e));}}); app.post(`/render/slide${n}`,requireApiKey,async(req,res)=>{try{const s=getSlideConfig(n); res.type('png').end(await renderTemplateToPng(s.template,dataFor(n,req.body||{})));}catch(e){console.error(`[render/slide${n}]`,e);res.status(500).json({ok:false,error:String(e)});}}); }
 ACTIVE_SLIDES.forEach(register);
 

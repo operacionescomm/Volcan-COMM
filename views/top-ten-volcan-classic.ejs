@@ -4,17 +4,65 @@
 <meta charset="UTF-8">
 <title><%= titulo %></title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:1600px;height:900px;overflow:hidden}body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#0b2d67}.slide{position:relative;width:1600px;height:900px;padding:24px 52px 0;background:linear-gradient(135deg,#fff 0%,#fbfdff 72%,#f4f8fd 100%);overflow:hidden}.brand{position:absolute;right:0;top:0;width:410px;height:94px;border-bottom-left-radius:235px 98px;background:linear-gradient(145deg,#0d478e,#073772 60%,#062d61);display:flex;align-items:center;justify-content:flex-end;padding-right:22px;color:#fff;z-index:2;overflow:hidden}.brand:before{content:'';position:absolute;left:0;top:0;width:90px;height:94px;background:rgba(255,255,255,.06);border-bottom-left-radius:210px 92px}.header{height:78px;padding-right:420px;position:relative;z-index:3}.title{font-size:39px;font-weight:800;line-height:1.05;color:#0b2f6c;white-space:nowrap}.underline{width:82px;height:5px;border-radius:3px;background:#f26b12;margin-top:14px}.comm-logo{position:relative;z-index:2;display:flex;align-items:center;gap:10px;white-space:nowrap}.comm-logo .emblem{width:72px;height:50px;flex:0 0 auto}.comm-logo .words{line-height:.88;text-align:left;white-space:nowrap}.comm-logo .w1{display:block;font-size:35px;font-weight:900;letter-spacing:.4px;color:#2d7bd8}.comm-logo .w2{display:block;margin-top:4px;font-size:15px;font-weight:900;letter-spacing:.2px;color:#2d7bd8}.comm-logo .w3{display:block;margin-top:5px;font-size:7.5px;font-weight:800;letter-spacing:.45px;color:#bdbdbd}.emblem .g{fill:#a0a0a0}.emblem .b{fill:#0d4a98}.emblem .r{fill:#ef2b2d}.brand .comm-logo{transform:scale(.86);transform-origin:right center}.notes{height:118px;display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}.note{background:#fff;border:1px solid #d8e4ef;border-radius:17px;box-shadow:0 7px 17px rgba(20,64,111,.10);padding:18px 22px;display:grid;grid-template-columns:54px 1fr;align-items:center;gap:14px}.note-icon{width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#247ed6,#124ca6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:27px;font-weight:900}.note-text{font-size:18px;line-height:1.22;color:#173b70;font-weight:700}.note-text strong{font-size:24px;color:#ef650e}.main{height:574px;display:grid;grid-template-columns:1.24fr .76fr;gap:18px;margin-top:12px}.panel{background:#fff;border:1px solid #dbe5ef;border-radius:18px;box-shadow:0 7px 17px rgba(20,64,111,.10);overflow:hidden}.chart-panel{padding:14px 18px 10px}.table-panel{padding:14px 18px 14px}.panel-title{height:34px;font-size:21px;font-weight:800;color:#0b2f6c;display:flex;align-items:center;justify-content:center;text-transform:uppercase}.panel-subtitle{height:20px;font-size:12px;font-weight:700;color:#6d7f95;display:flex;align-items:center;justify-content:center}.chart-svg{width:100%;height:444px;display:block;overflow:visible}.grid{stroke:#d5dde8;stroke-width:1}.axis{font-size:12px;fill:#607287;font-weight:700}.axis-r{font-size:12px;fill:#7b6e60;font-weight:700}.cat{font-size:10.5px;fill:#5d6f86;font-weight:700}.bar-value{font-size:13px;fill:#fff;font-weight:900;text-anchor:middle;text-shadow:0 1px 2px rgba(0,0,0,.25)}.pct-label{font-size:12px;fill:#ef6b12;font-weight:900;text-anchor:middle}.point{fill:#ef6b12;stroke:#fff;stroke-width:2}.legend{height:26px;display:flex;align-items:center;justify-content:center;gap:30px;font-size:13px;font-weight:700;color:#29466f}.leg{display:flex;align-items:center;gap:7px}.legbox{width:22px;height:10px;background:#9fb8d7;border:1px solid #4d8dd3}.legline{width:30px;height:4px;background:#ef6b12;border-radius:2px;position:relative}.legline:after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:#ef6b12;left:11px;top:-2px}.table-title{height:40px;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:800;color:#0b2f6c;text-transform:uppercase}.table-wrap{margin-top:4px;border-top:2px solid #5d8be0;border-bottom:2px solid #5d8be0;padding-top:12px;padding-bottom:2px}.detail-table{width:100%;border-collapse:collapse;color:#000}.detail-table th{font-size:16px;font-weight:400;padding:0 6px 10px;text-align:center;color:#000;background:transparent}.detail-table th:first-child{text-align:center}.detail-table td{font-size:17px;line-height:1.08;padding:6px 6px;border:none;color:#000;vertical-align:top}.detail-table td:first-child{font-size:18px}.detail-table td.name{padding-left:4px}.detail-table td.center{text-align:center}.detail-table td.right{text-align:right;padding-right:10px}.detail-table tbody tr td{border-bottom:1px solid rgba(93,139,224,.12)}.detail-table tbody tr:last-child td{border-bottom:none}.footer{position:absolute;left:0;right:0;bottom:0;height:66px;background:linear-gradient(90deg,#0d4a98,#063774);color:#fff;overflow:hidden}.footer-logo{position:absolute;z-index:2;left:74px;top:8px;width:265px;height:52px}.footer-logo .comm-logo{gap:8px}.footer-logo .comm-logo .emblem{width:80px;height:52px}.footer-logo .comm-logo .w1{font-size:33px;color:#fff}.footer-logo .comm-logo .w2{font-size:13px;color:#fff;margin-top:3px}.footer-logo .comm-logo .w3{font-size:6.8px;color:#d7d7d7;margin-top:4px}.footer-logo .emblem .b{fill:#dce9ff}.footer-logo .emblem .g{fill:#b6b6b6}.footer-sep{position:absolute;z-index:2;left:370px;top:12px;width:1px;height:42px;background:rgba(255,255,255,.62)}.footer-web{position:absolute;z-index:2;left:400px;top:18px;display:flex;align-items:center;gap:10px;font-size:21px;font-weight:700;white-space:nowrap;color:#fff}.footer-web .webicon{width:31px;height:31px;flex:0 0 auto}.footer-web .orange{color:#ff7414}.footer-orange{position:absolute;right:-22px;bottom:-28px;width:180px;height:104px;background:#ff6f12;border-radius:70% 0 0 0;transform:rotate(-7deg)}
+*{box-sizing:border-box}
+html,body{margin:0;width:1600px;height:900px;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#0b2d67}
+.slide{position:relative;width:1600px;height:900px;padding:24px 52px 0;background:linear-gradient(135deg,#fff 0%,#fbfdff 72%,#f4f8fd 100%);overflow:hidden}
+.brand{position:absolute;right:0;top:0;width:410px;height:94px;border-bottom-left-radius:235px 98px;background:linear-gradient(145deg,#0d478e,#073772 60%,#062d61);display:flex;align-items:center;justify-content:flex-end;padding-right:38px;color:#fff;z-index:2}
+.brand-mark{display:flex;align-items:center;gap:12px}.brand-globe{width:43px;height:43px}.brand-globe svg{width:43px;height:43px;stroke:#fff;fill:none;stroke-width:1.8}.brand-word{font-size:40px;font-weight:800;letter-spacing:1px}
+.header{height:78px;padding-right:420px;position:relative;z-index:3}.title{font-size:39px;font-weight:800;line-height:1.05;color:#0b2f6c;white-space:nowrap}.underline{width:82px;height:5px;border-radius:3px;background:#f26b12;margin-top:14px}
+.notes{height:118px;display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}.note{background:#fff;border:1px solid #d8e4ef;border-radius:17px;box-shadow:0 7px 17px rgba(20,64,111,.10);padding:18px 22px;display:grid;grid-template-columns:54px 1fr;align-items:center;gap:14px}.note-icon{width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#247ed6,#124ca6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:27px;font-weight:900}.note-text{font-size:18px;line-height:1.22;color:#173b70;font-weight:700}.note-text strong{font-size:24px;color:#ef650e}
+.main{height:574px;display:grid;grid-template-columns:1.24fr .76fr;gap:18px;margin-top:12px}.panel{background:#fff;border:1px solid #dbe5ef;border-radius:18px;box-shadow:0 7px 17px rgba(20,64,111,.10);overflow:hidden}.chart-panel{padding:14px 18px 10px}.table-panel{padding:14px 18px 14px}.panel-title{height:34px;font-size:21px;font-weight:800;color:#0b2f6c;display:flex;align-items:center;justify-content:center;text-transform:uppercase}.panel-subtitle{height:20px;font-size:12px;font-weight:700;color:#6d7f95;display:flex;align-items:center;justify-content:center}
+.chart-svg{width:100%;height:444px;display:block;overflow:visible}.grid{stroke:#d5dde8;stroke-width:1}.axis{font-size:12px;fill:#607287;font-weight:700}.axis-r{font-size:12px;fill:#7b6e60;font-weight:700}.cat{font-size:10.5px;fill:#5d6f86;font-weight:700}.bar-value{font-size:13px;fill:#fff;font-weight:900;text-anchor:middle;text-shadow:0 1px 2px rgba(0,0,0,.25)}.pct-label{font-size:12px;fill:#ef6b12;font-weight:900;text-anchor:middle}.point{fill:#ef6b12;stroke:#fff;stroke-width:2}
+.legend{height:26px;display:flex;align-items:center;justify-content:center;gap:30px;font-size:13px;font-weight:700;color:#29466f}.leg{display:flex;align-items:center;gap:7px}.legbox{width:22px;height:10px;background:#9fb8d7;border:1px solid #4d8dd3}.legline{width:30px;height:4px;background:#ef6b12;border-radius:2px;position:relative}.legline:after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:#ef6b12;left:11px;top:-2px}
+.table-title{height:40px;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:800;color:#0b2f6c;text-transform:uppercase}.table-wrap{margin-top:4px;border-top:2px solid #5d8be0;border-bottom:2px solid #5d8be0;padding-top:12px;padding-bottom:2px}.detail-table{width:100%;border-collapse:collapse;color:#000}.detail-table th{font-size:16px;font-weight:400;padding:0 6px 10px;text-align:center;color:#000;background:transparent}.detail-table th:first-child{text-align:center}.detail-table td{font-size:17px;line-height:1.08;padding:6px 6px;border:none;color:#000;vertical-align:top}.detail-table td:first-child{font-size:18px}.detail-table td.name{padding-left:4px}.detail-table td.center{text-align:center}.detail-table td.right{text-align:right;padding-right:10px}.detail-table tbody tr td{border-bottom:1px solid rgba(93,139,224,.12)}.detail-table tbody tr:last-child td{border-bottom:none}
+.footer{position:absolute;left:0;right:0;bottom:0;height:66px;background:linear-gradient(90deg,#0d4a98,#063774);color:#fff;display:flex;align-items:center;padding-left:50px;overflow:hidden}.footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:15px;font-size:22px;letter-spacing:.2px}.footer-inner strong{font-size:25px;letter-spacing:.5px}.footer-globe{width:34px;height:34px}.footer-globe svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:2}.footer-orange{position:absolute;right:-22px;bottom:-28px;width:180px;height:104px;background:#ff6f12;border-radius:70% 0 0 0;transform:rotate(-7deg)}
 </style>
 </head>
 <body>
 <%
 const rows = Array.isArray(items) ? items : [];
 function fmt(n){ return Number(n || 0).toLocaleString('en-US'); }
-function pctVal(row){ const raw = Number(row?.pct || 0); if (raw > 0) return raw; const cant = Number(row?.cant || 0); return Number(totalAcumulado || 0) > 0 ? cant / Number(totalAcumulado || 1) : 0; }
+function pctVal(row){
+  const raw = Number(row?.pct || 0);
+  if (raw > 0) return raw;
+  const cant = Number(row?.cant || 0);
+  return Number(totalAcumulado || 0) > 0 ? cant / Number(totalAcumulado || 1) : 0;
+}
 function pctText(v){ return `${Math.round(Number(v || 0) * 100)}%`; }
-function niceStep(maxVal){ const rough = Math.max(1, maxVal) / 5; const mag = Math.pow(10, Math.floor(Math.log10(rough))); const n = rough / mag; let step = 1; if (n <= 1) step = 1; else if (n <= 2) step = 2; else if (n <= 5) step = 5; else step = 10; return step * mag; }
-function splitLabel(name){ const original = String(name || '').trim(); const suffixMatch = original.match(/\([^)]*\)$/); const suffix = suffixMatch ? suffixMatch[0] : ''; const base = suffix ? original.replace(/\s*\([^)]*\)$/, '').trim() : original; let lines=[]; if (/^Cable Roto por\s+/i.test(base)) lines=['Cable Roto',base.replace(/^Cable Roto\s*/i,'').trim()]; else { const words=base.split(/\s+/).filter(Boolean); let line=''; words.forEach(w=>{ if(!line) line=w; else if((line+' '+w).length<=14) line+=' '+w; else {lines.push(line); line=w;} }); if(line) lines.push(line); } if(suffix) lines.push(suffix); if(lines.length>3) lines=[lines[0],lines.slice(1,-1).join(' '),lines[lines.length-1]]; return lines.slice(0,3); }
+function niceStep(maxVal){
+  const rough = Math.max(1, maxVal) / 5;
+  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+  const n = rough / mag;
+  let step = 1;
+  if (n <= 1) step = 1;
+  else if (n <= 2) step = 2;
+  else if (n <= 5) step = 5;
+  else step = 10;
+  return step * mag;
+}
+function splitLabel(name){
+  const original = String(name || '').trim();
+  const suffixMatch = original.match(/\([^)]*\)$/);
+  const suffix = suffixMatch ? suffixMatch[0] : '';
+  const base = suffix ? original.replace(/\s*\([^)]*\)$/, '').trim() : original;
+  let lines = [];
+  if (/^Cable Roto por\s+/i.test(base)) {
+    lines = ['Cable Roto', base.replace(/^Cable Roto\s*/i, '').trim()];
+  } else {
+    const words = base.split(/\s+/).filter(Boolean);
+    let line = '';
+    words.forEach(w => {
+      if (!line) line = w;
+      else if ((line + ' ' + w).length <= 14) line += ' ' + w;
+      else { lines.push(line); line = w; }
+    });
+    if (line) lines.push(line);
+  }
+  if (suffix) lines.push(suffix);
+  if (lines.length > 3) lines = [lines[0], lines.slice(1, -1).join(' '), lines[lines.length - 1]];
+  return lines.slice(0, 3);
+}
 const maxCant = Math.max(1, ...rows.map(r => Number(r.cant || 0)));
 const countStep = niceStep(maxCant);
 const countMax = Math.ceil(maxCant / countStep) * countStep;
@@ -22,31 +70,74 @@ const maxPct = Math.max(0.08, ...rows.map(r => pctVal(r)));
 const pctStep = 0.02;
 const pctMax = Math.ceil(maxPct / pctStep) * pctStep;
 const pctFloor = -0.04;
-const includeLogo = () => `<div class="comm-logo"><svg class="emblem" viewBox="0 0 120 82"><path class="b" d="M8 48c6-22 24-39 47-45l5 8c-19 4-35 18-42 36z"/><path class="r" d="M62 5l18-5 6 11-19 6zM91 0l22-5 6 11-23 8z"/><rect class="b" x="15" y="23" width="13" height="13" rx="3" transform="rotate(-36 21 30)"/><rect class="b" x="31" y="13" width="13" height="13" rx="3" transform="rotate(-36 37 20)"/><rect class="g" x="16" y="49" width="22" height="16" rx="4" transform="rotate(8 27 57)"/><rect class="g" x="42" y="51" width="25" height="16" rx="4" transform="rotate(-9 54 59)"/><rect class="g" x="72" y="42" width="27" height="16" rx="4" transform="rotate(-24 85 50)"/><rect class="g" x="45" y="29" width="27" height="16" rx="4" transform="rotate(-24 58 37)"/><rect class="g" x="76" y="18" width="25" height="16" rx="4" transform="rotate(-39 88 26)"/><rect class="g" x="98" y="12" width="20" height="16" rx="4" transform="rotate(-51 108 20)"/><rect class="g" x="16" y="68" width="23" height="12" rx="3" transform="rotate(17 28 74)"/><rect class="g" x="44" y="68" width="27" height="12" rx="3" transform="rotate(-6 58 74)"/><rect class="g" x="75" y="60" width="28" height="13" rx="3" transform="rotate(-28 89 66)"/></svg><div class="words"><span class="w1">COMM</span><span class="w2">COMMUNICATIONS</span><span class="w3">AND SYSTEMS DEVELOPMENT</span></div></div>`;
 %>
 <div class="slide">
-  <div class="brand"><%- includeLogo() %></div>
+  <div class="brand"><div class="brand-mark"><span class="brand-globe"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg></span><span class="brand-word">COMM</span></div></div>
   <header class="header"><div class="title"><%= titulo %></div><div class="underline"></div></header>
   <section class="notes">
     <div class="note"><div class="note-icon">1</div><div class="note-text"><%= notaMesPrefix %> <strong><%= fmt(totalMes) %></strong> <%= tipoPlural %> en <%= alcance %>.</div></div>
     <div class="note"><div class="note-icon">Σ</div><div class="note-text"><%= notaAcumuladoPrefix %> <strong><%= fmt(totalAcumulado) %></strong> <%= tipoPlural %> en <%= alcance %>.</div></div>
   </section>
   <main class="main">
-    <section class="panel chart-panel"><div class="panel-title">Ranking acumulado</div><div class="panel-subtitle">Barras: cantidad acumulada | Línea naranja: participación porcentual</div>
+    <section class="panel chart-panel">
+      <div class="panel-title">Ranking acumulado</div>
+      <div class="panel-subtitle">Barras: cantidad acumulada | Línea naranja: participación porcentual</div>
       <svg class="chart-svg" viewBox="0 0 860 444">
         <% const ml=56,mr=54,mt=28,mb=118,pw=860-ml-mr,ph=444-mt-mb,n=rows.length||1,slot=pw/n,barW=Math.min(48,slot*0.38); const sx=i=>ml+slot*i+slot/2; const syC=v=>mt+ph-(Number(v||0)/countMax)*ph; const syP=v=>mt+ph-((Number(v||0)-pctFloor)/(pctMax-pctFloor))*ph; %>
-        <% for(let t=0;t<=countMax;t+=countStep){ const y=syC(t); %><line class="grid" x1="<%= ml %>" y1="<%= y %>" x2="<%= 860-mr %>" y2="<%= y %>"/><text class="axis" x="<%= ml-9 %>" y="<%= y+4 %>" text-anchor="end"><%= t %></text><% } %>
-        <% for(let p=0;p<=pctMax+1e-9;p+=pctStep){ const y=syP(p); %><text class="axis-r" x="<%= 860-mr+12 %>" y="<%= y+4 %>" text-anchor="start"><%= Math.round(p*100) %>%</text><% } %>
+        <% for(let t=0;t<=countMax;t+=countStep){ const y=syC(t); %>
+          <line class="grid" x1="<%= ml %>" y1="<%= y %>" x2="<%= 860-mr %>" y2="<%= y %>"/>
+          <text class="axis" x="<%= ml-9 %>" y="<%= y+4 %>" text-anchor="end"><%= t %></text>
+        <% } %>
+        <% for(let p=0;p<=pctMax+1e-9;p+=pctStep){ const y=syP(p); %>
+          <text class="axis-r" x="<%= 860-mr+12 %>" y="<%= y+4 %>" text-anchor="start"><%= Math.round(p*100) %>%</text>
+        <% } %>
         <line x1="<%= ml %>" y1="<%= mt+ph %>" x2="<%= 860-mr %>" y2="<%= mt+ph %>" stroke="#cdd7e2" stroke-width="1.2"/>
         <% const points = rows.map((r,i)=> `${sx(i)},${syP(pctVal(r))}`).join(' '); %>
-        <% rows.forEach((r,i)=>{ const cx=sx(i), val=Number(r.cant||0), y=syC(val), h=(mt+ph)-y, vy=y+(h/2)+5; %><rect x="<%= cx-barW/2 %>" y="<%= y %>" width="<%= barW %>" height="<%= h %>" rx="1" fill="#9fb8d7" stroke="#4d8dd3" stroke-width="2"/><text class="bar-value" x="<%= cx %>" y="<%= vy %>"><%= fmt(val) %></text><% }) %>
+        <% rows.forEach((r,i)=>{ const cx=sx(i), val=Number(r.cant||0), y=syC(val), h=(mt+ph)-y, vy=y+(h/2)+5; %>
+          <rect x="<%= cx-barW/2 %>" y="<%= y %>" width="<%= barW %>" height="<%= h %>" rx="1" fill="#9fb8d7" stroke="#4d8dd3" stroke-width="2"/>
+          <text class="bar-value" x="<%= cx %>" y="<%= vy %>"><%= fmt(val) %></text>
+        <% }) %>
         <polyline points="<%= points %>" fill="none" stroke="#ef6b12" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <% rows.forEach((r,i)=>{ const cx=sx(i), pct=pctVal(r), py=syP(pct), label=pctText(pct), labelW=Math.max(34,label.length*7+10), ly=Math.max(mt+14,py-16), ry=ly-13; %><circle class="point" cx="<%= cx %>" cy="<%= py %>" r="4.2"/><rect x="<%= cx-labelW/2 %>" y="<%= ry %>" width="<%= labelW %>" height="18" rx="9" fill="#fff" stroke="#ef6b12" stroke-width="1.2"/><text class="pct-label" x="<%= cx %>" y="<%= ly %>"><%= label %></text><% }) %>
-        <% rows.forEach((r,i)=>{ const cx=sx(i), lines=splitLabel(r.nombre); %><text class="cat" x="<%= cx %>" y="<%= mt+ph+21 %>" text-anchor="middle"><% lines.forEach((line,li)=>{ %><tspan x="<%= cx %>" dy="<%= li===0 ? 0 : 13 %>"><%= line %></tspan><% }) %></text><% }) %>
-      </svg><div class="legend"><span class="leg"><i class="legbox"></i>Cantidad acumulada</span><span class="leg"><i class="legline"></i>% participación</span></div></section>
-    <section class="panel table-panel"><div class="table-title"><%= tipoPlural %></div><div class="table-wrap"><table class="detail-table"><thead><tr><th style="width:<%= showMesColumn ? '58%' : '66%' %>"><%= tipoPlural.toUpperCase() %></th><% if (showMesColumn) { %><th style="width:12%"><%= mesCorto.toUpperCase() %></th><% } %><th style="width:15%">CANT.</th><th style="width:15%">%</th></tr></thead><tbody><% rows.forEach((r)=>{ %><tr><td class="name"><%= r.nombre %></td><% if (showMesColumn) { %><td class="center"><%= fmt(r.mesValor) %></td><% } %><td class="right"><%= fmt(r.cant) %></td><td class="center"><%= pctText(pctVal(r)) %></td></tr><% }) %></tbody></table></div></section>
+        <% rows.forEach((r,i)=>{ const cx=sx(i), pct=pctVal(r), py=syP(pct), label=pctText(pct), labelW=Math.max(34,label.length*7+10), ly=Math.max(mt+14,py-16), ry=ly-13; %>
+          <circle class="point" cx="<%= cx %>" cy="<%= py %>" r="4.2"/>
+          <rect x="<%= cx-labelW/2 %>" y="<%= ry %>" width="<%= labelW %>" height="18" rx="9" fill="#fff" stroke="#ef6b12" stroke-width="1.2"/>
+          <text class="pct-label" x="<%= cx %>" y="<%= ly %>"><%= label %></text>
+        <% }) %>
+        <% rows.forEach((r,i)=>{ const cx=sx(i), lines=splitLabel(r.nombre); %>
+          <text class="cat" x="<%= cx %>" y="<%= mt+ph+21 %>" text-anchor="middle">
+            <% lines.forEach((line,li)=>{ %><tspan x="<%= cx %>" dy="<%= li===0 ? 0 : 13 %>"><%= line %></tspan><% }) %>
+          </text>
+        <% }) %>
+      </svg>
+      <div class="legend"><span class="leg"><i class="legbox"></i>Cantidad acumulada</span><span class="leg"><i class="legline"></i>% participación</span></div>
+    </section>
+    <section class="panel table-panel">
+      <div class="table-title"><%= tipoPlural %></div>
+      <div class="table-wrap">
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th style="width:<%= showMesColumn ? '58%' : '66%' %>"><%= tipoPlural.toUpperCase() %></th>
+              <% if (showMesColumn) { %><th style="width:12%"><%= mesCorto.toUpperCase() %></th><% } %>
+              <th style="width:15%">CANT.</th>
+              <th style="width:15%">%</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% rows.forEach((r)=>{ %>
+            <tr>
+              <td class="name"><%= r.nombre %></td>
+              <% if (showMesColumn) { %><td class="center"><%= fmt(r.mesValor) %></td><% } %>
+              <td class="right"><%= fmt(r.cant) %></td>
+              <td class="center"><%= pctText(pctVal(r)) %></td>
+            </tr>
+          <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </main>
-  <footer class="footer"><span class="footer-logo"><%- includeLogo() %></span><span class="footer-sep"></span><div class="footer-web"><svg class="webicon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" stroke="#fff" fill="none" stroke-width="2"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0" stroke="#fff" fill="none" stroke-width="2"/></svg><span>www.<span class="orange">COMMUNICATIONS</span>.com.pe</span></div><span class="footer-orange"></span></footer>
+  <footer class="footer"><div class="footer-inner"><span class="footer-globe"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg></span><span class="footer-globe"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="footer-orange"></span></footer>
 </div>
 </body>
 </html>

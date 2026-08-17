@@ -51,6 +51,7 @@ const countMax = Math.ceil(maxCant / countStep) * countStep;
 const maxPct = Math.max(0.08, ...rows.map(r => pctVal(r)));
 const pctStep = 0.02;
 const pctMax = Math.ceil(maxPct / pctStep) * pctStep;
+const pctFloor = -0.02;
 %>
 <div class="slide">
   <div class="brand"><div class="brand-mark"><span class="brand-globe"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg></span><span class="brand-word">COMM</span></div></div>
@@ -64,7 +65,7 @@ const pctMax = Math.ceil(maxPct / pctStep) * pctStep;
       <div class="panel-title">Ranking acumulado</div>
       <div class="panel-subtitle">Barras: cantidad acumulada | Línea naranja: participación porcentual</div>
       <svg class="chart-svg" viewBox="0 0 860 444">
-        <% const ml=56,mr=54,mt=28,mb=130,pw=860-ml-mr,ph=444-mt-mb,n=rows.length||1,slot=pw/n,barW=Math.min(48,slot*0.38); const sx=i=>ml+slot*i+slot/2; const syC=v=>mt+ph-(Number(v||0)/countMax)*ph; const syP=v=>mt+ph-(Number(v||0)/pctMax)*ph; %>
+        <% const ml=56,mr=54,mt=28,mb=130,pw=860-ml-mr,ph=444-mt-mb,n=rows.length||1,slot=pw/n,barW=Math.min(48,slot*0.38); const sx=i=>ml+slot*i+slot/2; const syC=v=>mt+ph-(Number(v||0)/countMax)*ph; const syP=v=>mt+ph-((Number(v||0)-pctFloor)/(pctMax-pctFloor))*ph; %>
         <% for(let t=0;t<=countMax;t+=countStep){ const y=syC(t); %>
           <line class="grid" x1="<%= ml %>" y1="<%= y %>" x2="<%= 860-mr %>" y2="<%= y %>"/>
           <text class="axis" x="<%= ml-9 %>" y="<%= y+4 %>" text-anchor="end"><%= t %></text>

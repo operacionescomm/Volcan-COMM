@@ -94,6 +94,30 @@ const SLIDES = {
     template: 'top-ten-volcan-classic',
     active: true,
     description: 'Top Ten Incidentes - VOLCAN acumulado'
+  },
+  29: {
+    key: 'top-ten-causa-raiz-scr-car',
+    template: 'top-ten-root-cause-compare',
+    active: true,
+    description: 'Top Ten Causa Raíz Incidente - SCR-CAR junio vs julio'
+  },
+  30: {
+    key: 'top-ten-causa-raiz-andaychagua',
+    template: 'top-ten-root-cause-compare',
+    active: true,
+    description: 'Top Ten Causa Raíz Incidente - Andaychagua junio vs julio'
+  },
+  31: {
+    key: 'top-ten-causa-raiz-chungar',
+    template: 'top-ten-root-cause-compare',
+    active: true,
+    description: 'Top Ten Causa Raíz Incidente - Chungar junio vs julio'
+  },
+  32: {
+    key: 'top-ten-causa-raiz-cerro',
+    template: 'top-ten-root-cause-cerro',
+    active: true,
+    description: 'Top Ten Causa Raíz Incidente - VOLCAN Cerro'
   }
 };
 

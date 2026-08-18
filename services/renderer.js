@@ -110,11 +110,48 @@ function standardBrandingInjection() {
 </script>`;
 }
 
-function donutLabelInjection() {
+function donutLabelInjection(data = {}) {
+  const pctInc = Number(data.pctIncidentesMes ?? data.pctIncidentes ?? data.pctInc ?? 0);
+  const pctReq = Number(data.pctRequerimientosMes ?? data.pctRequerimientos ?? data.pctReq ?? 0);
+  const unit = String(data.unidadNombre || data.tituloVisual || data.titulo || '').toLowerCase();
+
+  // Base aprobada para los donuts mensuales: las cápsulas quedan sobre su
+  // segmento, pero sin invadir el número ni el texto central.
+  let incTop = 58;
+  let incRight = 26;
+  let reqLeft = 28;
+  let reqBottom = 54;
+
+  // Los slides 23, 25 y 26 tienen franja naranja pequeña. Se coloca la cápsula
+  // en la parte superior-derecha del aro naranja, no en el centro blanco.
+  if (unit.includes('ticlio') || (pctInc > 0 && pctInc <= 16)) {
+    incTop = 42;
+    incRight = 42;
+    reqLeft = 34;
+    reqBottom = 58;
+  }
+
+  // Cerro y Romina tienen 5–8% de incidentes: la cápsula debe ir más arriba,
+  // centrada en esa porción naranja pequeña.
+  if (unit.includes('cerro') || unit.includes('romina') || (pctInc > 0 && pctInc <= 9)) {
+    incTop = 31;
+    incRight = 58;
+    reqLeft = 34;
+    reqBottom = 58;
+  }
+
+  // Acumulado 12 meses: cápsulas más externas para no tapar el total central.
+  if (String(data.titulo || '').toLowerCase().includes('volcan') && pctInc > 20) {
+    incTop = 54;
+    incRight = 12;
+    reqLeft = 26;
+    reqBottom = 54;
+  }
+
   return `
 <style id="comm-donut-label-overrides">
-/* Ajuste transversal slides 19–26: las cápsulas deben quedar centradas
-   visualmente sobre su franja del donut, sin salirse del segmento. */
+/* Ajuste transversal slides 19–26: cápsulas sobre su franja del donut,
+   sin tapar número central ni texto interno. */
 .side .donut .pct,
 .donut .pct{
   transform:none!important;
@@ -122,17 +159,23 @@ function donutLabelInjection() {
 }
 .side .donut .pct-inc,
 .donut .pct-inc{
-  right:20px!important;
-  top:60px!important;
+  right:${incRight}px!important;
+  top:${incTop}px!important;
   min-width:58px!important;
   padding:5px 10px!important;
+  color:#e9610c!important;
+  border-color:#ff7617!important;
+  background:rgba(255,255,255,.98)!important;
 }
 .side .donut .pct-req,
 .donut .pct-req{
-  left:22px!important;
-  bottom:48px!important;
+  left:${reqLeft}px!important;
+  bottom:${reqBottom}px!important;
   min-width:62px!important;
   padding:5px 10px!important;
+  color:#1555ad!important;
+  border-color:#1765c1!important;
+  background:rgba(255,255,255,.98)!important;
 }
 </style>`;
 }
@@ -141,7 +184,7 @@ function applyTemplateOverrides(templateName, html, data = {}) {
   let output = html;
 
   if (DONUT_LABEL_TEMPLATES.has(templateName)) {
-    const overrideCss = donutLabelInjection();
+    const overrideCss = donutLabelInjection(data);
     output = output.includes('</head>')
       ? output.replace('</head>', `${overrideCss}\n</head>`)
       : `${overrideCss}\n${output}`;
@@ -154,15 +197,11 @@ function applyTemplateOverrides(templateName, html, data = {}) {
    porcentaje de incidentes = cápsula naranja,
    porcentaje de requerimientos = cápsula azul. */
 .pct-inc{
-  right:20px !important;
-  top:60px !important;
   color:#e9610c !important;
   border:2px solid #ff7617 !important;
   background:rgba(255,255,255,.98) !important;
 }
 .pct-req{
-  left:22px !important;
-  bottom:48px !important;
   color:#1555ad !important;
   border:2px solid #1765c1 !important;
   background:rgba(255,255,255,.98) !important;

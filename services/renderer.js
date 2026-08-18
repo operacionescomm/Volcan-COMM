@@ -84,14 +84,14 @@ function standardBrandingInjection() {
   const globe = ${JSON.stringify(STANDARD_GLOBE_SVG)};
   const headerHtml = '<div class="comm-header-lockup"><span class="comm-header-globe">' + globe + '</span><span class="comm-header-text"><span class="w1">COMM</span><span class="w2">COMMUNICATIONS</span><span class="w3">AND SYSTEMS DEVELOPMENT</span></span></div>';
   const footerHtml = '<div class="comm-footer-inner"><span class="comm-footer-globe">' + globe + '</span><span class="comm-footer-sep"></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="comm-footer-orange"></span>';
-  const brand = document.querySelector('.brand, .brand-curve');
+  const brand = document.querySelector('.brand, .brand-curve, .val-brand');
   if (brand) {
     brand.innerHTML = headerHtml;
     brand.classList.add('comm-brand-standard');
   }
-  let footer = document.querySelector('.footer');
+  let footer = document.querySelector('.footer, .val-footer');
   if (!footer) {
-    const slide = document.querySelector('.slide');
+    const slide = document.querySelector('.slide, .val-slide');
     if (slide) {
       slide.insertAdjacentHTML('beforeend', '<footer class="footer comm-footer-standard">' + footerHtml + '</footer>');
       return;

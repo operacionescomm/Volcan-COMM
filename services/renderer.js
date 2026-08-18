@@ -14,7 +14,21 @@ const STANDARD_BRANDING_TEMPLATES = new Set([
   'cerro-pasco-atenciones',
   'incidentes-requerimientos-volcan-classic',
   'incidentes-requerimientos-unidad-classic',
-  'incidentes-requerimientos-chungar-classic'
+  'incidentes-requerimientos-chungar-classic',
+  'top-ten-volcan-classic',
+  'top-ten-root-cause-compare',
+  'top-ten-root-cause-cerro',
+  'costos-servicio-cover',
+  'valorizacion-servicio',
+  'suministros-cover',
+  'top-ten-suministros'
+]);
+
+const DONUT_LABEL_TEMPLATES = new Set([
+  'incidentes-requerimientos-volcan-classic',
+  'incidentes-requerimientos-unidad-classic',
+  'incidentes-requerimientos-chungar-classic',
+  'incidentes-requerimientos-unidad'
 ]);
 
 const STANDARD_GLOBE_SVG = `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg>`;
@@ -22,7 +36,23 @@ const STANDARD_GLOBE_SVG = `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="
 function standardBrandingInjection() {
   return `
 <style id="comm-standard-branding-overrides">
-.comm-brand-standard{overflow:hidden!important;color:#fff!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;background:linear-gradient(145deg,#0d478e,#073772 60%,#062d61)!important;box-shadow:none!important}
+.comm-brand-standard{
+  position:absolute!important;
+  right:0!important;
+  top:0!important;
+  width:410px!important;
+  height:94px!important;
+  border-bottom-left-radius:235px 98px!important;
+  padding-right:38px!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  background:linear-gradient(145deg,#0d478e,#073772 60%,#062d61)!important;
+  box-shadow:none!important;
+  z-index:25!important;
+}
 .comm-brand-standard::before{content:'';position:absolute;left:0;top:0;width:92px;height:100%;background:rgba(255,255,255,.06);border-bottom-left-radius:210px 92px;pointer-events:none}
 .comm-brand-standard .comm-header-lockup{position:relative;z-index:2;display:flex;align-items:center;gap:13px;white-space:nowrap}
 .comm-brand-standard .comm-header-globe{width:45px;height:45px;flex:0 0 auto}
@@ -31,19 +61,34 @@ function standardBrandingInjection() {
 .comm-brand-standard .comm-header-text .w1{display:block;font-size:39px;font-weight:900;letter-spacing:.6px;color:#7da7ec}
 .comm-brand-standard .comm-header-text .w2{display:block;margin-top:4px;font-size:16.5px;font-weight:900;letter-spacing:.3px;color:#7da7ec}
 .comm-brand-standard .comm-header-text .w3{display:block;margin-top:5px;font-size:8px;font-weight:800;letter-spacing:.6px;color:#d5d5d5}
-.comm-footer-standard{position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:66px!important;background:linear-gradient(90deg,#0d4a98,#063774)!important;color:#fff!important;display:flex!important;align-items:center!important;padding-left:50px!important;overflow:hidden!important;z-index:20!important}
-.comm-footer-standard .comm-footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:20px;font-size:22px;letter-spacing:.2px;font-weight:700;color:#fff;white-space:nowrap}
+.comm-footer-standard{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  height:66px!important;
+  background:linear-gradient(90deg,#0d4a98,#063774)!important;
+  color:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  padding-left:50px!important;
+  overflow:hidden!important;
+  z-index:30!important;
+  border-radius:0!important;
+  transform:none!important;
+}
+.comm-footer-standard .comm-footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:16px;font-size:22px;letter-spacing:.2px;font-weight:700;color:#fff;white-space:nowrap}
 .comm-footer-standard strong{font-size:25px;letter-spacing:.5px;color:#ff7414}
 .comm-footer-standard .comm-footer-globe{width:34px;height:34px;flex:0 0 auto}
 .comm-footer-standard .comm-footer-globe svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:2}
-.comm-footer-standard .comm-footer-sep{width:2px;height:40px;background:rgba(255,255,255,.72);margin:0 10px 0 4px;flex:0 0 auto}
+.comm-footer-standard .comm-footer-sep{width:2px;height:40px;background:rgba(255,255,255,.72);margin:0 12px 0 2px;flex:0 0 auto}
 .comm-footer-standard .comm-footer-orange{position:absolute;right:-22px;bottom:-28px;width:180px;height:104px;background:#ff6f12;border-radius:70% 0 0 0;transform:rotate(-7deg)}
 </style>
 <script id="comm-standard-branding-script">
 (function(){
   const globe = ${JSON.stringify(STANDARD_GLOBE_SVG)};
   const headerHtml = '<div class="comm-header-lockup"><span class="comm-header-globe">' + globe + '</span><span class="comm-header-text"><span class="w1">COMM</span><span class="w2">COMMUNICATIONS</span><span class="w3">AND SYSTEMS DEVELOPMENT</span></span></div>';
-  const footerHtml = '<div class="comm-footer-inner"><span class="comm-footer-globe">' + globe + '</span><span class="comm-footer-sep"></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="comm-footer-orange"></span>';
+  const footerHtml = '<div class="comm-footer-inner"><span class="comm-footer-globe">' + globe + '</span><span class="comm-footer-globe">' + globe + '</span><span class="comm-footer-sep"></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="comm-footer-orange"></span>';
   const brand = document.querySelector('.brand, .brand-curve');
   if (brand) {
     brand.innerHTML = headerHtml;
@@ -65,8 +110,42 @@ function standardBrandingInjection() {
 </script>`;
 }
 
+function donutLabelInjection() {
+  return `
+<style id="comm-donut-label-overrides">
+/* Ajuste transversal slides 19–26: las cápsulas deben quedar centradas
+   visualmente sobre su franja del donut, sin salirse del segmento. */
+.side .donut .pct,
+.donut .pct{
+  transform:none!important;
+  box-shadow:0 3px 9px rgba(10,45,95,.16)!important;
+}
+.side .donut .pct-inc,
+.donut .pct-inc{
+  right:20px!important;
+  top:60px!important;
+  min-width:58px!important;
+  padding:5px 10px!important;
+}
+.side .donut .pct-req,
+.donut .pct-req{
+  left:22px!important;
+  bottom:48px!important;
+  min-width:62px!important;
+  padding:5px 10px!important;
+}
+</style>`;
+}
+
 function applyTemplateOverrides(templateName, html, data = {}) {
   let output = html;
+
+  if (DONUT_LABEL_TEMPLATES.has(templateName)) {
+    const overrideCss = donutLabelInjection();
+    output = output.includes('</head>')
+      ? output.replace('</head>', `${overrideCss}\n</head>`)
+      : `${overrideCss}\n${output}`;
+  }
 
   if (templateName === 'incidentes-requerimientos-unidad') {
     const overrideCss = `
@@ -75,15 +154,15 @@ function applyTemplateOverrides(templateName, html, data = {}) {
    porcentaje de incidentes = cápsula naranja,
    porcentaje de requerimientos = cápsula azul. */
 .pct-inc{
-  right:7px !important;
-  top:49px !important;
+  right:20px !important;
+  top:60px !important;
   color:#e9610c !important;
   border:2px solid #ff7617 !important;
   background:rgba(255,255,255,.98) !important;
 }
 .pct-req{
-  left:11px !important;
-  bottom:37px !important;
+  left:22px !important;
+  bottom:48px !important;
   color:#1555ad !important;
   border:2px solid #1765c1 !important;
   background:rgba(255,255,255,.98) !important;

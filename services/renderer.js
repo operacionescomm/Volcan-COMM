@@ -26,6 +26,15 @@ const DONUT_LABEL_TEMPLATES = new Set([
   'incidentes-requerimientos-unidad'
 ]);
 
+const BAR_INSIDE_LABEL_TEMPLATES = new Set([
+  'incidentes-requerimientos-volcan-classic',
+  'incidentes-requerimientos-unidad-classic',
+  'incidentes-requerimientos-chungar-classic',
+  'incidentes-requerimientos-unidad',
+  'top-ten-volcan-classic',
+  'top-ten-root-cause-compare'
+]);
+
 const STANDARD_GLOBE_SVG = `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg>`;
 
 function standardBrandingInjection() {
@@ -81,39 +90,73 @@ function incidentRequirementColorInjection(data = {}) {
 .side .donut .pct,.donut .pct{transform:none!important;box-shadow:0 3px 9px rgba(10,45,95,.16)!important}
 .side .donut .pct-inc,.donut .pct-inc{right:${incRight}px!important;top:${incTop}px!important;min-width:58px!important;padding:5px 10px!important;color:#1555ad!important;border-color:#1765c1!important;background:rgba(255,255,255,.98)!important}
 .side .donut .pct-req,.donut .pct-req{left:${reqLeft}px!important;bottom:${reqBottom}px!important;min-width:62px!important;padding:5px 10px!important;color:#e9610c!important;border-color:#ff7617!important;background:rgba(255,255,255,.98)!important}
-.value-inc{fill:#fff!important;stroke:transparent!important;stroke-width:0!important;font-size:13px!important;font-weight:900!important;text-anchor:middle!important;dominant-baseline:middle!important;paint-order:normal!important}
-.value-req{fill:#ef6b12!important;stroke:#fff!important;stroke-width:4px!important;paint-order:stroke!important}
 .legbox{background:#1765c1!important}.legline,.legline:after{background:#ef6b12!important}
 .sval.blue,.stext .blue{color:#1765c1!important}.sval.orange,.stext .orange{color:#ef6b12!important}
 .mini.blue{background:#1765c1!important}.mini.orange{background:#ff7617!important}
 .pitem.inc{color:#1765c1!important}.pitem.req{color:#ef6b12!important}
 .pitem.inc .pdot,.pitem.inc .pdot.orange{background:#1765c1!important}.pitem.req .pdot,.pitem.req .pdot.blue{background:#ff7617!important}
 </style>
-<script id="comm-inc-bar-labels-script">
+<script id="comm-inc-req-donut-script">
 (function(){
   const donutIncidentPct = ${JSON.stringify(donutIncidentPct)};
   document.querySelectorAll('.side .donut, .donut').forEach(donut => {
     donut.style.setProperty('background', 'conic-gradient(#1765c1 0 ' + donutIncidentPct + '%, #ff7617 ' + donutIncidentPct + '% 100%)', 'important');
   });
-  const svg = document.querySelector('.chart-svg');
-  if (!svg) return;
-  const bars = Array.from(svg.querySelectorAll('rect')).filter(r => {
-    const fill = String(r.getAttribute('fill') || '').toLowerCase();
-    return fill === '#1765c1' || fill === '#1557a5' || fill === '#1554a9';
-  });
-  const labels = Array.from(svg.querySelectorAll('text.value-inc'));
-  labels.forEach((label, i) => {
-    const bar = bars[i];
-    if (!bar) return;
-    const x = Number(bar.getAttribute('x') || 0);
-    const y = Number(bar.getAttribute('y') || 0);
-    const width = Number(bar.getAttribute('width') || 0);
-    const height = Number(bar.getAttribute('height') || 0);
-    label.setAttribute('x', String(x + width / 2));
-    label.setAttribute('y', String(y + Math.max(16, height * 0.5)));
-    label.setAttribute('fill', '#fff');
-    label.setAttribute('stroke', 'transparent');
-    label.setAttribute('dominant-baseline', 'middle');
+})();
+</script>`;
+}
+
+function barInsideLabelsInjection() {
+  return `
+<style id="comm-bar-inside-label-overrides">
+.value-inc,.bar-label,.bar-value{fill:#fff!important;stroke:transparent!important;stroke-width:0!important;font-size:12px!important;font-weight:900!important;text-anchor:middle!important;dominant-baseline:middle!important;paint-order:normal!important}
+</style>
+<script id="comm-bar-inside-label-script">
+(function(){
+  function num(el, attr){ return Number(el.getAttribute(attr) || 0); }
+  function fillOf(el){ return String(el.getAttribute('fill') || '').trim().toLowerCase(); }
+  function strokeOf(el){ return String(el.getAttribute('stroke') || '').trim().toLowerCase(); }
+  function isBar(r){
+    const f = fillOf(r);
+    const w = num(r,'width'), h = num(r,'height');
+    if (w <= 8 || h <= 4) return false;
+    return ['#1765c1','#1557a5','#1554a9','#9fb8d7','#4d8dd3','#2f5fae','#3569bf','#143f86'].includes(f);
+  }
+  function nearestBar(label, bars){
+    const lx = num(label,'x');
+    let best = null, dist = Infinity;
+    bars.forEach(bar => {
+      const cx = num(bar,'x') + num(bar,'width') / 2;
+      const d = Math.abs(cx - lx);
+      if (d < dist) { dist = d; best = bar; }
+    });
+    return best;
+  }
+  document.querySelectorAll('svg.chart-svg').forEach(svg => {
+    const bars = Array.from(svg.querySelectorAll('rect')).filter(isBar);
+    if (!bars.length) return;
+    // Oculta las cápsulas blancas que antes iban sobre las barras.
+    Array.from(svg.querySelectorAll('rect')).forEach(r => {
+      if (fillOf(r) === '#fff' && ['#9abce0','#9fb8d7','#4d8dd3'].includes(strokeOf(r))) {
+        r.style.display = 'none';
+      }
+    });
+    const labels = Array.from(svg.querySelectorAll('text.value-inc, text.bar-label, text.bar-value'));
+    labels.forEach(label => {
+      const bar = nearestBar(label, bars);
+      if (!bar) return;
+      const x = num(bar,'x'), y = num(bar,'y'), w = num(bar,'width'), h = num(bar,'height');
+      label.setAttribute('x', String(x + w / 2));
+      label.setAttribute('y', String(y + Math.max(7, h / 2)));
+      label.setAttribute('fill', '#fff');
+      label.setAttribute('stroke', 'transparent');
+      label.setAttribute('dominant-baseline', 'middle');
+      label.setAttribute('text-anchor', 'middle');
+      label.style.fill = '#fff';
+      label.style.stroke = 'transparent';
+      label.style.fontWeight = '900';
+      label.style.dominantBaseline = 'middle';
+    });
   });
 })();
 </script>`;
@@ -164,6 +207,10 @@ function applyTemplateOverrides(templateName, html, data = {}) {
   if (DONUT_LABEL_TEMPLATES.has(templateName)) {
     const overrideCss = incidentRequirementColorInjection(data);
     output = output.includes('</head>') ? output.replace('</head>', `${overrideCss}\n</head>`) : `${overrideCss}\n${output}`;
+  }
+  if (BAR_INSIDE_LABEL_TEMPLATES.has(templateName)) {
+    const barFix = barInsideLabelsInjection();
+    output = output.includes('</body>') ? output.replace('</body>', `${barFix}\n</body>`) : `${output}\n${barFix}`;
   }
   if (templateName === 'valorizacion-servicio') {
     const labelFix = valuationTiclioLabelInjection(data);

@@ -7,18 +7,19 @@ const { renderTemplateToHtml, renderTemplateToPng } = require('./services/render
 const { closeBrowser, resolveChromeExecutable } = require('./services/browser');
 const { getRootCauseComparisonSample, getCerroRootCauseSample } = require('./services/root-cause-samples');
 const { getValorizacionSample, getCostosCoverData } = require('./services/valorizacion-samples');
+const { getSuministrosSample, getSuministrosCoverData } = require('./services/suministros-samples');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const APP_NAME = process.env.APP_NAME || 'Volcan-COMM Visual Engine';
 const API_KEY = String(process.env.RENDER_API_KEY || '').trim();
-const VERSION = '0.10.0';
+const VERSION = '0.11.0';
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-const ACTIVE_SLIDES = [19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42];
+const ACTIVE_SLIDES = [19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52];
 app.get('/', (req, res) => res.json({
   ok:true, service:APP_NAME, version:VERSION,
   activeSlides: ACTIVE_SLIDES.map(number => ({ number, key:getSlideConfig(number).key })),
@@ -59,6 +60,8 @@ function dataFor(n, body={}){
   if(n===32) return Object.keys(body).length ? body : getCerroRootCauseSample();
   if(n===33) return getCostosCoverData(body || {});
   if(n>=34&&n<=42) return getValorizacionSample(n, body || {});
+  if(n===43) return getSuministrosCoverData(body || {});
+  if(n>=44&&n<=52) return getSuministrosSample(n, body || {});
   throw new Error(`Slide no soportado: ${n}`);
 }
 function register(n){ app.get(`/test-slide${n}`,async(req,res)=>{try{const s=getSlideConfig(n); res.type('html').send(await renderTemplateToHtml(s.template,dataFor(n)));}catch(e){console.error(`[test-slide${n}]`,e);res.status(500).send(String(e));}}); app.get(`/test-slide${n}-png`,async(req,res)=>{try{const s=getSlideConfig(n); res.type('png').end(await renderTemplateToPng(s.template,dataFor(n)));}catch(e){console.error(`[test-slide${n}-png]`,e);res.status(500).send(String(e));}}); app.post(`/render/slide${n}`,requireApiKey,async(req,res)=>{try{const s=getSlideConfig(n); res.type('png').end(await renderTemplateToPng(s.template,dataFor(n,req.body||{})));}catch(e){console.error(`[render/slide${n}]`,e);res.status(500).json({ok:false,error:String(e)});}}); }

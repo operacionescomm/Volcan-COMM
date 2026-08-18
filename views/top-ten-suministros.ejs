@@ -3,43 +3,101 @@
 <head>
 <meta charset="utf-8" />
 <%
-const money = v => Number(v || 0) ? '$ ' + Number(v).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : '$ -';
-const shortMoney = v => Number(v || 0) ? '$' + Number(v).toLocaleString('en-US', {maximumFractionDigits:0}) : '$ -';
+const money = v => Number(v || 0) ? '$ ' + Number(v).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 }) : '$ -';
+const money0 = v => Number(v || 0) ? '$' + Number(v).toLocaleString('en-US', { maximumFractionDigits:0 }) : '$ -';
 const pctText = v => (Number(v || 0) % 1 === 0 ? Number(v || 0).toFixed(0) : Number(v || 0).toFixed(1)) + '%';
-const label = s => String(s || '').replace(/\s+/g, ' ').trim();
-const splitLabel = (s, maxChars=13, maxLines=6) => {
-  const words = label(s).split(' ');
+const clean = s => String(s || '').replace(/\s+/g, ' ').trim();
+const rowsSafe = Array.isArray(rows) ? rows : [];
+const isVolcan = String(unit || '').toUpperCase() === 'VOLCAN';
+const topTotal = Number(totalTopTen || 0);
+const totalSupply = Number(totalSuministros || 0);
+const part = Number(participacion || 0);
+const maxTotalRaw = Math.max(1, ...rowsSafe.map(r => Number(r.total || 0)));
+const step = maxTotalRaw > 20000 ? 10000 : maxTotalRaw > 10000 ? 5000 : maxTotalRaw > 3000 ? 1000 : maxTotalRaw > 1000 ? 500 : 100;
+const yMax = Math.max(step, Math.ceil((maxTotalRaw * 1.28) / step) * step);
+const pctMax = Math.max(10, Math.ceil((Math.max(1, ...rowsSafe.map(r => Number(r.pct || 0))) * 1.25) / 5) * 5);
+function labelLines(text, maxLines = 5, maxChars = 12) {
+  const words = clean(text).split(' ');
   const lines = [];
   let cur = '';
   for (const word of words) {
-    if ((cur + ' ' + word).trim().length <= maxChars) cur = (cur + ' ' + word).trim();
-    else { if (cur) lines.push(cur); cur = word; }
-    if (lines.length >= maxLines) break;
+    const next = cur ? cur + ' ' + word : word;
+    if (next.length > maxChars && cur) { lines.push(cur); cur = word; }
+    else cur = next;
+    if (lines.length === maxLines) break;
   }
-  if (lines.length < maxLines && cur) lines.push(cur);
-  if (words.join(' ').length > lines.join(' ').length && lines.length) lines[lines.length - 1] = lines[lines.length - 1].replace(/[,.:-]+$/,'') + '…';
+  if (cur && lines.length < maxLines) lines.push(cur);
+  if (words.join(' ').length > lines.join(' ').length && lines.length) lines[lines.length - 1] = lines[lines.length - 1].replace(/…?$/, '…');
   return lines;
-};
-const rowsSafe = Array.isArray(rows) ? rows : [];
-const slideNum = Number(slideNumber || 0);
-const horizontal = slideNum === 44;
-const maxTotal = Math.max(1, ...rowsSafe.map(r => Number(r.total || 0)));
-const maxPct = Math.max(1, ...rowsSafe.map(r => Number(r.pct || 0)));
-const step = maxTotal > 10000 ? 5000 : maxTotal > 3000 ? 1000 : maxTotal > 1000 ? 500 : 100;
-const yMax = Math.max(step, Math.ceil(maxTotal / step) * step);
-const vChart = { x: 78, y: 132, w: 708, h: 330 };
-const hChart = { x: 295, y: 110, w: 455, h: 350 };
-const vGap = rowsSafe.length ? vChart.w / rowsSafe.length : vChart.w;
-const vBarW = Math.min(52, Math.max(30, vGap * 0.48));
-const hRowH = rowsSafe.length ? Math.min(32, hChart.h / rowsSafe.length) : 30;
+}
+function trunc(text, max = 64) { const s = clean(text); return s.length > max ? s.slice(0, max - 1) + '…' : s; }
 %>
 <style>
-:root{--navy:#17366f;--blue:#2f5fae;--orange:#e8752a;--grid:#dfe7f1;--text:#0f1d3a;--muted:#6b778d}*{box-sizing:border-box}body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif;color:var(--text)}.slide{position:relative;width:1600px;height:900px;overflow:hidden;background:#fff}.title{position:absolute;left:28px;top:28px;font-size:36px;font-weight:900;color:var(--navy);letter-spacing:.2px;max-width:1060px;white-space:nowrap}.accent{position:absolute;top:33px;left:1080px;width:92px;height:5px;background:var(--orange);border-radius:12px}.brand{position:absolute;right:0;top:0;width:395px;height:86px;background:linear-gradient(145deg,#0d478e,#073772);border-bottom-left-radius:210px 92px;color:#fff;display:flex;align-items:center;justify-content:flex-end;padding-right:44px;gap:16px}.brand svg{width:43px;height:43px;stroke:#fff;fill:none;stroke-width:2.2}.brand b{font-size:40px;letter-spacing:.5px}.summary{position:absolute;top:105px;height:82px;border:1.5px solid #dbe5ef;border-radius:18px;background:#fff;box-shadow:0 10px 22px rgba(20,45,85,.045)}.s1{left:48px;width:470px}.s2{left:565px;width:470px}.s3{left:1082px;width:470px}.icon{position:absolute;left:24px;top:21px;width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,#174fa8,#2f70c7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}.summary .lbl{position:absolute;left:96px;top:20px;font-size:19px;font-weight:900;color:var(--navy)}.summary .val{position:absolute;left:96px;top:48px;font-size:27px;font-weight:900;color:var(--orange)}.panel{position:absolute;top:210px;height:590px;border:1.5px solid #dbe5ef;border-radius:18px;background:#fff;box-shadow:0 12px 28px rgba(20,45,85,.055)}.chartPanel{left:48px;width:870px}.tablePanel{left:940px;width:612px;overflow:hidden}.panelTitle{position:absolute;left:26px;top:18px;font-size:24px;font-weight:900;color:var(--navy)}.panelSub{position:absolute;left:26px;top:50px;font-size:13px;font-weight:800;color:var(--muted)}.axisLabel{font-size:12px;font-weight:900;fill:var(--navy)}.tick{font-size:12px;font-weight:800;fill:var(--navy)}.grid{stroke:var(--grid);stroke-width:1;stroke-dasharray:3 5}.bar{fill:url(#barGrad)}.barText{font-size:12px;font-weight:900;fill:var(--navy)}.pctText{font-size:13px;font-weight:900;fill:var(--orange)}.xlab{font-size:9.5px;font-weight:800;fill:var(--navy)}.hname{font-size:10px;font-weight:800;fill:var(--navy)}.pctBox{fill:#fff;stroke:var(--orange);stroke-width:1.6}.mutedBar{fill:#f1f5fb}.tableHead{height:40px;background:linear-gradient(90deg,#0d3d82,#17366f);color:#fff;font-size:20px;font-weight:900;text-align:center;line-height:40px}.t{width:100%;border-collapse:collapse;font-size:12px}.t th{height:34px;color:var(--navy);text-align:left;border-bottom:1px solid #dbe5ef}.t th:nth-child(2),.t th:nth-child(3),.t th:nth-child(4),.t th:nth-child(5),.t td:nth-child(2),.t td:nth-child(3),.t td:nth-child(4),.t td:nth-child(5){text-align:center}.t td{height:34px;border-bottom:1px solid #eef3f8;color:var(--text);font-weight:700}.t .name{padding-left:12px;width:315px;font-weight:600}.t .total{font-weight:900}.t .pct{color:var(--orange);font-weight:900}.totals{position:absolute;left:8px;right:8px;bottom:12px}.totrow{height:28px;background:#eef4fb;margin-top:2px;display:grid;grid-template-columns:1fr 140px 50px;align-items:center;padding:0 10px;font-size:15px;font-weight:900;color:var(--navy)}.totrow.total{background:#e6f0ff}.totrow .pct{color:var(--orange);text-align:center}.empty{position:absolute;left:50px;right:50px;top:190px;text-align:center;color:var(--muted);font-size:20px}.empty b{display:block;color:var(--navy);font-size:24px;margin-bottom:12px}.footer{position:absolute;left:45px;right:45px;bottom:25px;height:66px;background:linear-gradient(90deg,#0d4a98,#063774);display:flex;align-items:center;padding-left:30px;color:#fff;z-index:8}.footer svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:2;margin-right:18px}.footer span{font-size:24px;font-weight:800;margin-left:12px}.footer:after{content:'';position:absolute;right:-26px;bottom:-28px;width:180px;height:105px;background:var(--orange);border-radius:70% 0 0 0;transform:rotate(-7deg)}
+:root{--navy:#17366f;--blue:#2f5fae;--blue2:#143f86;--orange:#e8752a;--grid:#dfe7f1;--text:#0f1d3a;--muted:#6b778d;--light:#f3f7fc}
+*{box-sizing:border-box} body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+.slide{position:relative;width:1600px;height:900px;overflow:hidden;background:#fff}
+.title{position:absolute;left:28px;top:28px;font-size:36px;font-weight:900;color:var(--navy);letter-spacing:.2px;max-width:1085px;white-space:nowrap}
+.accent{position:absolute;top:33px;left:1080px;width:92px;height:5px;background:var(--orange);border-radius:12px}
+.brand{position:absolute;right:0;top:0;width:395px;height:86px;background:linear-gradient(145deg,#0d478e,#073772);border-bottom-left-radius:210px 92px;color:#fff;display:flex;align-items:center;justify-content:flex-end;padding-right:44px;gap:16px}
+.brand svg{width:43px;height:43px;stroke:#fff;fill:none;stroke-width:2.2}.brand b{font-size:40px;letter-spacing:.5px}
+.summary{position:absolute;top:105px;height:82px;border:1.5px solid #dbe5ef;border-radius:18px;background:#fff;box-shadow:0 10px 22px rgba(20,45,85,.045)}
+.s1{left:48px;width:470px}.s2{left:565px;width:470px}.s3{left:1082px;width:470px}
+.icon{position:absolute;left:24px;top:21px;width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,#174fa8,#2f70c7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}.summary .lbl{position:absolute;left:96px;top:20px;font-size:19px;font-weight:900;color:var(--navy)}.summary .val{position:absolute;left:96px;top:48px;font-size:27px;font-weight:900;color:var(--orange)}
+.panel{position:absolute;top:210px;height:590px;border:1.5px solid #dbe5ef;border-radius:18px;background:#fff;box-shadow:0 12px 28px rgba(20,45,85,.055)}.chartPanel{left:48px;width:870px}.tablePanel{left:940px;width:612px;overflow:hidden}
+.panelTitle{position:absolute;left:26px;top:18px;font-size:24px;font-weight:900;color:var(--navy)}.panelSub{position:absolute;left:26px;top:50px;font-size:13px;font-weight:800;color:var(--muted)}
+.legend{position:absolute;left:410px;top:23px;display:flex;gap:24px;align-items:center;font-size:12px;font-weight:800;color:var(--navy)}.legend .box{width:18px;height:12px;background:linear-gradient(180deg,#2f66bd,#15438f);display:inline-block;margin-right:7px;border-radius:2px}.legend .line{width:26px;height:3px;background:var(--orange);display:inline-block;margin-right:7px;position:relative;top:-3px}.legend .line:after{content:'';position:absolute;right:-3px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--orange)}
+.tableHead{height:40px;background:linear-gradient(90deg,#0d3d82,#17366f);color:#fff;font-size:20px;font-weight:900;text-align:center;line-height:40px}.t{width:100%;border-collapse:collapse;font-size:12px}.t th{height:34px;color:var(--navy);text-align:left;border-bottom:1px solid #dbe5ef}.t th:nth-child(2),.t th:nth-child(3),.t th:nth-child(4),.t th:nth-child(5),.t td:nth-child(2),.t td:nth-child(3),.t td:nth-child(4),.t td:nth-child(5){text-align:center}.t td{height:34px;border-bottom:1px solid #eef3f8;color:var(--text);font-weight:700}.t .name{padding-left:12px;width:315px;font-weight:600}.t .total{font-weight:900}.t .pct{color:var(--orange);font-weight:900}.totals{position:absolute;left:8px;right:8px;bottom:12px}.totrow{height:28px;background:#eef4fb;margin-top:2px;display:grid;grid-template-columns:1fr 140px 50px;align-items:center;padding:0 10px;font-size:15px;font-weight:900;color:var(--navy)}.totrow.total{background:#e6f0ff}.totrow .pct{color:var(--orange);text-align:center}.empty{position:absolute;left:50px;right:50px;top:190px;text-align:center;color:var(--muted);font-size:20px}.empty b{display:block;color:var(--navy);font-size:24px;margin-bottom:12px}
+.footer{position:absolute;left:45px;right:45px;bottom:25px;height:66px;background:linear-gradient(90deg,#0d4a98,#063774);display:flex;align-items:center;padding-left:30px;color:#fff;z-index:8}.footer svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:2;margin-right:18px}.footer span{font-size:24px;font-weight:800;margin-left:12px}.footer:after{content:'';position:absolute;right:-26px;bottom:-28px;width:180px;height:105px;background:var(--orange);border-radius:70% 0 0 0;transform:rotate(-7deg)}
+.vchart{position:absolute;left:38px;top:98px;width:790px;height:465px}.vplot{position:absolute;left:56px;top:20px;width:710px;height:315px;border-left:1px solid #9ba8bd;border-bottom:2px solid #9ba8bd;overflow:visible;background:transparent}.vgrid{position:absolute;left:0;width:100%;border-top:1px dashed var(--grid)}.vtick{position:absolute;left:-60px;transform:translateY(-50%);font-size:12px;font-weight:900;color:var(--navy);width:48px;text-align:right}.barSlot{position:absolute;bottom:0;width:58px;height:100%;overflow:visible}.barClip{position:absolute;left:13px;bottom:0;width:32px;height:100%;overflow:hidden}.vbar{position:absolute;left:0;bottom:0;width:32px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#3569bf,#143f86);box-shadow:0 4px 10px rgba(20,50,100,.12)}.amount{position:absolute;left:50%;transform:translateX(-50%);font-size:12px;font-weight:900;color:var(--navy);white-space:nowrap}.pctPill{position:absolute;left:50%;transform:translateX(-50%);min-width:42px;height:22px;line-height:18px;border:2px solid var(--orange);border-radius:9px;background:#fff;color:var(--orange);font-size:12px;font-weight:900;text-align:center;padding:1px 6px;white-space:nowrap}.xlabel{position:absolute;top:348px;width:72px;left:-7px;text-align:center;font-size:9.5px;font-weight:900;line-height:1.12;color:var(--navy);height:94px;overflow:hidden}.axisTitle{position:absolute;left:0;top:0;font-size:13px;font-weight:900;color:var(--navy)}
+.hlist{position:absolute;left:26px;right:24px;top:90px;bottom:32px}.hrow{position:relative;height:39px;margin-bottom:8px}.hname{position:absolute;left:0;top:0;width:245px;font-size:10px;font-weight:900;line-height:1.05;color:var(--navy)}.htrack{position:absolute;left:265px;right:80px;top:6px;height:22px;background:#f1f4f8;border-radius:6px}.hbar{position:absolute;left:0;top:0;height:22px;border-radius:6px;background:linear-gradient(90deg,#3569bf,#143f86)}.hmoney{position:absolute;left:calc(265px + var(--w));top:6px;margin-left:8px;font-size:14px;font-weight:900;color:var(--navy);white-space:nowrap}.hpct{position:absolute;right:0;top:3px;min-width:42px;height:24px;line-height:20px;border:2px solid var(--orange);border-radius:9px;background:#fff;color:var(--orange);font-size:13px;font-weight:900;text-align:center;padding:1px 6px}
 </style>
-</head><body><div class="slide">
-<div class="title"><%= title %></div><div class="accent"></div><div class="brand"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><b>COMM</b></div>
-<div class="summary s1"><div class="icon">S/</div><div class="lbl">Total Suministros</div><div class="val"><%= money(totalSuministros) %></div></div><div class="summary s2"><div class="icon">Σ</div><div class="lbl">Total Top Ten</div><div class="val"><%= money(totalTopTen) %></div></div><div class="summary s3"><div class="icon">%</div><div class="lbl">Participación Top Ten</div><div class="val"><%= totalSuministros ? pctText(participacion) : '-' %></div></div>
-<section class="panel chartPanel"><div class="panelTitle">Ranking por costo total</div><div class="panelSub">Barras: monto total &nbsp;|&nbsp; Etiqueta naranja: participación</div><% if (rowsSafe.length) { %><% if (horizontal) { %><svg width="870" height="590" viewBox="0 0 870 590"><defs><linearGradient id="barGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2f66bd"/><stop offset="100%" stop-color="#143f86"/></linearGradient></defs><% rowsSafe.forEach((r,idx)=>{ const yy=hChart.y+idx*hRowH; const bw=Math.max(18,hChart.w*(r.total/maxTotal)); const pctX=hChart.x+hChart.w-22; const textX=Math.min(hChart.x+bw+10, hChart.x+hChart.w-84); %><text class="hname" x="24" y="<%= yy+13 %>"><% splitLabel(r.nombre,24,2).forEach((line,j)=>{ %><tspan x="24" dy="<%= j===0?0:12 %>"><%= line %></tspan><% }) %></text><rect class="mutedBar" x="<%= hChart.x %>" y="<%= yy %>" width="<%= hChart.w %>" height="22" rx="5"/><rect class="bar" x="<%= hChart.x %>" y="<%= yy %>" width="<%= bw %>" height="22" rx="5"/><text class="barText" x="<%= textX %>" y="<%= yy+16 %>"><%= money(r.total).replace('$ ', '$') %></text><rect class="pctBox" x="<%= pctX %>" y="<%= yy-3 %>" width="50" height="28" rx="10"/><text class="pctText" x="<%= pctX+25 %>" y="<%= yy+16 %>" text-anchor="middle"><%= pctText(r.pct) %></text><% }) %></svg><% } else { %><svg width="870" height="590" viewBox="0 0 870 590"><defs><linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2f66bd"/><stop offset="100%" stop-color="#143f86"/></linearGradient></defs><text x="28" y="106" class="axisLabel">Monto (USD)</text><% for (let i=0;i<=5;i++){ const gy=vChart.y+vChart.h-(vChart.h*i/5); const val=yMax*i/5; %><line class="grid" x1="<%= vChart.x %>" y1="<%= gy %>" x2="<%= vChart.x+vChart.w %>" y2="<%= gy %>"/><text class="tick" x="<%= vChart.x-16 %>" y="<%= gy+4 %>" text-anchor="end"><%= shortMoney(val) %></text><% } %><line x1="<%= vChart.x %>" y1="<%= vChart.y %>" x2="<%= vChart.x %>" y2="<%= vChart.y+vChart.h %>" stroke="#9ba8bd" stroke-width="1"/><line x1="<%= vChart.x %>" y1="<%= vChart.y+vChart.h %>" x2="<%= vChart.x+vChart.w %>" y2="<%= vChart.y+vChart.h %>" stroke="#9ba8bd" stroke-width="1"/><% rowsSafe.forEach((r,idx)=>{ const cx=vChart.x+vGap*idx+vGap/2; const bh=Math.max(4,vChart.h*(r.total/yMax)); const bx=cx-vBarW/2; const by=vChart.y+vChart.h-bh; const pctY=Math.max(vChart.y+16, by-44); const valY=Math.max(vChart.y+34, by-18); const pctBoxY=pctY-17; %><rect class="bar" x="<%= bx %>" y="<%= by %>" width="<%= vBarW %>" height="<%= bh %>" rx="4"/><text class="barText" x="<%= cx %>" y="<%= valY %>" text-anchor="middle"><%= money(r.total).replace('$ ', '$') %></text><rect class="pctBox" x="<%= cx-25 %>" y="<%= pctBoxY %>" width="50" height="26" rx="9"/><text class="pctText" x="<%= cx %>" y="<%= pctBoxY+18 %>" text-anchor="middle"><%= pctText(r.pct) %></text><text class="xlab" x="<%= cx %>" y="490" text-anchor="middle"><% splitLabel(r.nombre,11,6).forEach((line,j)=>{ %><tspan x="<%= cx %>" dy="<%= j===0?0:12 %>"><%= line %></tspan><% }) %></text><% }) %></svg><% } %><% } else { %><div class="empty"><b>No hay suministros registrados.</b>Sin datos de suministros para julio 2026.</div><% } %></section>
-<section class="panel tablePanel"><div class="tableHead">DETALLE TOP TEN - <%= unit %></div><table class="t"><thead><tr><th style="padding-left:12px">Suministro</th><th>Unidad</th><th>Cant.</th><th>Total</th><th>%</th></tr></thead><tbody><% rowsSafe.forEach(r=>{ %><tr><td class="name"><%= label(r.nombre).length > 64 ? label(r.nombre).slice(0,64)+'…' : label(r.nombre) %></td><td><%= r.unidad %></td><td><%= Number(r.cantidad || 0).toLocaleString('en-US') %></td><td class="total"><%= money(r.total) %></td><td class="pct"><%= pctText(r.pct) %></td></tr><% }) %></tbody></table><% if (!rowsSafe.length) { %><div class="empty"><b>No hay registros de suministros.</b></div><% } %><div class="totals"><div class="totrow"><span>Total Top Ten</span><span><%= money(totalTopTen) %></span><span class="pct"><%= totalSuministros ? pctText(participacion) : '-' %></span></div><div class="totrow total"><span>Total Suministros</span><span><%= money(totalSuministros) %></span><span></span></div></div></section>
-<footer class="footer"><% for(let i=0;i<4;i++){ %><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><% } %><span>www.COMMUNICATIONS.com.pe</span></footer>
-</div></body></html>
+</head>
+<body>
+<div class="slide">
+  <div class="title"><%= title %></div><div class="accent"></div>
+  <div class="brand"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><b>COMM</b></div>
+  <div class="summary s1"><div class="icon">S/</div><div class="lbl">Total Suministros</div><div class="val"><%= money(totalSupply) %></div></div>
+  <div class="summary s2"><div class="icon">Σ</div><div class="lbl">Total Top Ten</div><div class="val"><%= money(topTotal) %></div></div>
+  <div class="summary s3"><div class="icon">%</div><div class="lbl">Participación Top Ten</div><div class="val"><%= totalSupply ? pctText(part) : '-' %></div></div>
+  <section class="panel chartPanel">
+    <div class="panelTitle">Ranking por costo total</div><div class="panelSub">Barras: monto total &nbsp;|&nbsp; Etiqueta naranja: participación</div>
+    <% if (rowsSafe.length) { %>
+      <% if (isVolcan) { %>
+      <div class="hlist">
+        <% rowsSafe.forEach(r => { const w = Math.max(2, (Number(r.total || 0) / maxTotalRaw) * 100); %>
+          <div class="hrow"><div class="hname"><%= clean(r.nombre).split(' ').slice(0,8).join(' ') %></div><div class="htrack"><div class="hbar" style="width:<%= w %>%"></div></div><div class="hmoney" style="--w:<%= w %>%"><%= money(r.total).replace('$ ', '$') %></div><div class="hpct"><%= pctText(r.pct) %></div></div>
+        <% }) %>
+      </div>
+      <% } else { %>
+      <div class="legend"><span><i class="box"></i>Monto (USD)</span><span><i class="line"></i>Participación (%)</span></div>
+      <div class="vchart">
+        <div class="axisTitle">Monto (USD)</div>
+        <div class="vplot">
+          <% for (let i=0;i<=5;i++){ const bottom = (i/5)*100; const val = yMax*i/5; %><div class="vgrid" style="bottom:<%= bottom %>%"></div><div class="vtick" style="bottom:<%= bottom %>%"><%= money0(val) %></div><% } %>
+          <% rowsSafe.forEach((r, idx) => { const slotW = 710 / rowsSafe.length; const left = slotW * idx + (slotW - 58) / 2; const hPct = Math.max(1, Math.min(96, Number(r.total || 0) / yMax * 100)); const topPct = 100 - hPct; %>
+            <div class="barSlot" style="left:<%= left %>px">
+              <div class="barClip"><div class="vbar" style="height:<%= hPct %>%"></div></div>
+              <div class="amount" style="bottom:calc(<%= hPct %>% + 10px)"><%= money(r.total).replace('$ ', '$') %></div>
+              <div class="pctPill" style="bottom:calc(<%= hPct %>% + 32px)"><%= pctText(r.pct) %></div>
+              <div class="xlabel"><% labelLines(r.nombre, 6, 12).forEach(line => { %><div><%= line %></div><% }) %></div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+      <% } %>
+    <% } else { %>
+      <div class="empty"><b>No hay suministros registrados.</b>Sin datos de suministros para julio 2026.</div>
+    <% } %>
+  </section>
+  <section class="panel tablePanel">
+    <div class="tableHead">DETALLE TOP TEN - <%= unit %></div>
+    <table class="t"><thead><tr><th style="padding-left:12px">Suministro</th><th>Unidad</th><th>Cant.</th><th>Total</th><th>%</th></tr></thead><tbody>
+    <% rowsSafe.forEach(r=>{ %><tr><td class="name"><%= trunc(r.nombre) %></td><td><%= r.unidad %></td><td><%= Number(r.cantidad || 0).toLocaleString('en-US') %></td><td class="total"><%= money(r.total) %></td><td class="pct"><%= pctText(r.pct) %></td></tr><% }) %>
+    </tbody></table>
+    <% if (!rowsSafe.length) { %><div class="empty"><b>No hay registros de suministros.</b></div><% } %>
+    <div class="totals"><div class="totrow"><span>Total Top Ten</span><span><%= money(topTotal) %></span><span class="pct"><%= totalSupply ? pctText(part) : '-' %></span></div><div class="totrow total"><span>Total Suministros</span><span><%= money(totalSupply) %></span><span></span></div></div>
+  </section>
+  <footer class="footer"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><span>www.COMMUNICATIONS.com.pe</span></footer>
+</div>
+</body>
+</html>

@@ -4,7 +4,43 @@
 <meta charset="UTF-8">
 <title><%= titulo %></title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:1600px;height:900px;overflow:hidden}body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#081a3a}.slide{position:relative;width:1600px;height:900px;padding:18px 24px 86px;background:linear-gradient(135deg,#fff 0%,#fbfdff 76%,#f2f7fd 100%);overflow:hidden}.brand{position:absolute;right:0;top:0;width:410px;height:86px;border-bottom-left-radius:235px 92px;background:linear-gradient(145deg,#17498f,#0a3b78 60%,#062d61);display:flex;align-items:center;justify-content:flex-end;padding-right:30px;color:#fff;z-index:4}.brand-lock{display:flex;align-items:center;gap:12px}.brand svg,.footer svg{stroke:#fff;fill:none}.brand svg{width:42px;height:42px;stroke-width:2.2}.brand-word{font-size:39px;font-weight:900;letter-spacing:1px}.header{height:70px;position:relative;z-index:3}.title{font-size:38px;font-weight:900;line-height:1.05;color:#0b2f6c;white-space:nowrap;text-shadow:0 2px 5px rgba(11,47,108,.12)}.underline{position:absolute;left:1060px;top:14px;width:92px;height:5px;border-radius:3px;background:#f26b12}.content{position:absolute;left:24px;right:24px;top:86px;bottom:88px;background:#fff;border:1px solid #d8e4ef;border-radius:16px;box-shadow:0 8px 18px rgba(18,71,125,.07);padding:18px 28px 16px}.chart-svg{display:block;width:100%;height:448px;overflow:visible}.grid{stroke:#dce4ee;stroke-width:1;stroke-dasharray:2 4}.axis{font-size:12px;fill:#071833;font-weight:800}.month{font-size:12px;fill:#071833;font-weight:800}.line-label{font-size:13px;font-weight:900}.legend{height:30px;display:flex;align-items:center;justify-content:center;gap:54px;font-size:17px;font-weight:800;color:#071833;margin-top:1px}.leg{display:flex;align-items:center;gap:7px}.leg-line{width:42px;height:4px;border-radius:4px;position:relative}.leg-line:after{content:'';position:absolute;left:17px;top:-5px;width:13px;height:13px;border-radius:50%;background:currentColor;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}.data-table{width:780px;margin:2px auto 0;border-collapse:collapse;font-size:17px;color:#071833;box-shadow:0 5px 12px rgba(18,71,125,.08)}.data-table th{background:linear-gradient(90deg,#06336d,#0b4a9a);color:#fff;height:34px;font-size:18px;text-align:center;border:1px solid #8aa3cb;font-weight:900}.data-table td{height:31px;border:1px solid #93a5bd;background:rgba(255,255,255,.96);text-align:center}.data-table td:first-child{font-weight:500}.data-table .currency{width:58px;font-weight:900}.data-table .total td{background:#eaf2ff;font-weight:900;font-size:18px}.footer{position:absolute;left:25px;right:25px;bottom:16px;height:63px;background:linear-gradient(90deg,#2e56a0,#063774);display:flex;align-items:center;padding-left:32px;color:#fff;overflow:hidden}.footer svg{width:30px;height:30px;stroke-width:2}.footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:17px;font-size:22px;color:rgba(255,255,255,.86);font-weight:700}.footer-inner strong{font-size:25px}.footer-orange{position:absolute;right:-22px;bottom:-28px;width:180px;height:104px;background:#f8751a;border-radius:70% 0 0 0;transform:rotate(-7deg)}
+*{box-sizing:border-box}
+html,body{margin:0;width:1600px;height:900px;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#081a3a}
+.val-slide{position:relative;width:1600px;height:900px;background:linear-gradient(135deg,#fff 0%,#fbfdff 76%,#f2f7fd 100%);overflow:hidden}
+.val-brand{position:absolute;right:0;top:0;width:410px;height:86px;border-bottom-left-radius:235px 92px;background:linear-gradient(145deg,#17498f,#0a3b78 60%,#062d61);display:flex;align-items:center;justify-content:flex-end;padding-right:30px;color:#fff;z-index:10}
+.val-brand-lock{display:flex;align-items:center;gap:12px}
+.val-brand svg,.val-footer svg{stroke:#fff;fill:none}
+.val-brand svg{width:42px;height:42px;stroke-width:2.2}
+.val-brand-word{font-size:39px;font-weight:900;letter-spacing:1px}
+.val-header{position:absolute;left:24px;right:24px;top:14px;height:58px;z-index:8}
+.val-title{font-size:38px;font-weight:900;line-height:1.05;color:#0b2f6c;white-space:nowrap;text-shadow:0 2px 5px rgba(11,47,108,.12)}
+.val-underline{position:absolute;left:1036px;top:15px;width:92px;height:5px;border-radius:3px;background:#f26b12}
+.val-content{position:absolute;left:24px;right:24px;top:78px;bottom:104px;background:#fff;border:1px solid #d8e4ef;border-radius:16px;box-shadow:0 8px 18px rgba(18,71,125,.07);padding:10px 26px 12px;z-index:3;overflow:hidden}
+.val-chart-svg{display:block;width:100%;height:475px;overflow:visible}
+.val-grid{stroke:#dce4ee;stroke-width:1;stroke-dasharray:2 4}
+.val-axis{font-size:12px;fill:#071833;font-weight:800}
+.val-month{font-size:12px;fill:#071833;font-weight:800}
+.val-line-label{font-size:12.5px;font-weight:900}
+.val-legend{height:28px;display:flex;align-items:center;justify-content:center;gap:48px;font-size:16px;font-weight:800;color:#071833;margin-top:0}
+.val-leg{display:flex;align-items:center;gap:7px}
+.val-leg-line{width:42px;height:4px;border-radius:4px;position:relative}
+.val-leg-line:after{content:'';position:absolute;left:17px;top:-5px;width:13px;height:13px;border-radius:50%;background:currentColor;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.val-data-table{width:780px;margin:7px auto 0;border-collapse:collapse;font-size:16px;color:#071833;box-shadow:0 5px 12px rgba(18,71,125,.08)}
+.val-data-table th{background:linear-gradient(90deg,#06336d,#0b4a9a);color:#fff;height:32px;font-size:17px;text-align:center;border:1px solid #8aa3cb;font-weight:900}
+.val-data-table td{height:29px;border:1px solid #93a5bd;background:rgba(255,255,255,.97);text-align:center}
+.val-data-table td:first-child{font-weight:500}
+.val-data-table .currency{width:58px;font-weight:900}
+.val-data-table .total td{background:#eaf2ff;font-weight:900;font-size:17px}
+.val-data-table.compact{font-size:14.5px}
+.val-data-table.compact th{height:28px;font-size:15.5px}
+.val-data-table.compact td{height:25px}
+.val-data-table.compact .total td{font-size:15.5px}
+.val-footer{position:absolute;left:25px;right:25px;bottom:16px;height:63px;background:linear-gradient(90deg,#2e56a0,#063774);display:flex;align-items:center;padding-left:32px;color:#fff;overflow:hidden;z-index:20}
+.val-footer svg{width:30px;height:30px;stroke-width:2}
+.val-footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:17px;font-size:22px;color:rgba(255,255,255,.86);font-weight:700;white-space:nowrap}
+.val-footer-inner strong{font-size:25px}
+.val-footer-orange{position:absolute;right:-22px;bottom:-28px;width:180px;height:104px;background:#f8751a;border-radius:70% 0 0 0;transform:rotate(-7deg)}
 </style>
 </head>
 <body>
@@ -12,32 +48,44 @@
 function money(n){ const v=Number(n||0); return v===0 ? '$-' : '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function amount(n){ const v=Number(n||0); return v===0 ? '-' : v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function niceMax(v){ if(v<=0) return 1; const pow=Math.pow(10,Math.floor(Math.log10(v))); const scaled=v/pow; const nice=scaled<=1?1:scaled<=2?2:scaled<=5?5:10; return nice*pow; }
-const allValues=(series||[]).flatMap(s=>s.values||[]); const maxVal=Math.max(1,...allValues); const yMax=niceMax(maxVal*1.12); const ticks=5;
-const W=1470,H=448,ml=102,mr=56,mt=24,mb=58,pw=W-ml-mr,ph=H-mt-mb; const n=(categories||[]).length||1; const sx=i=>ml+(n===1?pw/2:(pw*i/(n-1))); const sy=v=>mt+ph-(Number(v||0)/yMax)*ph;
-function labelDy(si, i, val){ const other=(series||[]).find((s,idx)=>idx!==si && s.values && s.values[i]!==undefined); const close=other && Math.abs(Number(other.values[i]||0)-Number(val||0)) < yMax*.07; if(si===0) return close ? -22 : -18; if(si===1) return close ? 30 : -18; return 30; }
-function safeY(y, dy){ let yy=y+dy; if(yy<14) yy=y+30; if(yy>H-mb-2) yy=y-18; return yy; }
+const allValues=(series||[]).flatMap(s=>s.values||[]);
+const maxVal=Math.max(1,...allValues);
+const yMax=niceMax(maxVal*1.12);
+const ticks=5;
+const W=1470,H=475,ml=132,mr=54,mt=28,mb=56,pw=W-ml-mr,ph=H-mt-mb;
+const n=(categories||[]).length||1;
+const sx=i=>ml+(n===1?pw/2:(pw*i/(n-1)));
+const sy=v=>mt+ph-(Number(v||0)/yMax)*ph;
+function labelDy(si,i,val){
+  const here=(series||[]).map(s=>Number((s.values||[])[i]||0));
+  const close=here.some((v,idx)=>idx!==si && Math.abs(v-Number(val||0)) < yMax*.06);
+  if(close) return si===0 ? -24 : (si===1 ? 28 : 44);
+  return si===2 ? 28 : -18;
+}
+function safeY(y,dy){ let yy=y+dy; if(yy<15) yy=y+28; if(yy>H-mb-4) yy=y-18; return yy; }
+const compactTable=(rows||[]).length>3;
 %>
-<div class="slide">
-  <div class="brand"><div class="brand-lock"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><div class="brand-word">COMM</div></div></div>
-  <header class="header"><div class="title"><%= titulo %></div><div class="underline"></div></header>
-  <main class="content">
-    <svg class="chart-svg" viewBox="0 0 1470 448" xmlns="http://www.w3.org/2000/svg">
+<div class="val-slide">
+  <div class="val-brand"><div class="val-brand-lock"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><div class="val-brand-word">COMM</div></div></div>
+  <header class="val-header"><div class="val-title"><%= titulo %></div><div class="val-underline"></div></header>
+  <main class="val-content">
+    <svg class="val-chart-svg" viewBox="0 0 1470 475" xmlns="http://www.w3.org/2000/svg">
       <% for(let k=0;k<=ticks;k++){ const val=yMax*k/ticks; const y=sy(val); %>
-        <line class="grid" x1="<%=ml%>" y1="<%=y%>" x2="<%=W-mr%>" y2="<%=y%>"/>
-        <text class="axis" x="<%=ml-22%>" y="<%=y+4%>" text-anchor="end"><%= k===0?'$-':money(val) %></text>
+        <line class="val-grid" x1="<%=ml%>" y1="<%=y%>" x2="<%=W-mr%>" y2="<%=y%>"/>
+        <text class="val-axis" x="<%=ml-24%>" y="<%=y+4%>" text-anchor="end"><%= k===0?'$-':money(val) %></text>
       <% } %>
       <line x1="<%=ml%>" y1="<%=sy(0)%>" x2="<%=W-mr%>" y2="<%=sy(0)%>" stroke="#697b91" stroke-width="1.1"/>
-      <% (categories||[]).forEach((c,i)=>{ %><text class="month" x="<%=sx(i)%>" y="<%=H-32%>" text-anchor="middle"><%=c%></text><% }) %>
+      <% (categories||[]).forEach((c,i)=>{ %><text class="val-month" x="<%=sx(i)%>" y="<%=H-31%>" text-anchor="middle"><%=c%></text><% }) %>
       <% (series||[]).forEach((s,si)=>{ const pts=(s.values||[]).map((v,i)=>`${sx(i)},${sy(v)}`).join(' '); %>
-        <polyline points="<%=pts%>" fill="none" stroke="<%=s.color%>" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="<%=pts%>" fill="none" stroke="<%=s.color%>" stroke-width="4.3" stroke-linecap="round" stroke-linejoin="round"/>
         <% (s.values||[]).forEach((v,i)=>{ const x=sx(i), y=sy(v), ly=safeY(y,labelDy(si,i,v)); %>
-          <circle cx="<%=x%>" cy="<%=y%>" r="6.5" fill="<%=s.color%>" stroke="#fff" stroke-width="2"/>
-          <text class="line-label" x="<%=x%>" y="<%=ly%>" fill="<%=s.color%>" text-anchor="middle"><%=money(v)%></text>
+          <circle cx="<%=x%>" cy="<%=y%>" r="6.8" fill="<%=s.color%>" stroke="#fff" stroke-width="2"/>
+          <text class="val-line-label" x="<%=x%>" y="<%=ly%>" fill="<%=s.color%>" text-anchor="middle"><%=money(v)%></text>
         <% }) %>
       <% }) %>
     </svg>
-    <div class="legend"><% (series||[]).forEach(s=>{ %><span class="leg"><i class="leg-line" style="background:<%=s.color%>;color:<%=s.color%>"></i><%=s.label%></span><% }) %></div>
-    <table class="data-table">
+    <div class="val-legend"><% (series||[]).forEach(s=>{ %><span class="val-leg"><i class="val-leg-line" style="background:<%=s.color%>;color:<%=s.color%>"></i><%=s.label%></span><% }) %></div>
+    <table class="val-data-table <%= compactTable ? 'compact' : '' %>">
       <thead><tr><th><%= tablaTitulo %></th><th colspan="2"><%= periodo %></th></tr></thead>
       <tbody>
         <% (rows||[]).forEach(r=>{ %><tr><td><%=r.label%></td><td class="currency">$</td><td><%=amount(r.value)%></td></tr><% }) %>
@@ -45,7 +93,7 @@ function safeY(y, dy){ let yy=y+dy; if(yy<14) yy=y+30; if(yy>H-mb-2) yy=y-18; re
       </tbody>
     </table>
   </main>
-  <footer class="footer"><div class="footer-inner"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="footer-orange"></span></footer>
+  <footer class="val-footer"><div class="val-footer-inner"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="val-footer-orange"></span></footer>
 </div>
 </body>
 </html>

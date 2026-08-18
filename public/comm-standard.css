@@ -80,6 +80,30 @@
   margin-top: 10px !important;
 }
 
+/*
+ * Corrección de donuts para slides 19–26.
+ * Las cápsulas de porcentaje se ubican fuera del centro del donut para no
+ * tapar el total ni el texto central, pero permanecen asociadas visualmente
+ * a su segmento azul/naranja.
+ */
+.slide:has(.classic-footer) .donut .pct-inc,
+.slide:has(.classic-footer) .side .donut .pct-inc {
+  right: -16px !important;
+  top: 62px !important;
+  min-width: 60px !important;
+  padding: 5px 10px !important;
+  z-index: 8 !important;
+}
+
+.slide:has(.classic-footer) .donut .pct-req,
+.slide:has(.classic-footer) .side .donut .pct-req {
+  left: -18px !important;
+  bottom: 42px !important;
+  min-width: 64px !important;
+  padding: 5px 10px !important;
+  z-index: 8 !important;
+}
+
 .placeholder-shell {
   width: 1600px;
   height: 900px;

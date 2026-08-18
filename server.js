@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const APP_NAME = process.env.APP_NAME || 'Volcan-COMM Visual Engine';
 const API_KEY = String(process.env.RENDER_API_KEY || '').trim();
-const VERSION = '0.9.0';
+const VERSION = '0.9.1';
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));

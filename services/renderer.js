@@ -65,7 +65,7 @@ function standardBrandingInjection() {
 </script>`;
 }
 
-function donutLabelInjection(data = {}) {
+function incidentRequirementColorInjection(data = {}) {
   const pctInc = Number(data.pctIncidentesMes ?? data.pctIncidentes ?? data.pctInc ?? 0);
   const unit = String(data.unidadNombre || data.tituloVisual || data.titulo || '').toLowerCase();
   let incTop = 58, incRight = 26, reqLeft = 28, reqBottom = 54;
@@ -73,11 +73,41 @@ function donutLabelInjection(data = {}) {
   if (unit.includes('cerro') || unit.includes('romina') || (pctInc > 0 && pctInc <= 9)) { incTop = 31; incRight = 58; reqLeft = 34; reqBottom = 58; }
   if (String(data.titulo || '').toLowerCase().includes('volcan') && pctInc > 20) { incTop = 54; incRight = 12; reqLeft = 26; reqBottom = 54; }
   return `
-<style id="comm-donut-label-overrides">
+<style id="comm-inc-req-color-overrides">
+/* Lógica definitiva: Incidentes = azul, Requerimientos = naranja */
 .side .donut .pct,.donut .pct{transform:none!important;box-shadow:0 3px 9px rgba(10,45,95,.16)!important}
-.side .donut .pct-inc,.donut .pct-inc{right:${incRight}px!important;top:${incTop}px!important;min-width:58px!important;padding:5px 10px!important;color:#e9610c!important;border-color:#ff7617!important;background:rgba(255,255,255,.98)!important}
-.side .donut .pct-req,.donut .pct-req{left:${reqLeft}px!important;bottom:${reqBottom}px!important;min-width:62px!important;padding:5px 10px!important;color:#1555ad!important;border-color:#1765c1!important;background:rgba(255,255,255,.98)!important}
-</style>`;
+.side .donut .pct-inc,.donut .pct-inc{right:${incRight}px!important;top:${incTop}px!important;min-width:58px!important;padding:5px 10px!important;color:#1555ad!important;border-color:#1765c1!important;background:rgba(255,255,255,.98)!important}
+.side .donut .pct-req,.donut .pct-req{left:${reqLeft}px!important;bottom:${reqBottom}px!important;min-width:62px!important;padding:5px 10px!important;color:#e9610c!important;border-color:#ff7617!important;background:rgba(255,255,255,.98)!important}
+.value-inc{fill:#fff!important;stroke:transparent!important;stroke-width:0!important;font-size:13px!important;font-weight:900!important;text-anchor:middle!important;dominant-baseline:middle!important;paint-order:normal!important}
+.value-req{fill:#ef6b12!important;stroke:#fff!important;stroke-width:4px!important;paint-order:stroke!important}
+.legbox{background:#1765c1!important}.legline,.legline:after{background:#ef6b12!important}
+.sval.blue,.stext .blue{color:#1765c1!important}.sval.orange,.stext .orange{color:#ef6b12!important}
+.mini.blue{background:#1765c1!important}.mini.orange{background:#ff7617!important}
+</style>
+<script id="comm-inc-bar-labels-script">
+(function(){
+  const svg = document.querySelector('.chart-svg');
+  if (!svg) return;
+  const bars = Array.from(svg.querySelectorAll('rect')).filter(r => {
+    const fill = String(r.getAttribute('fill') || '').toLowerCase();
+    return fill === '#1765c1' || fill === '#1557a5' || fill === '#1554a9';
+  });
+  const labels = Array.from(svg.querySelectorAll('text.value-inc'));
+  labels.forEach((label, i) => {
+    const bar = bars[i];
+    if (!bar) return;
+    const x = Number(bar.getAttribute('x') || 0);
+    const y = Number(bar.getAttribute('y') || 0);
+    const width = Number(bar.getAttribute('width') || 0);
+    const height = Number(bar.getAttribute('height') || 0);
+    label.setAttribute('x', String(x + width / 2));
+    label.setAttribute('y', String(y + Math.max(16, height * 0.5)));
+    label.setAttribute('fill', '#fff');
+    label.setAttribute('stroke', 'transparent');
+    label.setAttribute('dominant-baseline', 'middle');
+  });
+})();
+</script>`;
 }
 
 function valuationTiclioLabelInjection(data = {}) {
@@ -123,20 +153,12 @@ function valuationTiclioLabelInjection(data = {}) {
 function applyTemplateOverrides(templateName, html, data = {}) {
   let output = html;
   if (DONUT_LABEL_TEMPLATES.has(templateName)) {
-    const overrideCss = donutLabelInjection(data);
+    const overrideCss = incidentRequirementColorInjection(data);
     output = output.includes('</head>') ? output.replace('</head>', `${overrideCss}\n</head>`) : `${overrideCss}\n${output}`;
   }
   if (templateName === 'valorizacion-servicio') {
     const labelFix = valuationTiclioLabelInjection(data);
     if (labelFix) output = output.includes('</body>') ? output.replace('</body>', `${labelFix}\n</body>`) : `${output}\n${labelFix}`;
-  }
-  if (templateName === 'incidentes-requerimientos-unidad') {
-    const overrideCss = `
-<style id="inc-req-unidad-standard-overrides">
-.pct-inc{color:#e9610c !important;border:2px solid #ff7617 !important;background:rgba(255,255,255,.98) !important}
-.pct-req{color:#1555ad !important;border:2px solid #1765c1 !important;background:rgba(255,255,255,.98) !important}
-</style>`;
-    output = output.includes('</head>') ? output.replace('</head>', `${overrideCss}\n</head>`) : `${overrideCss}\n${output}`;
   }
   if (templateName === 'incidentes-requerimientos-unidad-classic' && data.tituloVisual) {
     output = output.replace('Incidentes vs Requerimientos Yauli', String(data.tituloVisual));

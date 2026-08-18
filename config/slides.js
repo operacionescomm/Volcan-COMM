@@ -118,6 +118,66 @@ const SLIDES = {
     template: 'top-ten-root-cause-cerro',
     active: true,
     description: 'Top Ten Causa Raíz Incidente - VOLCAN Cerro'
+  },
+  33: {
+    key: 'costos-servicio-cover',
+    template: 'costos-servicio-cover',
+    active: true,
+    description: 'Portada de bloque - Costos del servicio'
+  },
+  34: {
+    key: 'valorizacion-volcan',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización Volcan'
+  },
+  35: {
+    key: 'valorizacion-yauli',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización U.M. Yauli'
+  },
+  36: {
+    key: 'valorizacion-yauli-san-cristobal',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización U.M. Yauli - San Cristóbal'
+  },
+  37: {
+    key: 'valorizacion-yauli-carahuacra',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización U.M. Yauli - Carahuacra'
+  },
+  38: {
+    key: 'valorizacion-yauli-andaychagua',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización U.M. Yauli - Andaychagua'
+  },
+  39: {
+    key: 'valorizacion-yauli-ticlio',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización U.M. Yauli - Ticlio'
+  },
+  40: {
+    key: 'valorizacion-chungar',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización U.M. Chungar'
+  },
+  41: {
+    key: 'valorizacion-cerro',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización U.M. Cerro'
+  },
+  42: {
+    key: 'valorizacion-romina',
+    template: 'valorizacion-servicio',
+    active: true,
+    description: 'Valorización U.M. Romina'
   }
 };
 

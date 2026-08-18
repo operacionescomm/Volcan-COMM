@@ -7,20 +7,15 @@ const ROOT = path.join(__dirname, '..');
 const VIEW_DIR = path.join(ROOT, 'views');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 
+// Branding estándar solicitado para slides 19–52, excluyendo portadas 33 y 43.
 const STANDARD_BRANDING_TEMPLATES = new Set([
-  'atenciones',
-  'yauli-atenciones',
-  'unidad-atenciones',
-  'cerro-pasco-atenciones',
   'incidentes-requerimientos-volcan-classic',
   'incidentes-requerimientos-unidad-classic',
   'incidentes-requerimientos-chungar-classic',
   'top-ten-volcan-classic',
   'top-ten-root-cause-compare',
   'top-ten-root-cause-cerro',
-  'costos-servicio-cover',
   'valorizacion-servicio',
-  'suministros-cover',
   'top-ten-suministros'
 ]);
 
@@ -88,7 +83,7 @@ function standardBrandingInjection() {
 (function(){
   const globe = ${JSON.stringify(STANDARD_GLOBE_SVG)};
   const headerHtml = '<div class="comm-header-lockup"><span class="comm-header-globe">' + globe + '</span><span class="comm-header-text"><span class="w1">COMM</span><span class="w2">COMMUNICATIONS</span><span class="w3">AND SYSTEMS DEVELOPMENT</span></span></div>';
-  const footerHtml = '<div class="comm-footer-inner"><span class="comm-footer-globe">' + globe + '</span><span class="comm-footer-globe">' + globe + '</span><span class="comm-footer-sep"></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="comm-footer-orange"></span>';
+  const footerHtml = '<div class="comm-footer-inner"><span class="comm-footer-globe">' + globe + '</span><span class="comm-footer-sep"></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="comm-footer-orange"></span>';
   const brand = document.querySelector('.brand, .brand-curve');
   if (brand) {
     brand.innerHTML = headerHtml;
@@ -112,7 +107,6 @@ function standardBrandingInjection() {
 
 function donutLabelInjection(data = {}) {
   const pctInc = Number(data.pctIncidentesMes ?? data.pctIncidentes ?? data.pctInc ?? 0);
-  const pctReq = Number(data.pctRequerimientosMes ?? data.pctRequerimientos ?? data.pctReq ?? 0);
   const unit = String(data.unidadNombre || data.tituloVisual || data.titulo || '').toLowerCase();
 
   // Base aprobada para los donuts mensuales: las cápsulas quedan sobre su
@@ -122,17 +116,15 @@ function donutLabelInjection(data = {}) {
   let reqLeft = 28;
   let reqBottom = 54;
 
-  // Los slides 23, 25 y 26 tienen franja naranja pequeña. Se coloca la cápsula
-  // en la parte superior-derecha del aro naranja, no en el centro blanco.
-  if (unit.includes('ticlio') || (pctInc > 0 && pctInc <= 16)) {
+  // Ticlio: franja naranja mediana, cápsula sobre el arco naranja.
+  if (unit.includes('ticlio') || (pctInc > 9 && pctInc <= 16)) {
     incTop = 42;
     incRight = 42;
     reqLeft = 34;
     reqBottom = 58;
   }
 
-  // Cerro y Romina tienen 5–8% de incidentes: la cápsula debe ir más arriba,
-  // centrada en esa porción naranja pequeña.
+  // Cerro y Romina: franja naranja pequeña, cápsula más arriba y más externa.
   if (unit.includes('cerro') || unit.includes('romina') || (pctInc > 0 && pctInc <= 9)) {
     incTop = 31;
     incRight = 58;
@@ -140,7 +132,7 @@ function donutLabelInjection(data = {}) {
     reqBottom = 58;
   }
 
-  // Acumulado 12 meses: cápsulas más externas para no tapar el total central.
+  // Acumulado 12 meses: cápsulas externas para no tapar el total central.
   if (String(data.titulo || '').toLowerCase().includes('volcan') && pctInc > 20) {
     incTop = 54;
     incRight = 12;

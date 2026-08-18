@@ -86,6 +86,8 @@ function incidentRequirementColorInjection(data = {}) {
 .legbox{background:#1765c1!important}.legline,.legline:after{background:#ef6b12!important}
 .sval.blue,.stext .blue{color:#1765c1!important}.sval.orange,.stext .orange{color:#ef6b12!important}
 .mini.blue{background:#1765c1!important}.mini.orange{background:#ff7617!important}
+.pitem.inc{color:#1765c1!important}.pitem.req{color:#ef6b12!important}
+.pitem.inc .pdot,.pitem.inc .pdot.orange{background:#1765c1!important}.pitem.req .pdot,.pitem.req .pdot.blue{background:#ff7617!important}
 </style>
 <script id="comm-inc-bar-labels-script">
 (function(){

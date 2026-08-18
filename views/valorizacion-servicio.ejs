@@ -16,8 +16,8 @@ body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#081a3a}
 .val-header{position:absolute;left:24px;right:24px;top:14px;height:58px;z-index:8}
 .val-title{font-size:38px;font-weight:900;line-height:1.05;color:#0b2f6c;white-space:nowrap;text-shadow:0 2px 5px rgba(11,47,108,.12)}
 .val-underline{position:absolute;left:1036px;top:15px;width:92px;height:5px;border-radius:3px;background:#f26b12}
-.val-content{position:absolute;left:24px;right:24px;top:78px;bottom:104px;background:#fff;border:1px solid #d8e4ef;border-radius:16px;box-shadow:0 8px 18px rgba(18,71,125,.07);padding:10px 26px 12px;z-index:3;overflow:hidden}
-.val-chart-svg{display:block;width:100%;height:475px;overflow:visible}
+.val-content{position:absolute;left:24px;right:24px;top:78px;bottom:104px;background:#fff;border:1px solid #d8e4ef;border-radius:16px;box-shadow:0 8px 18px rgba(18,71,125,.07);padding:22px 26px 12px;z-index:3;overflow:hidden}
+.val-chart-svg{display:block;width:100%;height:490px;overflow:visible}
 .val-grid{stroke:#dce4ee;stroke-width:1;stroke-dasharray:2 4}
 .val-axis{font-size:12px;fill:#071833;font-weight:800}
 .val-month{font-size:12px;fill:#071833;font-weight:800}
@@ -26,7 +26,7 @@ body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#081a3a}
 .val-leg{display:flex;align-items:center;gap:7px}
 .val-leg-line{width:42px;height:4px;border-radius:4px;position:relative}
 .val-leg-line:after{content:'';position:absolute;left:17px;top:-5px;width:13px;height:13px;border-radius:50%;background:currentColor;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
-.val-data-table{width:780px;margin:7px auto 0;border-collapse:collapse;font-size:16px;color:#071833;box-shadow:0 5px 12px rgba(18,71,125,.08)}
+.val-data-table{width:780px;margin:9px auto 0;border-collapse:collapse;font-size:16px;color:#071833;box-shadow:0 5px 12px rgba(18,71,125,.08)}
 .val-data-table th{background:linear-gradient(90deg,#06336d,#0b4a9a);color:#fff;height:32px;font-size:17px;text-align:center;border:1px solid #8aa3cb;font-weight:900}
 .val-data-table td{height:29px;border:1px solid #93a5bd;background:rgba(255,255,255,.97);text-align:center}
 .val-data-table td:first-child{font-weight:500}
@@ -52,7 +52,7 @@ const allValues=(series||[]).flatMap(s=>s.values||[]);
 const maxVal=Math.max(1,...allValues);
 const yMax=niceMax(maxVal*1.12);
 const ticks=5;
-const W=1470,H=475,ml=132,mr=54,mt=28,mb=56,pw=W-ml-mr,ph=H-mt-mb;
+const W=1470,H=490,ml=132,mr=54,mt=38,mb=62,pw=W-ml-mr,ph=H-mt-mb;
 const n=(categories||[]).length||1;
 const sx=i=>ml+(n===1?pw/2:(pw*i/(n-1)));
 const sy=v=>mt+ph-(Number(v||0)/yMax)*ph;
@@ -69,13 +69,13 @@ const compactTable=(rows||[]).length>3;
   <div class="val-brand"><div class="val-brand-lock"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><div class="val-brand-word">COMM</div></div></div>
   <header class="val-header"><div class="val-title"><%= titulo %></div><div class="val-underline"></div></header>
   <main class="val-content">
-    <svg class="val-chart-svg" viewBox="0 0 1470 475" xmlns="http://www.w3.org/2000/svg">
+    <svg class="val-chart-svg" viewBox="0 0 1470 490" xmlns="http://www.w3.org/2000/svg">
       <% for(let k=0;k<=ticks;k++){ const val=yMax*k/ticks; const y=sy(val); %>
         <line class="val-grid" x1="<%=ml%>" y1="<%=y%>" x2="<%=W-mr%>" y2="<%=y%>"/>
-        <text class="val-axis" x="<%=ml-24%>" y="<%=y+4%>" text-anchor="end"><%= k===0?'$-':money(val) %></text>
+        <text class="val-axis" x="<%=ml-46%>" y="<%=y+4%>" text-anchor="end"><%= k===0?'$-':money(val) %></text>
       <% } %>
       <line x1="<%=ml%>" y1="<%=sy(0)%>" x2="<%=W-mr%>" y2="<%=sy(0)%>" stroke="#697b91" stroke-width="1.1"/>
-      <% (categories||[]).forEach((c,i)=>{ %><text class="val-month" x="<%=sx(i)%>" y="<%=H-31%>" text-anchor="middle"><%=c%></text><% }) %>
+      <% (categories||[]).forEach((c,i)=>{ %><text class="val-month" x="<%=sx(i)%>" y="<%=H-35%>" text-anchor="middle"><%=c%></text><% }) %>
       <% (series||[]).forEach((s,si)=>{ const pts=(s.values||[]).map((v,i)=>`${sx(i)},${sy(v)}`).join(' '); %>
         <polyline points="<%=pts%>" fill="none" stroke="<%=s.color%>" stroke-width="4.3" stroke-linecap="round" stroke-linejoin="round"/>
         <% (s.values||[]).forEach((v,i)=>{ const x=sx(i), y=sy(v), ly=safeY(y,labelDy(si,i,v)); %>

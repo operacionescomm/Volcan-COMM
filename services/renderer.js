@@ -72,9 +72,11 @@ function incidentRequirementColorInjection(data = {}) {
   if (unit.includes('ticlio') || (pctInc > 9 && pctInc <= 16)) { incTop = 42; incRight = 42; reqLeft = 34; reqBottom = 58; }
   if (unit.includes('cerro') || unit.includes('romina') || (pctInc > 0 && pctInc <= 9)) { incTop = 31; incRight = 58; reqLeft = 34; reqBottom = 58; }
   if (String(data.titulo || '').toLowerCase().includes('volcan') && pctInc > 20) { incTop = 54; incRight = 12; reqLeft = 26; reqBottom = 54; }
+  const incidentPct = Math.max(0, Math.min(100, pctInc));
   return `
 <style id="comm-inc-req-color-overrides">
 /* Lógica definitiva: Incidentes = azul, Requerimientos = naranja */
+.side .donut,.donut{background:conic-gradient(#1765c1 0 ${incidentPct}%,#ff7617 ${incidentPct}% 100%)!important}
 .side .donut .pct,.donut .pct{transform:none!important;box-shadow:0 3px 9px rgba(10,45,95,.16)!important}
 .side .donut .pct-inc,.donut .pct-inc{right:${incRight}px!important;top:${incTop}px!important;min-width:58px!important;padding:5px 10px!important;color:#1555ad!important;border-color:#1765c1!important;background:rgba(255,255,255,.98)!important}
 .side .donut .pct-req,.donut .pct-req{left:${reqLeft}px!important;bottom:${reqBottom}px!important;min-width:62px!important;padding:5px 10px!important;color:#e9610c!important;border-color:#ff7617!important;background:rgba(255,255,255,.98)!important}
@@ -86,6 +88,10 @@ function incidentRequirementColorInjection(data = {}) {
 </style>
 <script id="comm-inc-bar-labels-script">
 (function(){
+  const incidentPct = ${JSON.stringify(incidentPct)};
+  document.querySelectorAll('.side .donut, .donut').forEach(donut => {
+    donut.style.setProperty('background', 'conic-gradient(#1765c1 0 ' + incidentPct + '%, #ff7617 ' + incidentPct + '% 100%)', 'important');
+  });
   const svg = document.querySelector('.chart-svg');
   if (!svg) return;
   const bars = Array.from(svg.querySelectorAll('rect')).filter(r => {

@@ -167,7 +167,7 @@ function normalizeSuministros(input = {}) {
 function getSuministrosSample(slideNumber, overrides = {}) {
   const base = SUPPLY_SAMPLES[Number(slideNumber)];
   if (!base) throw new Error(`No hay muestra de suministros para slide ${slideNumber}`);
-  return normalizeSuministros({ ...base, ...overrides, rows: overrides.rows || overrides.items || base.rows });
+  return normalizeSuministros({ ...base, slideNumber: Number(slideNumber), ...overrides, rows: overrides.rows || overrides.items || base.rows });
 }
 
 function getSuministrosCoverData(overrides = {}) {

@@ -35,6 +35,12 @@ const BAR_INSIDE_LABEL_TEMPLATES = new Set([
   'top-ten-root-cause-compare'
 ]);
 
+// Slides 20–26: si la barra es menor a 6, el valor debe ir encima en negro.
+const SMALL_OUTSIDE_LABEL_TEMPLATES = new Set([
+  'incidentes-requerimientos-unidad-classic',
+  'incidentes-requerimientos-chungar-classic'
+]);
+
 const STANDARD_GLOBE_SVG = `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg>`;
 
 function standardBrandingInjection() {
@@ -106,16 +112,23 @@ function incidentRequirementColorInjection(data = {}) {
 </script>`;
 }
 
-function barInsideLabelsInjection() {
+function barInsideLabelsInjection(smallOutside = false) {
   return `
 <style id="comm-bar-inside-label-overrides">
 .value-inc,.bar-label,.bar-value{fill:#fff!important;stroke:transparent!important;stroke-width:0!important;font-size:12px!important;font-weight:900!important;text-anchor:middle!important;dominant-baseline:middle!important;paint-order:normal!important}
+.comm-small-outside-label{fill:#111!important;stroke:transparent!important;dominant-baseline:auto!important}
 </style>
 <script id="comm-bar-inside-label-script">
 (function(){
+  const smallOutside = ${JSON.stringify(Boolean(smallOutside))};
   function num(el, attr){ return Number(el.getAttribute(attr) || 0); }
   function fillOf(el){ return String(el.getAttribute('fill') || '').trim().toLowerCase(); }
   function strokeOf(el){ return String(el.getAttribute('stroke') || '').trim().toLowerCase(); }
+  function labelValue(label){
+    const text = String(label.textContent || '').replace(/,/g, '').trim();
+    const value = Number.parseFloat(text);
+    return Number.isFinite(value) ? value : null;
+  }
   function isBar(r){
     const f = fillOf(r);
     const w = num(r,'width'), h = num(r,'height');
@@ -145,17 +158,30 @@ function barInsideLabelsInjection() {
     labels.forEach(label => {
       const bar = nearestBar(label, bars);
       if (!bar) return;
+      const value = labelValue(label);
       const x = num(bar,'x'), y = num(bar,'y'), w = num(bar,'width'), h = num(bar,'height');
       label.setAttribute('x', String(x + w / 2));
-      label.setAttribute('y', String(y + Math.max(7, h / 2)));
-      label.setAttribute('fill', '#fff');
-      label.setAttribute('stroke', 'transparent');
-      label.setAttribute('dominant-baseline', 'middle');
       label.setAttribute('text-anchor', 'middle');
-      label.style.fill = '#fff';
-      label.style.stroke = 'transparent';
       label.style.fontWeight = '900';
-      label.style.dominantBaseline = 'middle';
+      label.classList.remove('comm-small-outside-label');
+      if (smallOutside && value !== null && value < 6) {
+        label.setAttribute('y', String(Math.max(12, y - 7)));
+        label.setAttribute('fill', '#111');
+        label.setAttribute('stroke', 'transparent');
+        label.setAttribute('dominant-baseline', 'auto');
+        label.style.fill = '#111';
+        label.style.stroke = 'transparent';
+        label.style.dominantBaseline = 'auto';
+        label.classList.add('comm-small-outside-label');
+      } else {
+        label.setAttribute('y', String(y + Math.max(7, h / 2)));
+        label.setAttribute('fill', '#fff');
+        label.setAttribute('stroke', 'transparent');
+        label.setAttribute('dominant-baseline', 'middle');
+        label.style.fill = '#fff';
+        label.style.stroke = 'transparent';
+        label.style.dominantBaseline = 'middle';
+      }
     });
   });
 })();
@@ -209,7 +235,7 @@ function applyTemplateOverrides(templateName, html, data = {}) {
     output = output.includes('</head>') ? output.replace('</head>', `${overrideCss}\n</head>`) : `${overrideCss}\n${output}`;
   }
   if (BAR_INSIDE_LABEL_TEMPLATES.has(templateName)) {
-    const barFix = barInsideLabelsInjection();
+    const barFix = barInsideLabelsInjection(SMALL_OUTSIDE_LABEL_TEMPLATES.has(templateName));
     output = output.includes('</body>') ? output.replace('</body>', `${barFix}\n</body>`) : `${output}\n${barFix}`;
   }
   if (templateName === 'valorizacion-servicio') {

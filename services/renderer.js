@@ -7,7 +7,6 @@ const ROOT = path.join(__dirname, '..');
 const VIEW_DIR = path.join(ROOT, 'views');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 
-// Branding estándar solicitado para slides 19–52, excluyendo portadas 33 y 43.
 const STANDARD_BRANDING_TEMPLATES = new Set([
   'incidentes-requerimientos-volcan-classic',
   'incidentes-requerimientos-unidad-classic',
@@ -35,7 +34,7 @@ const BAR_INSIDE_LABEL_TEMPLATES = new Set([
   'top-ten-root-cause-compare'
 ]);
 
-// Slides 20–26: si la barra es menor a 6, el valor debe ir encima en negro.
+// Slides 20–26: 0 sin etiqueta, 1–5 encima en negro, 6+ dentro en blanco.
 const SMALL_OUTSIDE_LABEL_TEMPLATES = new Set([
   'incidentes-requerimientos-unidad-classic',
   'incidentes-requerimientos-chungar-classic'
@@ -91,7 +90,6 @@ function incidentRequirementColorInjection(data = {}) {
   const donutIncidentPct = Math.max(0, Math.min(100, Number(isVolcanAccumulated ? data.pctIncidentesAcum : pctInc)));
   return `
 <style id="comm-inc-req-color-overrides">
-/* Lógica definitiva: Incidentes = azul, Requerimientos = naranja */
 .side .donut,.donut{background:conic-gradient(#1765c1 0 ${donutIncidentPct}%,#ff7617 ${donutIncidentPct}% 100%)!important}
 .side .donut .pct,.donut .pct{transform:none!important;box-shadow:0 3px 9px rgba(10,45,95,.16)!important}
 .side .donut .pct-inc,.donut .pct-inc{right:${incRight}px!important;top:${incTop}px!important;min-width:58px!important;padding:5px 10px!important;color:#1555ad!important;border-color:#1765c1!important;background:rgba(255,255,255,.98)!important}
@@ -132,7 +130,7 @@ function barInsideLabelsInjection(smallOutside = false) {
   function isBar(r){
     const f = fillOf(r);
     const w = num(r,'width'), h = num(r,'height');
-    if (w <= 8 || h <= 4) return false;
+    if (w <= 8 || h < 0) return false;
     return ['#1765c1','#1557a5','#1554a9','#9fb8d7','#4d8dd3','#2f5fae','#3569bf','#143f86'].includes(f);
   }
   function nearestBar(label, bars){
@@ -148,24 +146,27 @@ function barInsideLabelsInjection(smallOutside = false) {
   document.querySelectorAll('svg.chart-svg').forEach(svg => {
     const bars = Array.from(svg.querySelectorAll('rect')).filter(isBar);
     if (!bars.length) return;
-    // Oculta las cápsulas blancas que antes iban sobre las barras.
     Array.from(svg.querySelectorAll('rect')).forEach(r => {
-      if (fillOf(r) === '#fff' && ['#9abce0','#9fb8d7','#4d8dd3'].includes(strokeOf(r))) {
-        r.style.display = 'none';
-      }
+      if (fillOf(r) === '#fff' && ['#9abce0','#9fb8d7','#4d8dd3'].includes(strokeOf(r))) r.style.display = 'none';
     });
+    const used = new Set();
     const labels = Array.from(svg.querySelectorAll('text.value-inc, text.bar-label, text.bar-value'));
     labels.forEach(label => {
-      const bar = nearestBar(label, bars);
-      if (!bar) return;
       const value = labelValue(label);
+      if (value === null) return;
+      if (smallOutside && value <= 0) { label.style.display = 'none'; return; }
+      const bar = nearestBar(label, bars.filter((_, idx) => !used.has(idx))) || nearestBar(label, bars);
+      if (!bar) return;
+      const barIndex = bars.indexOf(bar);
+      if (barIndex >= 0) used.add(barIndex);
       const x = num(bar,'x'), y = num(bar,'y'), w = num(bar,'width'), h = num(bar,'height');
+      label.style.display = '';
       label.setAttribute('x', String(x + w / 2));
       label.setAttribute('text-anchor', 'middle');
       label.style.fontWeight = '900';
       label.classList.remove('comm-small-outside-label');
-      if (smallOutside && value !== null && value < 6) {
-        label.setAttribute('y', String(Math.max(12, y - 7)));
+      if (smallOutside && value > 0 && value < 6) {
+        label.setAttribute('y', String(Math.max(12, y - 8)));
         label.setAttribute('fill', '#111');
         label.setAttribute('stroke', 'transparent');
         label.setAttribute('dominant-baseline', 'auto');
@@ -270,14 +271,12 @@ async function htmlToPng(html) {
       if (fs.existsSync(cssPath)) await page.addStyleTag({ path: cssPath });
     }
     await page.evaluate(async () => { if (document.fonts && document.fonts.ready) await document.fonts.ready; });
-    const screenshot = await page.screenshot({ type: 'png', fullPage: false });
-    return Buffer.from(screenshot);
+    return Buffer.from(await page.screenshot({ type: 'png', fullPage: false }));
   } finally { await page.close(); }
 }
 
 async function renderTemplateToPng(templateName, data) {
-  const html = await renderTemplateToHtml(templateName, data);
-  return htmlToPng(html);
+  return htmlToPng(await renderTemplateToHtml(templateName, data));
 }
 
 module.exports = { renderTemplateToHtml, htmlToPng, renderTemplateToPng };

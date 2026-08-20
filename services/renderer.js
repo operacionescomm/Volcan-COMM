@@ -8,6 +8,10 @@ const VIEW_DIR = path.join(ROOT, 'views');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 
 const STANDARD_BRANDING_TEMPLATES = new Set([
+  'atenciones',
+  'yauli-atenciones',
+  'unidad-atenciones',
+  'cerro-pasco-atenciones',
   'incidentes-requerimientos-volcan-classic',
   'incidentes-requerimientos-unidad-classic',
   'incidentes-requerimientos-chungar-classic',

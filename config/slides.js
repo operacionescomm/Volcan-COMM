@@ -18,7 +18,7 @@ const SLIDES = {
   29: { key: 'top-ten-causa-raiz-scr-car', template: 'top-ten-root-cause-compare', active: true, description: 'Top Ten Causa Raíz Incidente - SCR-CAR junio vs julio' },
   30: { key: 'top-ten-causa-raiz-andaychagua', template: 'top-ten-root-cause-compare', active: true, description: 'Top Ten Causa Raíz Incidente - Andaychagua junio vs julio' },
   31: { key: 'top-ten-causa-raiz-chungar', template: 'top-ten-root-cause-compare', active: true, description: 'Top Ten Causa Raíz Incidente - Chungar junio vs julio' },
-  32: { key: 'top-ten-causa-raiz-cerro', template: 'top-ten-root-cause-cerro', active: true, description: 'Top Ten Causa Raíz Incidente - VOLCAN Cerro' },
+  32: { key: 'top-ten-causa-raiz-cerro', template: 'top-ten-root-cause-compare', active: true, description: 'Top Ten Causa Raíz Incidente - VOLCAN Cerro' },
   34: { key: 'valorizacion-volcan', template: 'valorizacion-servicio', active: true, description: 'Valorización Volcan' },
   35: { key: 'valorizacion-yauli', template: 'valorizacion-servicio', active: true, description: 'Valorización U.M. Yauli' },
   36: { key: 'valorizacion-yauli-san-cristobal', template: 'valorizacion-servicio', active: true, description: 'Valorización U.M. Yauli - San Cristóbal' },

@@ -14,20 +14,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const APP_NAME = process.env.APP_NAME || 'Volcan-COMM Visual Engine';
 const API_KEY = String(process.env.RENDER_API_KEY || '').trim();
-const VERSION = '0.12.1';
+const VERSION = '0.12.2';
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const ACTIVE_SLIDES = [14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52];
-app.get('/', (req, res) => res.json({
-  ok: true,
-  service: APP_NAME,
-  version: VERSION,
-  activeSlides: ACTIVE_SLIDES.map(number => ({ number, key: getSlideConfig(number).key })),
-  tests: Object.fromEntries(ACTIVE_SLIDES.map(n => [`slide${n}`, `/test-slide${n}-png`]))
-}));
+app.get('/', (req, res) => res.json({ ok: true, service: APP_NAME, version: VERSION, activeSlides: ACTIVE_SLIDES.map(number => ({ number, key: getSlideConfig(number).key })), tests: Object.fromEntries(ACTIVE_SLIDES.map(n => [`slide${n}`, `/test-slide${n}-png`])) }));
 app.get('/health', (req, res) => res.json({ ok: true, service: APP_NAME, version: VERSION, timestamp: new Date().toISOString() }));
 app.get('/browser-status', (req, res) => { const executablePath = resolveChromeExecutable(); res.status(executablePath ? 200 : 503).json({ ok: Boolean(executablePath), executablePath: executablePath || null }); });
 function requireApiKey(req, res, next) { if (!API_KEY) return next(); return String(req.get('x-api-key') || '').trim() === API_KEY ? next() : res.status(401).json({ ok: false, error: 'No autorizado' }); }
@@ -51,76 +45,28 @@ const TOP_TEN_SAMPLES = {
 function normalizeTopTen(body = {}, fallback = {}) { const src = Array.isArray(body.items) && body.items.length ? body.items : fallback.items; return { ...fallback, ...body, items: (src || []).map(item => Array.isArray(item) ? { nombre: item[0], mesValor: Number(item[1] || 0), cant: Number(item[2] || 0), pct: Number(item[3] || 0) } : { nombre: String(item.nombre || item.categoria || ''), mesValor: Number(item.mesValor || item.jul || 0), cant: Number(item.cant || item.cantidad || item.total || 0), pct: Number(item.pct || item.porcentaje || 0) }).filter(i => i.nombre) }; }
 
 function slide14Sample() {
-  return normalizeAtenciones({
-    periodo: 'jul-26',
-    seriesUM: [
-      ['ago-25',562,256,80,0,898],['sept-25',611,239,81,8,939],['oct-25',603,242,83,32,960],['nov-25',613,238,83,68,1002],
-      ['dic-25',709,263,86,64,1122],['ene-26',599,206,83,54,942],['feb-26',530,185,79,95,889],['mar-26',619,260,66,102,1047],
-      ['abr-26',577,237,77,97,988],['may-26',617,265,68,97,1047],['jun-26',650,329,31,102,1112],['jul-26',630,339,39,100,1108]
-    ],
-    seriesImSup: [
-      ['ago-25',633,265,898],['sept-25',705,234,939],['oct-25',686,274,960],['nov-25',670,332,1002],['dic-25',752,370,1122],
-      ['ene-26',679,263,942],['feb-26',659,230,889],['mar-26',712,335,1047],['abr-26',742,246,988],['may-26',696,351,1047],
-      ['jun-26',802,310,1112],['jul-26',825,283,1108]
-    ]
-  });
+  return normalizeAtenciones({ periodo: 'jul-26', seriesUM: [['ago-25',562,256,80,0,898],['sept-25',611,239,81,8,939],['oct-25',603,242,83,32,960],['nov-25',613,238,83,68,1002],['dic-25',709,263,86,64,1122],['ene-26',599,206,83,54,942],['feb-26',530,185,79,95,889],['mar-26',619,260,66,102,1047],['abr-26',577,237,77,97,988],['may-26',617,265,68,97,1047],['jun-26',650,329,31,102,1112],['jul-26',630,339,39,100,1108]], seriesImSup: [['ago-25',633,265,898],['sept-25',705,234,939],['oct-25',686,274,960],['nov-25',670,332,1002],['dic-25',752,370,1122],['ene-26',679,263,942],['feb-26',659,230,889],['mar-26',712,335,1047],['abr-26',742,246,988],['may-26',696,351,1047],['jun-26',802,310,1112],['jul-26',825,283,1108]] });
 }
 
 function slide15Sample() {
-  return normalizeYauliAtenciones({
-    periodo: 'jul-26', totalMes: 630, acumulado12: 7320, im: 483, sup: 147, promedioDia: 20.3,
-    seriesTotal: [['ago-25',562],['sept-25',611],['oct-25',603],['nov-25',613],['dic-25',709],['ene-26',599],['feb-26',530],['mar-26',619],['abr-26',577],['may-26',617],['jun-26',650],['jul-26',630]],
-    seriesImSup: [['ago-25',414,148,562],['sept-25',474,137,611],['oct-25',450,153,603],['nov-25',441,172,613],['dic-25',521,188,709],['ene-26',452,147,599],['feb-26',423,107,530],['mar-26',450,169,619],['abr-26',466,111,577],['may-26',464,153,617],['jun-26',463,187,650],['jul-26',483,147,630]]
-  });
+  return normalizeYauliAtenciones({ periodo: 'jul-26', totalMes: 630, acumulado12: 7320, im: 483, sup: 147, promedioDia: 20.3, seriesTotal: [['ago-25',562],['sept-25',611],['oct-25',603],['nov-25',613],['dic-25',709],['ene-26',599],['feb-26',530],['mar-26',619],['abr-26',577],['may-26',617],['jun-26',650],['jul-26',630]], seriesImSup: [['ago-25',414,148,562],['sept-25',474,137,611],['oct-25',450,153,603],['nov-25',441,172,613],['dic-25',521,188,709],['ene-26',452,147,599],['feb-26',423,107,530],['mar-26',450,169,619],['abr-26',466,111,577],['may-26',464,153,617],['jun-26',463,187,650],['jul-26',483,147,630]] });
 }
 
 function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) { const normalized = normalizeYauliAtenciones({ ...body, titulo: body.titulo || titulo }); return { ...normalized, unidadNombre: body.unidadNombre || unidadNombre }; }
 
 const UNIT_ATENCIONES = {
-  16: { unidadNombre: 'Chungar', titulo: 'CANTIDAD DE ATENCIONES – U.M. CHUNGAR', totalMes: 339, acumulado12: 3059, im: 264, sup: 75, promedioDia: 10.9,
-    seriesTotal: [['ago-25',256],['sept-25',239],['oct-25',242],['nov-25',238],['dic-25',263],['ene-26',206],['feb-26',185],['mar-26',260],['abr-26',237],['may-26',265],['jun-26',329],['jul-26',339]],
-    seriesImSup: [['ago-25',200,56,256],['sept-25',186,53,239],['oct-25',189,53,242],['nov-25',186,52,238],['dic-25',205,58,263],['ene-26',161,45,206],['feb-26',144,41,185],['mar-26',203,57,260],['abr-26',185,52,237],['may-26',207,58,265],['jun-26',257,72,329],['jul-26',264,75,339]] },
-  17: { unidadNombre: 'Cerro Pasco', titulo: 'CANTIDAD DE ATENCIONES – U.M. CERRO PASCO', totalMes: 39, acumulado12: 856, im: 27, sup: 12, promedioDia: 1.3,
-    seriesTotal: [['ago-25',80],['sept-25',81],['oct-25',83],['nov-25',83],['dic-25',86],['ene-26',83],['feb-26',79],['mar-26',66],['abr-26',77],['may-26',68],['jun-26',31],['jul-26',39]],
-    seriesImSup: [['ago-25',55,25,80],['sept-25',56,25,81],['oct-25',57,26,83],['nov-25',57,26,83],['dic-25',59,27,86],['ene-26',57,26,83],['feb-26',55,24,79],['mar-26',46,20,66],['abr-26',53,24,77],['may-26',47,21,68],['jun-26',21,10,31],['jul-26',27,12,39]] },
-  18: { unidadNombre: 'Romina', titulo: 'CANTIDAD DE ATENCIONES – U.M. ROMINA', totalMes: 100, acumulado12: 819, im: 50, sup: 50, promedioDia: 3.2,
-    seriesTotal: [['ago-25',0],['sept-25',8],['oct-25',32],['nov-25',68],['dic-25',64],['ene-26',54],['feb-26',95],['mar-26',102],['abr-26',97],['may-26',97],['jun-26',102],['jul-26',100]],
-    seriesImSup: [['ago-25',0,0,0],['sept-25',4,4,8],['oct-25',16,16,32],['nov-25',34,34,68],['dic-25',32,32,64],['ene-26',27,27,54],['feb-26',48,47,95],['mar-26',51,51,102],['abr-26',48,49,97],['may-26',48,49,97],['jun-26',51,51,102],['jul-26',50,50,100]] }
+  16: { unidadNombre: 'Chungar', titulo: 'CANTIDAD DE ATENCIONES – U.M. CHUNGAR', totalMes: 339, acumulado12: 3059, im: 245, sup: 94, promedioDia: 10.9, seriesTotal: [['ago-25',256],['sept-25',239],['oct-25',242],['nov-25',238],['dic-25',263],['ene-26',206],['feb-26',185],['mar-26',260],['abr-26',237],['may-26',265],['jun-26',329],['jul-26',339]], seriesImSup: [['jul-26',245,94,339]], resumen3: 'El PPT original solo presenta la serie mensual Total y el desglose IM/SUP del mes de julio.' },
+  17: { unidadNombre: 'Cerro Pasco', titulo: 'CANTIDAD DE ATENCIONES – U.M. CERRO PASCO', totalMes: 39, acumulado12: 856, im: 21, sup: 18, promedioDia: 1.3, seriesTotal: [['ago-25',80],['sept-25',81],['oct-25',83],['nov-25',83],['dic-25',86],['ene-26',83],['feb-26',79],['mar-26',66],['abr-26',77],['may-26',68],['jun-26',31],['jul-26',39]], seriesImSup: [['ago-25',41,39,80],['sept-25',52,29,81],['oct-25',37,46,83],['nov-25',22,61,83],['dic-25',10,76,86],['ene-26',47,36,83],['feb-26',25,54,79],['mar-26',40,26,66],['abr-26',30,47,77],['may-26',32,36,68],['jun-26',13,18,31],['jul-26',21,18,39]] },
+  18: { unidadNombre: 'Romina', titulo: 'CANTIDAD DE ATENCIONES – U.M. ROMINA', totalMes: 100, acumulado12: 819, im: 78, sup: 24, promedioDia: 3.2, seriesTotal: [['sept-25',8],['oct-25',32],['nov-25',68],['dic-25',64],['ene-26',54],['feb-26',95],['mar-26',102],['abr-26',97],['may-26',97],['jun-26',102],['jul-26',100]], seriesImSup: [['sept-25',3,5,8],['oct-25',29,3,32],['nov-25',35,33,68],['dic-25',30,34,64],['ene-26',47,7,54],['feb-26',85,10,95],['mar-26',48,54,102],['abr-26',67,30,97],['may-26',43,54,97],['jun-26',83,19,102],['jul-26',76,24,100]], resumen1: 'En julio 2026, U.M. Romina registró 100 atenciones.', resumen2: 'Interior Mina (IM) registra 78 atenciones y Superficie (SUP) 24 según el texto del PPT; el gráfico mensual muestra 76 y 24 para julio.' }
 };
 
 function getSampleUnidadAtenciones(n) {
   const p = UNIT_ATENCIONES[Number(n)];
-  return normalizeUnidadAtenciones({
-    periodo: 'jul-26',
-    totalMes: p.totalMes,
-    acumulado12: p.acumulado12,
-    im: p.im,
-    sup: p.sup,
-    promedioDia: p.promedioDia,
-    seriesTotal: p.seriesTotal,
-    seriesImSup: p.seriesImSup,
-    resumen1: `En julio 2026, U.M. ${p.unidadNombre} registró ${p.totalMes} atenciones.`,
-    resumen2: `Interior Mina (IM) alcanzó ${p.im} atenciones y Superficie (SUP) ${p.sup}.`,
-    resumen3: 'La operación mantiene una lectura mensual automatizada con base en el reporte Volcan de julio.'
-  }, p.unidadNombre, p.titulo);
+  return normalizeUnidadAtenciones({ periodo: 'jul-26', totalMes: p.totalMes, acumulado12: p.acumulado12, im: p.im, sup: p.sup, promedioDia: p.promedioDia, seriesTotal: p.seriesTotal, seriesImSup: p.seriesImSup, resumen1: p.resumen1 || `En julio 2026, U.M. ${p.unidadNombre} registró ${p.totalMes} atenciones.`, resumen2: p.resumen2 || `Interior Mina (IM) alcanzó ${p.im} atenciones y Superficie (SUP) ${p.sup}.`, resumen3: p.resumen3 || 'La operación mantiene una lectura mensual automatizada con base en el reporte Volcan de julio.' }, p.unidadNombre, p.titulo);
 }
 
 function slide19Sample() { return normalizeIncReqTrend({ titulo: 'INCIDENTES VS REQUERIMIENTOS – VOLCAN', periodo: 'jul-26', acumuladoIncidentes: 2558, acumuladoRequerimientos: 9051, acumuladoTotal: 11609, series: [['ago-25',216,682,898],['sept-25',233,706,939],['oct-25',216,744,960],['nov-25',211,791,1002],['dic-25',225,897,1122],['ene-26',213,729,942],['feb-26',152,552,704],['mar-26',171,616,787],['abr-26',220,768,988],['may-26',210,837,1047],['jun-26',240,872,1112],['jul-26',251,857,1108]] }); }
-function dataFor(n, body = {}) {
-  if (n === 14) return Object.keys(body).length ? normalizeAtenciones(body) : slide14Sample();
-  if (n === 15) return Object.keys(body).length ? normalizeYauliAtenciones(body) : slide15Sample();
-  if (n >= 16 && n <= 18) { const p = UNIT_ATENCIONES[n]; return Object.keys(body).length ? normalizeUnidadAtenciones(body, p.unidadNombre, p.titulo) : getSampleUnidadAtenciones(n); }
-  if (n === 19) return Object.keys(body).length ? normalizeIncReqTrend(body) : slide19Sample();
-  if (n >= 20 && n <= 26) { const p = INC_REQ_UNIT_SAMPLES[n]; return Object.keys(body).length ? normalizeIncReqClassic(body, p.unidadNombre, p.tituloVisual) : getSampleIncReqUnit(n); }
-  if (n >= 27 && n <= 28) return normalizeTopTen(body, TOP_TEN_SAMPLES[n]);
-  if (n >= 29 && n <= 31) return Object.keys(body).length ? body : getRootCauseComparisonSample(n);
-  if (n === 32) return Object.keys(body).length ? body : getCerroRootCauseSample();
-  if (n === 33) return getCostosCoverData(body || {});
-  if (n >= 34 && n <= 42) return getValorizacionSample(n, body || {});
-  if (n === 43) return getSuministrosCoverData(body || {});
-  if (n >= 44 && n <= 52) return getSuministrosSample(n, body || {});
-  throw new Error(`Slide no soportado: ${n}`);
-}
+function dataFor(n, body = {}) { if (n === 14) return Object.keys(body).length ? normalizeAtenciones(body) : slide14Sample(); if (n === 15) return Object.keys(body).length ? normalizeYauliAtenciones(body) : slide15Sample(); if (n >= 16 && n <= 18) { const p = UNIT_ATENCIONES[n]; return Object.keys(body).length ? normalizeUnidadAtenciones(body, p.unidadNombre, p.titulo) : getSampleUnidadAtenciones(n); } if (n === 19) return Object.keys(body).length ? normalizeIncReqTrend(body) : slide19Sample(); if (n >= 20 && n <= 26) { const p = INC_REQ_UNIT_SAMPLES[n]; return Object.keys(body).length ? normalizeIncReqClassic(body, p.unidadNombre, p.tituloVisual) : getSampleIncReqUnit(n); } if (n >= 27 && n <= 28) return normalizeTopTen(body, TOP_TEN_SAMPLES[n]); if (n >= 29 && n <= 31) return Object.keys(body).length ? body : getRootCauseComparisonSample(n); if (n === 32) return Object.keys(body).length ? body : getCerroRootCauseSample(); if (n === 33) return getCostosCoverData(body || {}); if (n >= 34 && n <= 42) return getValorizacionSample(n, body || {}); if (n === 43) return getSuministrosCoverData(body || {}); if (n >= 44 && n <= 52) return getSuministrosSample(n, body || {}); throw new Error(`Slide no soportado: ${n}`); }
 function register(n) { app.get(`/test-slide${n}`, async (req, res) => { try { const s = getSlideConfig(n); res.type('html').send(await renderTemplateToHtml(s.template, dataFor(n))); } catch (e) { console.error(`[test-slide${n}]`, e); res.status(500).send(String(e)); } }); app.get(`/test-slide${n}-png`, async (req, res) => { try { const s = getSlideConfig(n); res.type('png').end(await renderTemplateToPng(s.template, dataFor(n))); } catch (e) { console.error(`[test-slide${n}-png]`, e); res.status(500).send(String(e)); } }); app.post(`/render/slide${n}`, requireApiKey, async (req, res) => { try { const s = getSlideConfig(n); res.type('png').end(await renderTemplateToPng(s.template, dataFor(n, req.body || {}))); } catch (e) { console.error(`[render/slide${n}]`, e); res.status(500).json({ ok: false, error: String(e) }); } }); }
 ACTIVE_SLIDES.forEach(register);
 

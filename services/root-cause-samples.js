@@ -24,16 +24,16 @@ const ROOT_CAUSE_COMPARE_SAMPLES = {
       totalIncidentes: 57,
       topTen: 56,
       items: [
-        ['Cable Roto por Vehículo (TEL)', 11, null, 0.19298245614035087],
-        ['Cable Roto por Trabajos (TEL)', 9, null, 0.15789473684210525],
-        ['Teléfono Malogrado', 9, null, 0.15789473684210525],
-        ['Cable Roto por Trabajos (RAD)', 7, null, 0.12280701754385964],
-        ['Conector Sulfatado (TEL)', 6, null, 0.10526315789473684],
-        ['Cable Roto por Trabajos (ELE)', 4, null, 0.07017543859649122],
-        ['Cable Roto por Trabajos (FO)', 3, null, 0.05263157894736842],
-        ['Equipo Inhibido (UR)', 3, null, 0.05263157894736842],
-        ['Sirena (INC)', 2, null, 0.03508771929824561],
-        ['Relé Malogrado', 2, null, 0.03508771929824561]
+        ['Cable Roto por Vehículo (TEL)', 11, 22, 0.19298245614035087],
+        ['Cable Roto por Trabajos (TEL)', 9, 18, 0.15789473684210525],
+        ['Teléfono Malogrado', 9, 18, 0.15789473684210525],
+        ['Cable Roto por Trabajos (RAD)', 7, 14, 0.12280701754385964],
+        ['Conector Sulfatado (TEL)', 6, 9, 0.10526315789473684],
+        ['Cable Roto por Trabajos (ELE)', 4, 8, 0.07017543859649122],
+        ['Cable Roto por Trabajos (FO)', 3, 12, 0.05263157894736842],
+        ['Equipo Inhibido (UR)', 3, 5, 0.05263157894736842],
+        ['Sirena (INC)', 2, 2, 0.03508771929824561],
+        ['Relé Malogrado', 2, 2, 0.03508771929824561]
       ]
     }
   },
@@ -62,16 +62,16 @@ const ROOT_CAUSE_COMPARE_SAMPLES = {
       totalIncidentes: 66,
       topTen: 65,
       items: [
-        ['Cable Roto por Trabajos (TEL)', 15, null, 0.22727272727272727],
-        ['Cable Roto por Vehículo (TEL)', 11, null, 0.16666666666666666],
-        ['Teléfono Malogrado', 8, null, 0.12121212121212122],
-        ['Conector Sulfatado (RAD)', 8, null, 0.12121212121212122],
-        ['Conector Malogrado (TEL)', 6, null, 0.09090909090909091],
-        ['Sirena Malogrado', 6, null, 0.09090909090909091],
-        ['Falla de Energía', 4, null, 0.06060606060606061],
-        ['Relé Malogrado', 3, null, 0.045454545454545456],
-        ['Equipo Inhibido (RU)', 2, null, 0.030303030303030304],
-        ['Cable Roto por Trabajos (DAT)', 2, null, 0.030303030303030304]
+        ['Cable Roto por Trabajos (TEL)', 15, 30, 0.22727272727272727],
+        ['Cable Roto por Vehículo (TEL)', 11, 22, 0.16666666666666666],
+        ['Teléfono Malogrado', 8, 8, 0.12121212121212122],
+        ['Conector Sulfatado (RAD)', 8, 12, 0.12121212121212122],
+        ['Conector Malogrado (TEL)', 6, 9, 0.09090909090909091],
+        ['Sirena Malogrado', 6, 12, 0.09090909090909091],
+        ['Falla de Energía', 4, 6, 0.06060606060606061],
+        ['Relé Malogrado', 3, 6, 0.045454545454545456],
+        ['Equipo Inhibido (RU)', 2, 2, 0.030303030303030304],
+        ['Cable Roto por Trabajos (DAT)', 2, 3, 0.030303030303030304]
       ]
     }
   },
@@ -100,15 +100,15 @@ const ROOT_CAUSE_COMPARE_SAMPLES = {
       totalIncidentes: 89,
       topTen: 89,
       items: [
-        ['Equipo Telefónico Análogo (INC)', 39, null, 0.43820224719101125],
-        ['Enlace radiante(INC)', 26, null, 0.29213483146067415],
-        ['Enlace de Datos FO (INC)', 9, null, 0.10112359550561797],
-        ['Reparar equipo', 7, null, 0.07865168539325842],
-        ['Cable Eléctrico (INC)', 3, null, 0.033707865168539325],
-        ['Enlace de Datos Cobre (INC)', 2, null, 0.02247191011235955],
-        ['Reparar Sensor de Flujometro', 1, null, 0.011235955056179775],
-        ['Equipo Telefónico IP de Escritorio (INC)', 1, null, 0.011235955056179775],
-        ['Multipar (INC)', 1, null, 0.011235955056179775]
+        ['Equipo Telefónico Análogo (INC)', 39, 92, 0.43820224719101125],
+        ['Enlace radiante(INC)', 26, 56, 0.29213483146067415],
+        ['Enlace de Datos FO (INC)', 9, 20, 0.10112359550561797],
+        ['Reparar equipo', 7, 8, 0.07865168539325842],
+        ['Cable Eléctrico (INC)', 3, 4, 0.033707865168539325],
+        ['Enlace de Datos Cobre (INC)', 2, 5, 0.02247191011235955],
+        ['Reparar Sensor de Flujometro', 1, 2, 0.011235955056179775],
+        ['Equipo Telefónico IP de Escritorio (INC)', 1, 3, 0.011235955056179775],
+        ['Multipar (INC)', 1, 2, 0.011235955056179775]
       ]
     }
   }
@@ -127,9 +127,9 @@ const CERRO_ROOT_CAUSE_SAMPLE = {
   julio: {
     label: 'Julio: 02 Incidentes',
     totalIncidentes: 2,
-    horas: null,
-    horasHombre: null,
-    items: [['Cable Roto por Trabajos (TEL)', 2, null, 1]]
+    horas: 6,
+    horasHombre: 10,
+    items: [['Cable Roto por Trabajos (TEL)', 2, 6, 1]]
   }
 };
 
@@ -169,8 +169,7 @@ function getRootCauseComparisonSample(slideNumber) {
 }
 
 function getCerroRootCauseSample() {
-  const data = { ...CERRO_ROOT_CAUSE_SAMPLE };
-  return { ...data, junio: normalizeMonth(data.junio), julio: normalizeMonth(data.julio) };
+  return normalizeRootCauseCompare({ ...CERRO_ROOT_CAUSE_SAMPLE });
 }
 
 module.exports = { getRootCauseComparisonSample, getCerroRootCauseSample, normalizeRootCauseCompare };

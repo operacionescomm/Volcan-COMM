@@ -7,7 +7,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;width:1600px;height:900px;overflow:hidden}
 body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#081a3a}
-.val-slide{position:relative;width:1600px;height:900px;background:linear-gradient(135deg,#fff 0%,#fbfdff 76%,#f2f7fd 100%);overflow:hidden}
+.val-slide{position:relative;width:1600px;height:900px;background:radial-gradient(circle at 9% 14%,rgba(41,129,230,.18),transparent 31%),radial-gradient(circle at 90% 19%,rgba(255,118,23,.14),transparent 30%),linear-gradient(135deg,#ffffff 0%,#f7fbff 68%,#eaf4ff 100%);overflow:hidden}
 .val-brand{position:absolute;right:0;top:0;width:410px;height:86px;border-bottom-left-radius:235px 92px;background:linear-gradient(145deg,#17498f,#0a3b78 60%,#062d61);display:flex;align-items:center;justify-content:flex-end;padding-right:30px;color:#fff;z-index:10}
 .val-brand-lock{display:flex;align-items:center;gap:12px}
 .val-brand svg,.val-footer svg{stroke:#fff;fill:none}
@@ -15,27 +15,40 @@ body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#081a3a}
 .val-brand-word{font-size:39px;font-weight:900;letter-spacing:1px}
 .val-header{position:absolute;left:24px;right:24px;top:14px;height:58px;z-index:8}
 .val-title{font-size:38px;font-weight:900;line-height:1.05;color:#0b2f6c;white-space:nowrap;text-shadow:0 2px 5px rgba(11,47,108,.12)}
-.val-underline{position:absolute;left:1036px;top:15px;width:92px;height:5px;border-radius:3px;background:#f26b12}
-.val-content{position:absolute;left:24px;right:24px;top:78px;bottom:104px;background:#fff;border:1px solid #d8e4ef;border-radius:16px;box-shadow:0 8px 18px rgba(18,71,125,.07);padding:22px 26px 12px;z-index:3;overflow:hidden}
-.val-chart-svg{display:block;width:100%;height:490px;overflow:visible}
+.val-underline{position:absolute;left:1036px;top:15px;width:92px;height:5px;border-radius:3px;background:#ff7617;box-shadow:0 0 12px rgba(255,118,23,.35)}
+.val-content{position:absolute;left:24px;right:24px;top:78px;bottom:96px;background:rgba(255,255,255,.96);border:1px solid #d8e4ef;border-radius:18px;box-shadow:0 11px 24px rgba(18,71,125,.12);padding:18px 24px 12px;z-index:3;overflow:hidden}
+.val-kpis{height:92px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:5px}
+.val-kpi{position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(135deg,#ffffff 0%,#f2f8ff 100%);border:1px solid #cfe0f0;box-shadow:0 8px 18px rgba(14,70,135,.11);padding:14px 16px 10px 18px}
+.val-kpi:before{content:'';position:absolute;right:-28px;top:-34px;width:112px;height:112px;border-radius:50%;background:var(--accent);opacity:.14}
+.val-kpi:after{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--accent)}
+.val-kpi-name{position:relative;font-size:13px;text-transform:uppercase;letter-spacing:.35px;font-weight:900;color:#476079;white-space:nowrap}
+.val-kpi-value{position:relative;margin-top:8px;font-size:28px;line-height:1;font-weight:900;color:var(--accent);white-space:nowrap}
+.val-kpi-sub{position:relative;margin-top:6px;font-size:12.5px;font-weight:800;color:#44536a;white-space:nowrap}
+.val-kpi.delta-up .val-kpi-value{color:#0aa36f}.val-kpi.delta-down .val-kpi-value{color:#e9502d}
+.val-chart-wrap{height:382px;border-radius:18px;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);border:1px solid #dbe7f2;padding:4px 4px 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.val-chart-svg{display:block;width:100%;height:374px;overflow:visible}
 .val-grid{stroke:#dce4ee;stroke-width:1;stroke-dasharray:2 4}
 .val-axis{font-size:12px;fill:#071833;font-weight:800}
 .val-month{font-size:12px;fill:#071833;font-weight:800}
-.val-line-label{font-size:12.5px;font-weight:900}
-.val-legend{height:28px;display:flex;align-items:center;justify-content:center;gap:48px;font-size:16px;font-weight:800;color:#071833;margin-top:0}
-.val-leg{display:flex;align-items:center;gap:7px}
-.val-leg-line{width:42px;height:4px;border-radius:4px;position:relative}
-.val-leg-line:after{content:'';position:absolute;left:17px;top:-5px;width:13px;height:13px;border-radius:50%;background:currentColor;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
-.val-data-table{width:780px;margin:9px auto 0;border-collapse:collapse;font-size:16px;color:#071833;box-shadow:0 5px 12px rgba(18,71,125,.08)}
-.val-data-table th{background:linear-gradient(90deg,#06336d,#0b4a9a);color:#fff;height:32px;font-size:17px;text-align:center;border:1px solid #8aa3cb;font-weight:900}
-.val-data-table td{height:29px;border:1px solid #93a5bd;background:rgba(255,255,255,.97);text-align:center}
-.val-data-table td:first-child{font-weight:500}
-.val-data-table .currency{width:58px;font-weight:900}
-.val-data-table .total td{background:#eaf2ff;font-weight:900;font-size:17px}
-.val-data-table.compact{font-size:14.5px}
-.val-data-table.compact th{height:28px;font-size:15.5px}
-.val-data-table.compact td{height:25px}
-.val-data-table.compact .total td{font-size:15.5px}
+.val-line-label{font-size:12px;font-weight:900;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.val-legend{height:30px;display:flex;align-items:center;justify-content:center;gap:42px;font-size:15px;font-weight:900;color:#071833;margin-top:1px}
+.val-leg{display:flex;align-items:center;gap:8px}
+.val-leg-line{width:44px;height:5px;border-radius:4px;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.14)}
+.val-leg-line:after{content:'';position:absolute;left:17px;top:-5px;width:14px;height:14px;border-radius:50%;background:currentColor;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.val-bottom{height:174px;display:grid;grid-template-columns:650px 1fr;gap:18px;margin-top:7px;align-items:start}
+.val-data-table{width:100%;border-collapse:collapse;font-size:14.8px;color:#071833;box-shadow:0 5px 12px rgba(18,71,125,.08);border-radius:12px;overflow:hidden}
+.val-data-table th{background:linear-gradient(90deg,#06336d,#1765c1);color:#fff;height:30px;font-size:15.6px;text-align:center;border:1px solid #8aa3cb;font-weight:900}
+.val-data-table td{height:28px;border:1px solid #93a5bd;background:rgba(255,255,255,.98);text-align:center}
+.val-data-table td:first-child{font-weight:800;text-align:left;padding-left:12px}
+.val-data-table .currency{width:52px;font-weight:900;text-align:center;padding-left:0}
+.val-data-table .total td{background:#eaf2ff;font-weight:900;font-size:15.5px}
+.val-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle;background:var(--dot)}
+.val-insights{height:100%;border-radius:16px;background:linear-gradient(135deg,#073b7d 0%,#0d5fbd 58%,#0ca6b7 100%);color:#fff;box-shadow:0 8px 18px rgba(8,60,130,.2);padding:16px 18px 13px;position:relative;overflow:hidden}
+.val-insights:before{content:'';position:absolute;right:-40px;bottom:-58px;width:190px;height:150px;border-radius:50%;background:rgba(255,118,23,.55)}
+.val-insights-title{position:relative;display:flex;align-items:center;gap:10px;font-size:19px;font-weight:900;margin-bottom:10px;letter-spacing:.2px}
+.val-insights-title span{width:28px;height:28px;border-radius:50%;background:#ff7617;display:flex;align-items:center;justify-content:center;font-size:18px}
+.val-insight{position:relative;display:flex;gap:9px;align-items:flex-start;font-size:15.3px;line-height:1.18;font-weight:700;margin:7px 0;color:#f7fbff}
+.val-check{width:18px;height:18px;border-radius:50%;background:#ff7617;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex:0 0 auto;margin-top:1px}
 .val-footer{position:absolute;left:25px;right:25px;bottom:16px;height:63px;background:linear-gradient(90deg,#2e56a0,#063774);display:flex;align-items:center;padding-left:32px;color:#fff;overflow:hidden;z-index:20}
 .val-footer svg{width:30px;height:30px;stroke-width:2}
 .val-footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:17px;font-size:22px;color:rgba(255,255,255,.86);font-weight:700;white-space:nowrap}
@@ -47,53 +60,93 @@ body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#081a3a}
 <%
 function money(n){ const v=Number(n||0); return v===0 ? '$-' : '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function amount(n){ const v=Number(n||0); return v===0 ? '-' : v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function pct(n){ const v=Number(n||0); return Math.abs(v).toFixed(1) + '%'; }
 function niceMax(v){ if(v<=0) return 1; const pow=Math.pow(10,Math.floor(Math.log10(v))); const scaled=v/pow; const nice=scaled<=1?1:scaled<=2?2:scaled<=5?5:10; return nice*pow; }
-const allValues=(series||[]).flatMap(s=>s.values||[]);
+const palette=['#1765c1','#ff7617','#10a6b1','#7c3aed'];
+function vividColor(s,si){
+  const c=String((s||{}).color||'').toLowerCase();
+  if(!c || c==='#0d4a98' || c==='#06336d') return palette[si%palette.length];
+  if(c==='#f26b12' || c==='#f8751a') return '#ff7617';
+  if(c==='#7b8798' || c==='#8e8e8e') return '#10a6b1';
+  return (s||{}).color || palette[si%palette.length];
+}
+const chartSeries=(series||[]).map((s,si)=>({...s,color:vividColor(s,si),values:(s.values||[]).map(v=>Number(v||0))}));
+const allValues=chartSeries.flatMap(s=>s.values||[]);
 const maxVal=Math.max(1,...allValues);
-const yMax=niceMax(maxVal*1.12);
-const ticks=5;
-const W=1470,H=490,ml=132,mr=54,mt=38,mb=62,pw=W-ml-mr,ph=H-mt-mb;
+const yMax=niceMax(maxVal*1.14);
+const ticks=4;
+const W=1470,H=374,ml=132,mr=54,mt=34,mb=54,pw=W-ml-mr,ph=H-mt-mb;
 const n=(categories||[]).length||1;
+const lastIdx=Math.max(0,n-1), prevIdx=Math.max(0,n-2);
 const sx=i=>ml+(n===1?pw/2:(pw*i/(n-1)));
 const sy=v=>mt+ph-(Number(v||0)/yMax)*ph;
 function labelDy(si,i,val){
-  const here=(series||[]).map(s=>Number((s.values||[])[i]||0));
+  const here=chartSeries.map(s=>Number((s.values||[])[i]||0));
   const close=here.some((v,idx)=>idx!==si && Math.abs(v-Number(val||0)) < yMax*.06);
-  if(close) return si===0 ? -24 : (si===1 ? 28 : 44);
-  return si===2 ? 28 : -18;
+  if(close) return si===0 ? -21 : (si===1 ? 26 : 42);
+  return si===2 ? 26 : -17;
 }
-function safeY(y,dy){ let yy=y+dy; if(yy<15) yy=y+28; if(yy>H-mb-4) yy=y-18; return yy; }
-const compactTable=(rows||[]).length>3;
+function safeY(y,dy){ let yy=y+dy; if(yy<15) yy=y+25; if(yy>H-mb-4) yy=y-17; return yy; }
+const latestRows=chartSeries.map(s=>({label:s.label,value:Number((s.values||[])[lastIdx]||0),color:s.color}));
+const totalCurrent=Number(total||latestRows.reduce((sum,r)=>sum+r.value,0));
+const prevTotal=chartSeries.reduce((sum,s)=>sum+Number((s.values||[])[prevIdx]||0),0);
+const delta=totalCurrent-prevTotal;
+const deltaPct=prevTotal ? (delta/prevTotal)*100 : 0;
+const dominant=latestRows.slice().sort((a,b)=>b.value-a.value)[0] || {label:'-',value:0,color:'#1765c1'};
+const dominantShare=totalCurrent ? (dominant.value/totalCurrent)*100 : 0;
+const monthTotals=(categories||[]).map((c,i)=>({category:c,total:chartSeries.reduce((sum,s)=>sum+Number((s.values||[])[i]||0),0)}));
+const peak=monthTotals.slice().sort((a,b)=>b.total-a.total)[0] || {category:periodo,total:totalCurrent};
+const latestLabel=(categories||[])[lastIdx] || periodo;
+const supportValue=latestRows[0]?.value || 0;
+const suppliesValue=totalCurrent-supportValue;
+const trendWord=delta>0?'incremento':delta<0?'reducción':'sin variación';
+const trendVerb=delta>0?'aumentó':delta<0?'disminuyó':'se mantuvo';
 %>
 <div class="val-slide">
   <div class="val-brand"><div class="val-brand-lock"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><div class="val-brand-word">COMM</div></div></div>
   <header class="val-header"><div class="val-title"><%= titulo %></div><div class="val-underline"></div></header>
   <main class="val-content">
-    <svg class="val-chart-svg" viewBox="0 0 1470 490" xmlns="http://www.w3.org/2000/svg">
-      <% for(let k=0;k<=ticks;k++){ const val=yMax*k/ticks; const y=sy(val); %>
-        <line class="val-grid" x1="<%=ml%>" y1="<%=y%>" x2="<%=W-mr%>" y2="<%=y%>"/>
-        <text class="val-axis" x="<%=ml-46%>" y="<%=y+4%>" text-anchor="end"><%= k===0?'$-':money(val) %></text>
-      <% } %>
-      <line x1="<%=ml%>" y1="<%=sy(0)%>" x2="<%=W-mr%>" y2="<%=sy(0)%>" stroke="#697b91" stroke-width="1.1"/>
-      <% (categories||[]).forEach((c,i)=>{ %><text class="val-month" x="<%=sx(i)%>" y="<%=H-35%>" text-anchor="middle"><%=c%></text><% }) %>
-      <% (series||[]).forEach((s,si)=>{ const pts=(s.values||[]).map((v,i)=>`${sx(i)},${sy(v)}`).join(' '); %>
-        <polyline points="<%=pts%>" fill="none" stroke="<%=s.color%>" stroke-width="4.3" stroke-linecap="round" stroke-linejoin="round"/>
-        <% (s.values||[]).forEach((v,i)=>{ const x=sx(i), y=sy(v), ly=safeY(y,labelDy(si,i,v)); %>
-          <circle cx="<%=x%>" cy="<%=y%>" r="6.8" fill="<%=s.color%>" stroke="#fff" stroke-width="2"/>
-          <text class="val-line-label" x="<%=x%>" y="<%=ly%>" fill="<%=s.color%>" text-anchor="middle"><%=money(v)%></text>
+    <section class="val-kpis">
+      <div class="val-kpi" style="--accent:#1765c1"><div class="val-kpi-name">Total valorizado</div><div class="val-kpi-value"><%=money(totalCurrent)%></div><div class="val-kpi-sub"><%=latestLabel%></div></div>
+      <div class="val-kpi" style="--accent:<%=latestRows[0]?.color || '#1765c1'%>"><div class="val-kpi-name"><%=latestRows[0]?.label || 'Soporte'%></div><div class="val-kpi-value"><%=money(supportValue)%></div><div class="val-kpi-sub"><%=pct(totalCurrent ? supportValue/totalCurrent*100 : 0)%> del total</div></div>
+      <div class="val-kpi" style="--accent:#ff7617"><div class="val-kpi-name">Suministros</div><div class="val-kpi-value"><%=money(suppliesValue)%></div><div class="val-kpi-sub"><%=pct(totalCurrent ? suppliesValue/totalCurrent*100 : 0)%> del total</div></div>
+      <div class="val-kpi <%=delta>=0?'delta-up':'delta-down'%>" style="--accent:<%=delta>=0?'#0aa36f':'#e9502d'%>"><div class="val-kpi-name">Variación vs mes anterior</div><div class="val-kpi-value"><%=delta===0?'0.0%':(delta>0?'+':'-') + pct(deltaPct)%></div><div class="val-kpi-sub"><%=money(Math.abs(delta))%> de <%=trendWord%></div></div>
+    </section>
+    <div class="val-chart-wrap">
+      <svg class="val-chart-svg" viewBox="0 0 1470 374" xmlns="http://www.w3.org/2000/svg">
+        <% for(let k=0;k<=ticks;k++){ const val=yMax*k/ticks; const y=sy(val); %>
+          <line class="val-grid" x1="<%=ml%>" y1="<%=y%>" x2="<%=W-mr%>" y2="<%=y%>"/>
+          <text class="val-axis" x="<%=ml-46%>" y="<%=y+4%>" text-anchor="end"><%= k===0?'$-':money(val) %></text>
+        <% } %>
+        <line x1="<%=ml%>" y1="<%=sy(0)%>" x2="<%=W-mr%>" y2="<%=sy(0)%>" stroke="#697b91" stroke-width="1.1"/>
+        <% (categories||[]).forEach((c,i)=>{ %><text class="val-month" x="<%=sx(i)%>" y="<%=H-26%>" text-anchor="middle"><%=c%></text><% }) %>
+        <% chartSeries.forEach((s,si)=>{ const pts=(s.values||[]).map((v,i)=>`${sx(i)},${sy(v)}`).join(' '); %>
+          <polyline points="<%=pts%>" fill="none" stroke="<%=s.color%>" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <% (s.values||[]).forEach((v,i)=>{ const x=sx(i), y=sy(v), ly=safeY(y,labelDy(si,i,v)); %>
+            <circle cx="<%=x%>" cy="<%=y%>" r="6.9" fill="<%=s.color%>" stroke="#fff" stroke-width="2"/>
+            <% if(Number(v)>0){ %><text class="val-line-label" x="<%=x%>" y="<%=ly%>" fill="<%=s.color%>" text-anchor="middle"><%=money(v)%></text><% } %>
+          <% }) %>
         <% }) %>
-      <% }) %>
-    </svg>
-    <div class="val-legend"><% (series||[]).forEach(s=>{ %><span class="val-leg"><i class="val-leg-line" style="background:<%=s.color%>;color:<%=s.color%>"></i><%=s.label%></span><% }) %></div>
-    <table class="val-data-table <%= compactTable ? 'compact' : '' %>">
-      <thead><tr><th><%= tablaTitulo %></th><th colspan="2"><%= periodo %></th></tr></thead>
-      <tbody>
-        <% (rows||[]).forEach(r=>{ %><tr><td><%=r.label%></td><td class="currency">$</td><td><%=amount(r.value)%></td></tr><% }) %>
-        <tr class="total"><td>Total</td><td class="currency">$</td><td><%=amount(total)%></td></tr>
-      </tbody>
-    </table>
+      </svg>
+    </div>
+    <div class="val-legend"><% chartSeries.forEach(s=>{ %><span class="val-leg"><i class="val-leg-line" style="background:<%=s.color%>;color:<%=s.color%>"></i><%=s.label%></span><% }) %></div>
+    <section class="val-bottom">
+      <table class="val-data-table">
+        <thead><tr><th><%= tablaTitulo %></th><th colspan="2"><%= periodo %></th></tr></thead>
+        <tbody>
+          <% latestRows.forEach(r=>{ %><tr><td><span class="val-dot" style="--dot:<%=r.color%>"></span><%=r.label%></td><td class="currency">$</td><td><%=amount(r.value)%></td></tr><% }) %>
+          <tr class="total"><td>Total</td><td class="currency">$</td><td><%=amount(totalCurrent)%></td></tr>
+        </tbody>
+      </table>
+      <aside class="val-insights">
+        <div class="val-insights-title"><span>↗</span>Observaciones automáticas</div>
+        <div class="val-insight"><span class="val-check">✓</span><span>En <strong><%=latestLabel%></strong>, el total valorizado alcanza <strong><%=money(totalCurrent)%></strong>.</span></div>
+        <div class="val-insight"><span class="val-check">✓</span><span>Predomina <strong><%=dominant.label%></strong> con <strong><%=pct(dominantShare)%></strong> de participación.</span></div>
+        <div class="val-insight"><span class="val-check">✓</span><span>Frente al mes anterior, el total <%=trendVerb%> en <strong><%=money(Math.abs(delta))%></strong>; el mayor pico fue <strong><%=peak.category%></strong> con <strong><%=money(peak.total)%></strong>.</span></div>
+      </aside>
+    </section>
   </main>
-  <footer class="val-footer"><div class="val-footer-inner"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="val-footer-orange"></span></footer>
+  <footer class="val-footer"><div class="val-footer-inner"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="val-footer-orange"></span></footer>
 </div>
 </body>
 </html>

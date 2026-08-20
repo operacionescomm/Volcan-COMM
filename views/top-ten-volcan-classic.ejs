@@ -4,140 +4,45 @@
 <meta charset="UTF-8">
 <title><%= titulo %></title>
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:1600px;height:900px;overflow:hidden}
-body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#0b2d67}
-.slide{position:relative;width:1600px;height:900px;padding:24px 52px 0;background:linear-gradient(135deg,#fff 0%,#fbfdff 72%,#f4f8fd 100%);overflow:hidden}
-.brand{position:absolute;right:0;top:0;width:410px;height:94px;border-bottom-left-radius:235px 98px;background:linear-gradient(145deg,#0d478e,#073772 60%,#062d61);display:flex;align-items:center;justify-content:flex-end;padding-right:26px;color:#fff;z-index:2;overflow:hidden}
-.brand:before{content:'';position:absolute;left:0;top:0;width:92px;height:94px;background:rgba(255,255,255,.06);border-bottom-left-radius:210px 92px}.brand-lockup{position:relative;z-index:2;display:flex;align-items:center;gap:13px}.brand-globe{width:45px;height:45px}.brand-globe svg{width:45px;height:45px;stroke:#fff;fill:none;stroke-width:2.2}.brand-text{line-height:.9;text-align:left;white-space:nowrap}.brand-text .w1{display:block;font-size:39px;font-weight:900;letter-spacing:.6px;color:#7da7ec}.brand-text .w2{display:block;margin-top:4px;font-size:16.5px;font-weight:900;letter-spacing:.3px;color:#7da7ec}.brand-text .w3{display:block;margin-top:5px;font-size:8px;font-weight:800;letter-spacing:.6px;color:#d5d5d5}
-.header{height:78px;padding-right:420px;position:relative;z-index:3}.title{font-size:39px;font-weight:800;line-height:1.05;color:#0b2f6c;white-space:nowrap}.underline{width:82px;height:5px;border-radius:3px;background:#f26b12;margin-top:14px}
-.notes{height:118px;display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}.note{background:#fff;border:1px solid #d8e4ef;border-radius:17px;box-shadow:0 7px 17px rgba(20,64,111,.10);padding:18px 22px;display:grid;grid-template-columns:54px 1fr;align-items:center;gap:14px}.note-icon{width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#247ed6,#124ca6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:27px;font-weight:900}.note-text{font-size:18px;line-height:1.22;color:#173b70;font-weight:700}.note-text strong{font-size:24px;color:#ef650e}
-.main{height:574px;display:grid;grid-template-columns:1.24fr .76fr;gap:18px;margin-top:12px}.panel{background:#fff;border:1px solid #dbe5ef;border-radius:18px;box-shadow:0 7px 17px rgba(20,64,111,.10);overflow:hidden}.chart-panel{padding:14px 18px 10px}.table-panel{padding:14px 18px 14px}.panel-title{height:34px;font-size:21px;font-weight:800;color:#0b2f6c;display:flex;align-items:center;justify-content:center;text-transform:uppercase}.panel-subtitle{height:20px;font-size:12px;font-weight:700;color:#6d7f95;display:flex;align-items:center;justify-content:center}
-.chart-svg{width:100%;height:444px;display:block;overflow:visible}.grid{stroke:#d5dde8;stroke-width:1}.axis{font-size:12px;fill:#607287;font-weight:700}.axis-r{font-size:12px;fill:#7b6e60;font-weight:700}.cat{font-size:10.5px;fill:#5d6f86;font-weight:700}.bar-value{font-size:13px;fill:#fff;font-weight:900;text-anchor:middle;text-shadow:0 1px 2px rgba(0,0,0,.25)}.pct-label{font-size:12px;fill:#ef6b12;font-weight:900;text-anchor:middle}.point{fill:#ef6b12;stroke:#fff;stroke-width:2}
-.legend{height:26px;display:flex;align-items:center;justify-content:center;gap:30px;font-size:13px;font-weight:700;color:#29466f}.leg{display:flex;align-items:center;gap:7px}.legbox{width:22px;height:10px;background:#9fb8d7;border:1px solid #4d8dd3}.legline{width:30px;height:4px;background:#ef6b12;border-radius:2px;position:relative}.legline:after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:#ef6b12;left:11px;top:-2px}
-.table-title{height:40px;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:800;color:#0b2f6c;text-transform:uppercase}.table-wrap{margin-top:4px;border-top:2px solid #5d8be0;border-bottom:2px solid #5d8be0;padding-top:12px;padding-bottom:2px}.detail-table{width:100%;border-collapse:collapse;color:#000}.detail-table th{font-size:16px;font-weight:400;padding:0 6px 10px;text-align:center;color:#000;background:transparent}.detail-table th:first-child{text-align:center}.detail-table td{font-size:17px;line-height:1.08;padding:6px 6px;border:none;color:#000;vertical-align:top}.detail-table td:first-child{font-size:18px}.detail-table td.name{padding-left:4px}.detail-table td.center{text-align:center}.detail-table td.right{text-align:right;padding-right:10px}.detail-table tbody tr td{border-bottom:1px solid rgba(93,139,224,.12)}.detail-table tbody tr:last-child td{border-bottom:none}
-.footer{position:absolute;left:0;right:0;bottom:0;height:66px;background:linear-gradient(90deg,#0d4a98,#063774);color:#fff;display:flex;align-items:center;padding-left:50px;overflow:hidden}.footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:20px;font-size:22px;letter-spacing:.2px}.footer-inner strong{font-size:25px;letter-spacing:.5px;color:#ff7414}.footer-globe{width:34px;height:34px;flex:0 0 auto}.footer-globe svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:2}.footer-sep{width:2px;height:40px;background:rgba(255,255,255,.72);margin:0 10px 0 4px}.footer-orange{position:absolute;right:-22px;bottom:-28px;width:180px;height:104px;background:#ff6f12;border-radius:70% 0 0 0;transform:rotate(-7deg)}
+*{box-sizing:border-box}html,body{margin:0;width:1600px;height:900px;overflow:hidden}body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#0b2f6c}.slide{position:relative;width:1600px;height:900px;padding:18px 32px 82px;background:linear-gradient(135deg,#fff 0%,#fbfdff 72%,#f4f8fd 100%);overflow:hidden}.brand{position:absolute;right:0;top:0;width:410px;height:86px;border-bottom-left-radius:235px 92px;background:linear-gradient(145deg,#17498f,#0a3b78 60%,#062d61);display:flex;align-items:center;justify-content:flex-end;padding-right:28px;color:#fff;z-index:2}.brand-lockup{display:flex;align-items:center;gap:12px}.brand svg,.footer svg{stroke:#fff;fill:none}.brand svg{width:42px;height:42px;stroke-width:2.2}.brand-text{line-height:.9}.brand-text .w1{display:block;font-size:38px;font-weight:900;color:#7da7ec}.brand-text .w2{display:block;margin-top:4px;font-size:16px;font-weight:900;color:#7da7ec}.brand-text .w3{display:block;margin-top:4px;font-size:8px;font-weight:800;color:#d5d5d5}.header{height:68px;padding-right:420px;position:relative;z-index:3}.title{font-size:35px;font-weight:900;line-height:1.05;color:#0b2f6c;white-space:nowrap}.underline{width:92px;height:5px;border-radius:3px;background:#f26b12;margin-top:11px}.kpis{height:88px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:2px}.kpi{background:#fff;border:1px solid #d8e4ef;border-radius:15px;box-shadow:0 5px 13px rgba(18,71,125,.09);display:grid;grid-template-columns:58px 1fr;align-items:center;padding:10px 16px}.kpi-icon{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:900;box-shadow:0 4px 10px rgba(20,40,80,.15)}.kpi.gray .kpi-icon{background:linear-gradient(145deg,#777,#aaa)}.kpi.teal .kpi-icon{background:linear-gradient(145deg,#188b98,#57aeb7)}.kpi.blue .kpi-icon{background:linear-gradient(145deg,#235ac1,#4c79dd)}.kpi.orange .kpi-icon{background:linear-gradient(145deg,#e86317,#f08b42)}.kpi-label{font-size:12px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;color:#546b87}.kpi-value{font-size:27px;font-weight:900;line-height:1;color:#0b2f6c;margin-top:2px}.kpi-sub{font-size:10px;color:#76879b;font-weight:700;margin-top:3px}.kpi.teal .kpi-value{color:#1a7e87}.kpi.blue .kpi-value{color:#315fc3}.kpi.orange .kpi-value{color:#e96b1e}.main{height:520px;display:grid;grid-template-columns:1.23fr .77fr;gap:18px;margin-top:10px}.panel{background:#fff;border:1px solid #dbe5ef;border-radius:17px;box-shadow:0 6px 15px rgba(20,64,111,.09);overflow:hidden}.chart-panel{padding:10px 15px 7px}.table-panel{padding:10px 16px}.panel-title{height:29px;font-size:19px;font-weight:900;color:#0b2f6c;display:flex;align-items:center;justify-content:center;text-transform:uppercase}.panel-subtitle{height:18px;font-size:11px;font-weight:700;color:#6d7f95;display:flex;align-items:center;justify-content:center}.chart-svg{width:100%;height:405px;display:block;overflow:visible}.grid{stroke:#d5dde8;stroke-width:1}.axis{font-size:11px;fill:#607287;font-weight:700}.axis-r{font-size:11px;fill:#7b6e60;font-weight:700}.cat{font-size:9.4px;fill:#253e64;font-weight:800}.bar-value{font-size:12px;fill:#fff;font-weight:900;text-anchor:middle}.pct-label{font-size:10.5px;fill:#ef6b12;font-weight:900;text-anchor:middle}.point{fill:#ef6b12;stroke:#fff;stroke-width:2}.legend{height:23px;display:flex;align-items:center;justify-content:center;gap:28px;font-size:12px;font-weight:800;color:#29466f}.leg{display:flex;align-items:center;gap:7px}.legbox{width:22px;height:10px;background:#3f6fc5;border:1px solid #315aa5}.legline{width:30px;height:4px;background:#ef6b12;border-radius:2px;position:relative}.legline:after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:#ef6b12;left:11px;top:-2px}.table-title{height:35px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;color:#0b2f6c;text-transform:uppercase}.table-wrap{margin-top:2px;border-top:2px solid #3f6fc5;border-bottom:2px solid #3f6fc5;padding-top:7px;padding-bottom:1px}.detail-table{width:100%;border-collapse:collapse;color:#06122a}.detail-table th{font-size:12.5px;font-weight:900;padding:0 5px 7px;text-align:center;color:#0b2f6c}.detail-table td{font-size:13.5px;line-height:1.07;padding:7px 5px;border-bottom:1px solid rgba(93,139,224,.14);vertical-align:middle}.detail-table td.name{font-weight:700}.detail-table td.center{text-align:center}.detail-table td.right{text-align:right;padding-right:9px}.summary{height:82px;margin-top:10px;background:#fff;border:1px solid #d8e4ef;border-radius:15px;box-shadow:0 5px 12px rgba(18,71,125,.07);display:grid;grid-template-columns:190px 1fr;overflow:hidden}.summary-title{background:linear-gradient(135deg,#2d62bd,#174b9b);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:17px;font-weight:900;line-height:1.05}.summary-body{padding:12px 18px;font-size:12.5px;color:#173b70;font-weight:700;display:grid;grid-template-columns:1fr 1fr;gap:7px 22px}.bullet:before{content:'✓';display:inline-flex;width:18px;height:18px;border-radius:50%;background:#315fc3;color:#fff;align-items:center;justify-content:center;margin-right:7px;font-size:11px}.footer{position:absolute;left:0;right:0;bottom:0;height:66px;background:linear-gradient(90deg,#0d4a98,#063774);color:#fff;display:flex;align-items:center;padding-left:50px;overflow:hidden}.footer-inner{position:relative;z-index:2;display:flex;align-items:center;gap:20px;font-size:22px;letter-spacing:.2px}.footer-inner strong{font-size:25px;letter-spacing:.5px;color:#ff7414}.footer svg{width:34px;height:34px;stroke-width:2}.footer-sep{width:2px;height:40px;background:rgba(255,255,255,.72);margin:0 10px 0 4px}.footer-orange{position:absolute;right:-22px;bottom:-28px;width:180px;height:104px;background:#ff6f12;border-radius:70% 0 0 0;transform:rotate(-7deg)}
 </style>
 </head>
 <body>
 <%
-const rows = Array.isArray(items) ? items : [];
-function fmt(n){ return Number(n || 0).toLocaleString('en-US'); }
-function pctVal(row){
-  const raw = Number(row?.pct || 0);
-  if (raw > 0) return raw;
-  const cant = Number(row?.cant || 0);
-  return Number(totalAcumulado || 0) > 0 ? cant / Number(totalAcumulado || 1) : 0;
-}
-function pctText(v){ return `${Math.round(Number(v || 0) * 100)}%`; }
-function niceStep(maxVal){
-  const rough = Math.max(1, maxVal) / 5;
-  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
-  const n = rough / mag;
-  let step = 1;
-  if (n <= 1) step = 1;
-  else if (n <= 2) step = 2;
-  else if (n <= 5) step = 5;
-  else step = 10;
-  return step * mag;
-}
-function splitLabel(name){
-  const original = String(name || '').trim();
-  const suffixMatch = original.match(/\([^)]*\)$/);
-  const suffix = suffixMatch ? suffixMatch[0] : '';
-  const base = suffix ? original.replace(/\s*\([^)]*\)$/, '').trim() : original;
-  let lines = [];
-  if (/^Cable Roto por\s+/i.test(base)) {
-    lines = ['Cable Roto', base.replace(/^Cable Roto\s*/i, '').trim()];
-  } else {
-    const words = base.split(/\s+/).filter(Boolean);
-    let line = '';
-    words.forEach(w => {
-      if (!line) line = w;
-      else if ((line + ' ' + w).length <= 14) line += ' ' + w;
-      else { lines.push(line); line = w; }
-    });
-    if (line) lines.push(line);
-  }
-  if (suffix) lines.push(suffix);
-  if (lines.length > 3) lines = [lines[0], lines.slice(1, -1).join(' '), lines[lines.length - 1]];
-  return lines.slice(0, 3);
-}
-const maxCant = Math.max(1, ...rows.map(r => Number(r.cant || 0)));
-const countStep = niceStep(maxCant);
-const countMax = Math.ceil(maxCant / countStep) * countStep;
-const maxPct = Math.max(0.08, ...rows.map(r => pctVal(r)));
-const pctStep = 0.02;
-const pctMax = Math.ceil(maxPct / pctStep) * pctStep;
-const pctFloor = -0.04;
+const rows=Array.isArray(items)?items:[];
+function fmt(n){return Number(n||0).toLocaleString('en-US')}
+function pctVal(r){const raw=Number(r?.pct||0);if(raw>0)return raw;return Number(totalAcumulado||0)>0?Number(r?.cant||0)/Number(totalAcumulado):0}
+function pctText(v){return `${Math.round(Number(v||0)*100)}%`}
+function niceStep(maxVal){const rough=Math.max(1,maxVal)/5,mag=Math.pow(10,Math.floor(Math.log10(rough))),n=rough/mag;return (n<=1?1:n<=2?2:n<=5?5:10)*mag}
+function wrapLabel(name,max=17){const words=String(name||'').trim().split(/\s+/);const lines=[];let line='';words.forEach(w=>{if(!line)line=w;else if((line+' '+w).length<=max)line+=' '+w;else{lines.push(line);line=w}});if(line)lines.push(line);return lines}
+const maxCant=Math.max(1,...rows.map(r=>Number(r.cant||0))),countStep=niceStep(maxCant),countMax=Math.ceil(maxCant/countStep)*countStep;
+const maxPct=Math.max(.08,...rows.map(r=>pctVal(r))),pctStep=.02,pctMax=Math.ceil(maxPct/pctStep)*pctStep,pctFloor=-.04;
+const leader=rows[0]||{nombre:'Sin datos',cant:0,pct:0};const leaderPct=pctVal(leader);const topTenTotal=rows.reduce((a,r)=>a+Number(r.cant||0),0);const topTenShare=Number(totalAcumulado||0)>0?topTenTotal/Number(totalAcumulado):0;
 %>
 <div class="slide">
-  <div class="brand"><div class="brand-lockup"><span class="brand-globe"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg></span><span class="brand-text"><span class="w1">COMM</span><span class="w2">COMMUNICATIONS</span><span class="w3">AND SYSTEMS DEVELOPMENT</span></span></div></div>
+  <div class="brand"><div class="brand-lockup"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><span class="brand-text"><span class="w1">COMM</span><span class="w2">COMMUNICATIONS</span><span class="w3">AND SYSTEMS DEVELOPMENT</span></span></div></div>
   <header class="header"><div class="title"><%= titulo %></div><div class="underline"></div></header>
-  <section class="notes">
-    <div class="note"><div class="note-icon">1</div><div class="note-text"><%= notaMesPrefix %> <strong><%= fmt(totalMes) %></strong> <%= tipoPlural %> en <%= alcance %>.</div></div>
-    <div class="note"><div class="note-icon">Σ</div><div class="note-text"><%= notaAcumuladoPrefix %> <strong><%= fmt(totalAcumulado) %></strong> <%= tipoPlural %> en <%= alcance %>.</div></div>
+  <section class="kpis">
+    <div class="kpi gray"><div class="kpi-icon">Σ</div><div><div class="kpi-label"><%= tipoPlural %> julio</div><div class="kpi-value"><%= fmt(totalMes) %></div><div class="kpi-sub">mes actual</div></div></div>
+    <div class="kpi teal"><div class="kpi-icon">↗</div><div><div class="kpi-label">Acumulado</div><div class="kpi-value"><%= fmt(totalAcumulado) %></div><div class="kpi-sub">periodo analizado</div></div></div>
+    <div class="kpi blue"><div class="kpi-icon">1</div><div><div class="kpi-label">Categoría líder</div><div class="kpi-value"><%= fmt(leader.cant) %></div><div class="kpi-sub"><%= leader.nombre %></div></div></div>
+    <div class="kpi orange"><div class="kpi-icon">%</div><div><div class="kpi-label">Participación líder</div><div class="kpi-value"><%= pctText(leaderPct) %></div><div class="kpi-sub">Top Ten: <%= pctText(topTenShare) %> del acumulado</div></div></div>
   </section>
   <main class="main">
-    <section class="panel chart-panel">
-      <div class="panel-title">Ranking acumulado</div>
-      <div class="panel-subtitle">Barras: cantidad acumulada | Línea naranja: participación porcentual</div>
-      <svg class="chart-svg" viewBox="0 0 860 444">
-        <% const ml=56,mr=54,mt=28,mb=118,pw=860-ml-mr,ph=444-mt-mb,n=rows.length||1,slot=pw/n,barW=Math.min(48,slot*0.38); const sx=i=>ml+slot*i+slot/2; const syC=v=>mt+ph-(Number(v||0)/countMax)*ph; const syP=v=>mt+ph-((Number(v||0)-pctFloor)/(pctMax-pctFloor))*ph; %>
-        <% for(let t=0;t<=countMax;t+=countStep){ const y=syC(t); %>
-          <line class="grid" x1="<%= ml %>" y1="<%= y %>" x2="<%= 860-mr %>" y2="<%= y %>"/>
-          <text class="axis" x="<%= ml-9 %>" y="<%= y+4 %>" text-anchor="end"><%= t %></text>
-        <% } %>
-        <% for(let p=0;p<=pctMax+1e-9;p+=pctStep){ const y=syP(p); %>
-          <text class="axis-r" x="<%= 860-mr+12 %>" y="<%= y+4 %>" text-anchor="start"><%= Math.round(p*100) %>%</text>
-        <% } %>
-        <line x1="<%= ml %>" y1="<%= mt+ph %>" x2="<%= 860-mr %>" y2="<%= mt+ph %>" stroke="#cdd7e2" stroke-width="1.2"/>
-        <% const points = rows.map((r,i)=> `${sx(i)},${syP(pctVal(r))}`).join(' '); %>
-        <% rows.forEach((r,i)=>{ const cx=sx(i), val=Number(r.cant||0), y=syC(val), h=(mt+ph)-y, vy=y+(h/2)+5; %>
-          <rect x="<%= cx-barW/2 %>" y="<%= y %>" width="<%= barW %>" height="<%= h %>" rx="1" fill="#9fb8d7" stroke="#4d8dd3" stroke-width="2"/>
-          <text class="bar-value" x="<%= cx %>" y="<%= vy %>"><%= fmt(val) %></text>
-        <% }) %>
-        <polyline points="<%= points %>" fill="none" stroke="#ef6b12" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <% rows.forEach((r,i)=>{ const cx=sx(i), pct=pctVal(r), py=syP(pct), label=pctText(pct), labelW=Math.max(34,label.length*7+10), ly=Math.max(mt+14,py-16), ry=ly-13; %>
-          <circle class="point" cx="<%= cx %>" cy="<%= py %>" r="4.2"/>
-          <rect x="<%= cx-labelW/2 %>" y="<%= ry %>" width="<%= labelW %>" height="18" rx="9" fill="#fff" stroke="#ef6b12" stroke-width="1.2"/>
-          <text class="pct-label" x="<%= cx %>" y="<%= ly %>"><%= label %></text>
-        <% }) %>
-        <% rows.forEach((r,i)=>{ const cx=sx(i), lines=splitLabel(r.nombre); %>
-          <text class="cat" x="<%= cx %>" y="<%= mt+ph+21 %>" text-anchor="middle">
-            <% lines.forEach((line,li)=>{ %><tspan x="<%= cx %>" dy="<%= li===0 ? 0 : 13 %>"><%= line %></tspan><% }) %>
-          </text>
-        <% }) %>
-      </svg>
-      <div class="legend"><span class="leg"><i class="legbox"></i>Cantidad acumulada</span><span class="leg"><i class="legline"></i>% participación</span></div>
+    <section class="panel chart-panel"><div class="panel-title">Ranking acumulado</div><div class="panel-subtitle">Barras: cantidad acumulada | Línea naranja: participación porcentual</div>
+      <svg class="chart-svg" viewBox="0 0 860 405">
+        <% const ml=56,mr=54,mt=24,mb=112,pw=860-ml-mr,ph=405-mt-mb,n=rows.length||1,slot=pw/n,barW=Math.min(48,slot*.42),sx=i=>ml+slot*i+slot/2,syC=v=>mt+ph-(Number(v||0)/countMax)*ph,syP=v=>mt+ph-((Number(v||0)-pctFloor)/(pctMax-pctFloor))*ph; %>
+        <% for(let t=0;t<=countMax;t+=countStep){const y=syC(t);%><line class="grid" x1="<%=ml%>" y1="<%=y%>" x2="<%=860-mr%>" y2="<%=y%>"/><text class="axis" x="<%=ml-9%>" y="<%=y+4%>" text-anchor="end"><%=t%></text><%}%>
+        <% for(let p=0;p<=pctMax+1e-9;p+=pctStep){const y=syP(p);%><text class="axis-r" x="<%=860-mr+10%>" y="<%=y+4%>"><%=Math.round(p*100)%>%</text><%}%>
+        <% rows.forEach((r,i)=>{const cx=sx(i),v=Number(r.cant||0),y=syC(v),h=mt+ph-y;%><rect x="<%=cx-barW/2%>" y="<%=y%>" width="<%=barW%>" height="<%=h%>" rx="2" fill="#3f6fc5" stroke="#315aa5" stroke-width="1.5"/><text class="bar-value" x="<%=cx%>" y="<%=y+h/2+4%>"><%=fmt(v)%></text><%})%>
+        <polyline points="<%=rows.map((r,i)=>`${sx(i)},${syP(pctVal(r))}`).join(' ')%>" fill="none" stroke="#ef6b12" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <% rows.forEach((r,i)=>{const cx=sx(i),py=syP(pctVal(r)),label=pctText(pctVal(r));%><circle class="point" cx="<%=cx%>" cy="<%=py%>" r="4"/><rect x="<%=cx-19%>" y="<%=Math.max(mt+2,py-23)%>" width="38" height="17" rx="8" fill="#fff" stroke="#ef6b12"/><text class="pct-label" x="<%=cx%>" y="<%=Math.max(mt+14,py-10)%>"><%=label%></text><% const lines=wrapLabel(r.nombre); %><text class="cat" x="<%=cx%>" y="<%=mt+ph+16%>" text-anchor="middle"><% lines.forEach((line,li)=>{%><tspan x="<%=cx%>" dy="<%=li===0?0:10.5%>"><%=line%></tspan><%})%></text><%})%>
+      </svg><div class="legend"><span class="leg"><i class="legbox"></i>Cantidad acumulada</span><span class="leg"><i class="legline"></i>% participación</span></div>
     </section>
-    <section class="panel table-panel">
-      <div class="table-title"><%= tipoPlural %></div>
-      <div class="table-wrap">
-        <table class="detail-table">
-          <thead>
-            <tr>
-              <th style="width:<%= showMesColumn ? '58%' : '66%' %>"><%= tipoPlural.toUpperCase() %></th>
-              <% if (showMesColumn) { %><th style="width:12%"><%= mesCorto.toUpperCase() %></th><% } %>
-              <th style="width:15%">CANT.</th>
-              <th style="width:15%">%</th>
-            </tr>
-          </thead>
-          <tbody>
-          <% rows.forEach((r)=>{ %>
-            <tr>
-              <td class="name"><%= r.nombre %></td>
-              <% if (showMesColumn) { %><td class="center"><%= fmt(r.mesValor) %></td><% } %>
-              <td class="right"><%= fmt(r.cant) %></td>
-              <td class="center"><%= pctText(pctVal(r)) %></td>
-            </tr>
-          <% }) %>
-          </tbody>
-        </table>
-      </div>
-    </section>
+    <section class="panel table-panel"><div class="table-title"><%= tipoPlural %></div><div class="table-wrap"><table class="detail-table"><thead><tr><th style="width:<%=showMesColumn?'58%':'66%'%>"><%=tipoPlural.toUpperCase()%></th><% if(showMesColumn){%><th style="width:12%"><%=mesCorto.toUpperCase()%></th><%}%><th style="width:15%">CANT.</th><th style="width:15%">%</th></tr></thead><tbody><% rows.forEach(r=>{%><tr><td class="name"><%=r.nombre%></td><% if(showMesColumn){%><td class="center"><%=fmt(r.mesValor)%></td><%}%><td class="center"><%=fmt(r.cant)%></td><td class="center"><%=pctText(pctVal(r))%></td></tr><%})%></tbody></table></div></section>
   </main>
-  <footer class="footer"><div class="footer-inner"><span class="footer-globe"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg></span><span class="footer-sep"></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><span class="footer-orange"></span></footer>
+  <section class="summary"><div class="summary-title">RESUMEN<br>EJECUTIVO</div><div class="summary-body"><div class="bullet"><b><%=leader.nombre%></b> lidera con <b><%=fmt(leader.cant)%></b> (<%=pctText(leaderPct)%>).</div><div class="bullet">El Top Ten concentra <b><%=pctText(topTenShare)%></b> del acumulado.</div><div class="bullet">Julio registra <b><%=fmt(totalMes)%></b> <%=tipoPlural.toLowerCase()%>.</div><div class="bullet">Acumulado del periodo: <b><%=fmt(totalAcumulado)%></b>.</div></div></section>
+  <footer class="footer"><div class="footer-inner"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><span class="footer-sep"></span><span>www.<strong>COMMUNICATIONS</strong>.com.pe</span></div><div class="footer-orange"></div></footer>
 </div>
 </body>
 </html>

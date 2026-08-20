@@ -1,6 +1,6 @@
 const SLIDES = {
   12: { key: 'incidentes-requerimientos', template: 'incidentes-requerimientos', active: true, description: 'Incidentes vs Requerimientos por scope' },
-  14: { key: 'atenciones', template: 'atenciones', active: true, description: 'Atenciones en la Operación - VOLCAN' },
+  14: { key: 'atenciones', template: 'atenciones-layout-fix', active: true, description: 'Atenciones en la Operación - VOLCAN' },
   15: { key: 'yauli-atenciones', template: 'yauli-atenciones', active: true, description: 'Cantidad de Atenciones - U.M. Yauli' },
   16: { key: 'chungar-atenciones', template: 'unidad-atenciones-left-date', active: true, description: 'Cantidad de Atenciones - U.M. Chungar' },
   17: { key: 'cerro-pasco-atenciones', template: 'cerro-pasco-atenciones', active: true, description: 'Cantidad de Atenciones - U.M. Cerro Pasco' },

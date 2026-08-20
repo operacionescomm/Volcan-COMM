@@ -3,6 +3,7 @@ const path = require('path');
 const { getSlideConfig } = require('./config/slides');
 const { normalizeIncReqTrend } = require('./services/incidentes-requerimientos-trend');
 const { normalizeIncReqUnidad } = require('./services/incidentes-requerimientos-unidad');
+const { normalizeAtenciones, normalizeYauliAtenciones } = require('./services/normalizers');
 const { renderTemplateToHtml, renderTemplateToPng } = require('./services/renderer');
 const { closeBrowser, resolveChromeExecutable } = require('./services/browser');
 const { getRootCauseComparisonSample, getCerroRootCauseSample } = require('./services/root-cause-samples');
@@ -13,13 +14,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const APP_NAME = process.env.APP_NAME || 'Volcan-COMM Visual Engine';
 const API_KEY = String(process.env.RENDER_API_KEY || '').trim();
-const VERSION = '0.11.0';
+const VERSION = '0.12.0';
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-const ACTIVE_SLIDES = [19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52];
+const ACTIVE_SLIDES = [14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52];
 app.get('/', (req, res) => res.json({
   ok:true, service:APP_NAME, version:VERSION,
   activeSlides: ACTIVE_SLIDES.map(number => ({ number, key:getSlideConfig(number).key })),
@@ -51,8 +52,75 @@ const TOP_TEN_SAMPLES = {
 };
 function normalizeTopTen(body={},fallback={}){ const src=Array.isArray(body.items)&&body.items.length?body.items:fallback.items; return {...fallback,...body,items:(src||[]).map(item=>Array.isArray(item)?{nombre:item[0],mesValor:Number(item[1]||0),cant:Number(item[2]||0),pct:Number(item[3]||0)}:{nombre:String(item.nombre||item.categoria||''),mesValor:Number(item.mesValor||item.jul||0),cant:Number(item.cant||item.cantidad||item.total||0),pct:Number(item.pct||item.porcentaje||0)}).filter(i=>i.nombre)}; }
 
+function slide14Sample(){
+  return normalizeAtenciones({
+    periodo:'jul-26',
+    seriesUM:[
+      ['ago-25',562,256,80,0,898],['sept-25',611,239,81,8,939],['oct-25',603,242,83,32,960],['nov-25',613,238,83,68,1002],
+      ['dic-25',709,263,86,64,1122],['ene-26',599,206,83,54,942],['feb-26',530,185,79,95,889],['mar-26',619,260,66,102,1047],
+      ['abr-26',577,237,77,97,988],['may-26',617,265,68,97,1047],['jun-26',650,329,31,102,1112],['jul-26',630,339,39,100,1108]
+    ],
+    seriesImSup:[
+      ['ago-25',633,265,898],['sept-25',705,234,939],['oct-25',686,274,960],['nov-25',670,332,1002],['dic-25',752,370,1122],
+      ['ene-26',679,263,942],['feb-26',659,230,889],['mar-26',712,335,1047],['abr-26',742,246,988],['may-26',696,351,1047],
+      ['jun-26',802,310,1112],['jul-26',825,283,1108]
+    ]
+  });
+}
+
+function slide15Sample(){
+  return normalizeYauliAtenciones({
+    periodo:'jul-26',
+    totalMes:630,
+    acumulado12:7320,
+    im:483,
+    sup:147,
+    promedioDia:20.3,
+    seriesTotal:[
+      ['ago-25',562],['sept-25',611],['oct-25',603],['nov-25',613],['dic-25',709],['ene-26',599],
+      ['feb-26',530],['mar-26',619],['abr-26',577],['may-26',617],['jun-26',650],['jul-26',630]
+    ],
+    seriesImSup:[
+      ['ago-25',414,148,562],['sept-25',474,137,611],['oct-25',450,153,603],['nov-25',441,172,613],
+      ['dic-25',521,188,709],['ene-26',452,147,599],['feb-26',423,107,530],['mar-26',450,169,619],
+      ['abr-26',466,111,577],['may-26',464,153,617],['jun-26',463,187,650],['jul-26',483,147,630]
+    ]
+  });
+}
+
+function normalizeUnidadAtenciones(body={},unidadNombre,titulo){
+  const normalized=normalizeYauliAtenciones({...body,titulo:body.titulo||titulo});
+  return {...normalized,unidadNombre:body.unidadNombre||unidadNombre};
+}
+
+const UNIT_ATENCIONES = {
+  16:{unidadNombre:'Chungar',titulo:'CANTIDAD DE ATENCIONES – U.M. CHUNGAR'},
+  17:{unidadNombre:'Cerro Pasco',titulo:'CANTIDAD DE ATENCIONES – U.M. CERRO PASCO'},
+  18:{unidadNombre:'Romina',titulo:'CANTIDAD DE ATENCIONES – U.M. ROMINA'}
+};
+
+function getSampleUnidadAtenciones(n){
+  const p=UNIT_ATENCIONES[Number(n)];
+  return normalizeUnidadAtenciones({
+    periodo:'jul-26',
+    totalMes:0,
+    acumulado12:0,
+    im:0,
+    sup:0,
+    promedioDia:0,
+    seriesTotal:[],
+    seriesImSup:[],
+    resumen1:`Vista de prueba para U.M. ${p.unidadNombre}.`,
+    resumen2:'Los valores reales serán enviados automáticamente desde Google Apps Script.',
+    resumen3:'Endpoint activo y preparado para recibir la data de la unidad minera.'
+  },p.unidadNombre,p.titulo);
+}
+
 function slide19Sample(){ return normalizeIncReqTrend({titulo:'INCIDENTES VS REQUERIMIENTOS – VOLCAN',periodo:'jul-26',acumuladoIncidentes:2558,acumuladoRequerimientos:9051,acumuladoTotal:11609,series:[['ago-25',216,682,898],['sept-25',233,706,939],['oct-25',216,744,960],['nov-25',211,791,1002],['dic-25',225,897,1122],['ene-26',213,729,942],['feb-26',152,552,704],['mar-26',171,616,787],['abr-26',220,768,988],['may-26',210,837,1047],['jun-26',240,872,1112],['jul-26',251,857,1108]]}); }
 function dataFor(n, body={}){
+  if(n===14) return Object.keys(body).length?normalizeAtenciones(body):slide14Sample();
+  if(n===15) return Object.keys(body).length?normalizeYauliAtenciones(body):slide15Sample();
+  if(n>=16&&n<=18){const p=UNIT_ATENCIONES[n]; return Object.keys(body).length?normalizeUnidadAtenciones(body,p.unidadNombre,p.titulo):getSampleUnidadAtenciones(n);}
   if(n===19) return Object.keys(body).length?normalizeIncReqTrend(body):slide19Sample();
   if(n>=20&&n<=26){const p=INC_REQ_UNIT_SAMPLES[n]; return Object.keys(body).length?normalizeIncReqClassic(body,p.unidadNombre,p.tituloVisual):getSampleIncReqUnit(n);}
   if(n>=27&&n<=28) return normalizeTopTen(body,TOP_TEN_SAMPLES[n]);

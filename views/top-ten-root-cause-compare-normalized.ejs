@@ -1,0 +1,42 @@
+<%
+const previous = junio || {};
+const current = julio || {};
+
+function sumCantidad(month) {
+  return (month.items || []).reduce((acc, row) => acc + Number(row.cantidad || 0), 0);
+}
+
+const previousTopTen = Number(previous.topTen != null ? previous.topTen : sumCantidad(previous));
+const currentTopTen = Number(current.topTen != null ? current.topTen : sumCantidad(current));
+const previousTotal = Number(previous.totalIncidentes || 0);
+const currentTotal = Number(current.totalIncidentes || 0);
+
+const previousNorm = {
+  ...previous,
+  topTen: previousTopTen,
+  pctTopTen: previous.pctTopTen != null
+    ? Number(previous.pctTopTen)
+    : (previousTotal > 0 ? previousTopTen / previousTotal : 0)
+};
+
+const currentNorm = {
+  ...current,
+  topTen: currentTopTen,
+  pctTopTen: current.pctTopTen != null
+    ? Number(current.pctTopTen)
+    : (currentTotal > 0 ? currentTopTen / currentTotal : 0)
+};
+
+const diffTotal = currentTotal - previousTotal;
+const diffTopTen = currentTopTen - previousTopTen;
+const diffPct = currentNorm.pctTopTen - previousNorm.pctTopTen;
+%>
+<%- include('top-ten-root-cause-compare', {
+  titulo,
+  unidad,
+  junio: previousNorm,
+  julio: currentNorm,
+  diffTotal,
+  diffTopTen,
+  diffPct
+}) %>

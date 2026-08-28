@@ -4,7 +4,7 @@ const VOLCAN_CLEAN_PAYLOADS = {
   SUPPLY_SHEET: 'ToTen_Sum',
 
   ROOT_CAUSE: {
-    29: { titleCell: 'A55', unit: 'SCR-CAR', previous: { headerRow: 58, labelCell: 'M56' }, current: { headerRow: 82, labelCell: 'M80' } },
+    29: { titleCell: 'A55', unit: 'SCR-CAR', previous: { headerRow: 58, labelCell: 'A56' }, current: { headerRow: 82, labelCell: 'M80' } },
     30: { titleCell: 'A96', unit: 'Andaychagua', previous: { headerRow: 101, labelCell: 'M99' }, current: { headerRow: 125, labelCell: 'M123' } },
     31: { titleCell: 'A143', unit: 'Chungar', previous: { headerRow: 149, labelCell: 'M146' }, current: { headerRow: 174, labelCell: 'M171' } },
     32: { titleCell: 'A192', unit: 'Cerro de Pasco', previous: { headerRow: 198, labelCell: 'M196' }, current: { headerRow: 222, labelCell: 'M220' } }
@@ -56,18 +56,18 @@ function volcanBuildTopTenPayload_(slide) {
   const title = sheet.getRange(isReq ? 'A1' : 'A28').getDisplayValue();
   const itemRange = isReq ? 'M6:O15' : 'M33:O42';
   const rows = sheet.getRange(itemRange).getValues();
-  const totalAccum = Number(sheet.getRange(isReq ? 'U16' : 'U43').getValue() || 0);
+  const totalAccum = volcanToNumber_(sheet.getRange(isReq ? 'U16' : 'U43').getValue());
   const monthText = sheet.getRange(isReq ? 'A23' : 'A51').getDisplayValue();
   const totalMonth = volcanExtractFirstNumber_(monthText);
   const period = sheet.getRange('R1').getValue();
-  const monthShort = volcanMonthNameShort_(period, ss.getSpreadsheetTimeZone());
+  const monthShort = volcanMonthNameShort_(period);
 
   const items = rows
     .map(row => ({
       nombre: String(row[0] || '').trim(),
       mesValor: 0,
-      cant: Number(row[1] || 0),
-      pct: Number(row[2] || 0)
+      cant: volcanToNumber_(row[1]),
+      pct: volcanPercentNumber_(row[2])
     }))
     .filter(row => row.nombre && row.cant !== 0);
 
@@ -79,7 +79,7 @@ function volcanBuildTopTenPayload_(slide) {
     totalMes: totalMonth,
     totalAcumulado: totalAccum,
     alcance: 'las localidades mineras',
-    notaMesPrefix: `En ${volcanMonthNameLong_(period, ss.getSpreadsheetTimeZone())} se realizó un total de`,
+    notaMesPrefix: `En ${volcanMonthNameLong_(period)} se realizó un total de`,
     notaAcumuladoPrefix: `En la ventana móvil de 12 meses hasta ${monthShort} se realizó`,
     // La hoja limpia expone el ranking acumulado. Evitamos inventar una columna mensual por categoría.
     showMesColumn: false,
@@ -112,16 +112,16 @@ function volcanReadRootCauseMonth_(sheet, cfg) {
   const items = rows
     .map(row => ({
       nombre: String(row[0] || '').trim(),
-      cantidad: Number(row[1] || 0),
-      tiempo: row[2] === '' || row[2] == null ? null : Number(row[2]),
+      cantidad: volcanToNumber_(row[1]),
+      tiempo: row[2] === '' || row[2] == null ? null : volcanToNumber_(row[2]),
       pct: volcanPercentNumber_(row[3])
     }))
     .filter(row => row.nombre && row.cantidad > 0);
 
   return {
     label,
-    totalIncidentes: Number(totalRow[1] || 0),
-    topTen: Number(topTenRow[1] || 0),
+    totalIncidentes: volcanToNumber_(totalRow[1]),
+    topTen: volcanToNumber_(topTenRow[1]),
     pctTopTen: volcanPercentNumber_(topTenRow[3]),
     items
   };
@@ -140,7 +140,7 @@ function volcanBuildCostPayload_(slide) {
   const categories = headerDisplay.slice(1, 13);
   const series = dataValues.map((row, index) => ({
     label: String(dataDisplay[index][0] || '').trim(),
-    values: row.slice(1, 13).map(value => Number(value || 0))
+    values: row.slice(1, 13).map(volcanToNumber_)
   }));
 
   const period = sheet.getRange('R2').getValue();
@@ -148,7 +148,7 @@ function volcanBuildCostPayload_(slide) {
   return {
     titulo: cfg.title,
     tablaTitulo: String(headerDisplay[0] || '').trim(),
-    periodo: volcanPeriodUpper_(period, ss.getSpreadsheetTimeZone()),
+    periodo: volcanPeriodUpper_(period),
     categories,
     series
   };
@@ -158,7 +158,7 @@ function volcanBuildSupplyPayload_(slide) {
   const ss = volcanGetSpreadsheet_();
   const sheet = volcanRequireSheet_(ss, VOLCAN_CLEAN_PAYLOADS.SUPPLY_SHEET);
   const cfg = VOLCAN_CLEAN_PAYLOADS.SUPPLY[slide];
-  const totalSuministros = Number(sheet.getRange(cfg.totalSupplyCell).getValue() || 0);
+  const totalSuministros = volcanToNumber_(sheet.getRange(cfg.totalSupplyCell).getValue());
   const title = sheet.getRange(cfg.titleCell).getDisplayValue();
 
   let rows;
@@ -167,8 +167,8 @@ function volcanBuildSupplyPayload_(slide) {
     rows = sheet.getRange(cfg.dataRange).getValues().map(row => ({
       nombre: String(row[0] || '').trim(),
       unidad: String(row[14] || '').trim(),
-      cantidad: Number(row[13] || 0),
-      total: Number(row[15] || 0),
+      cantidad: volcanToNumber_(row[13]),
+      total: volcanToNumber_(row[15]),
       pct: volcanPercentNumber_(row[16]) * 100
     }));
   } else {
@@ -176,8 +176,8 @@ function volcanBuildSupplyPayload_(slide) {
     rows = sheet.getRange(cfg.dataRange).getValues().map(row => ({
       nombre: String(row[0] || '').trim(),
       unidad: String(row[1] || '').trim(),
-      cantidad: Number(row[2] || 0),
-      total: Number(row[3] || 0),
+      cantidad: volcanToNumber_(row[2]),
+      total: volcanToNumber_(row[3]),
       pct: volcanPercentNumber_(row[4]) * 100
     }));
   }
@@ -193,32 +193,53 @@ function volcanBuildSupplyPayload_(slide) {
 }
 
 function volcanPercentNumber_(value) {
-  if (typeof value === 'number') return value > 1 ? value / 100 : value;
-  const text = String(value || '').trim().replace(',', '.').replace('%', '');
-  const parsed = Number(text);
-  if (!isFinite(parsed)) return 0;
+  if (typeof value === 'number' && isFinite(value)) return value > 1 ? value / 100 : value;
+  const parsed = volcanToNumber_(String(value || '').replace('%', ''));
   return parsed > 1 ? parsed / 100 : parsed;
+}
+
+function volcanToNumber_(value) {
+  if (typeof value === 'number') return isFinite(value) ? value : 0;
+  let text = String(value == null ? '' : value).trim();
+  if (!text || text === '-') return 0;
+
+  text = text.replace(/\s/g, '').replace(/[$S\/]/g, '').replace(/%/g, '');
+
+  // Formato latino: 1.234,56 -> 1234.56
+  if (text.includes(',') && text.includes('.')) {
+    if (text.lastIndexOf(',') > text.lastIndexOf('.')) {
+      text = text.replace(/\./g, '').replace(',', '.');
+    } else {
+      text = text.replace(/,/g, '');
+    }
+  } else if (text.includes(',')) {
+    text = text.replace(',', '.');
+  }
+
+  text = text.replace(/[^0-9.-]/g, '');
+  const parsed = Number(text);
+  return isFinite(parsed) ? parsed : 0;
 }
 
 function volcanExtractFirstNumber_(text) {
   const match = String(text || '').match(/([\d.]+(?:,\d+)?)/);
   if (!match) return 0;
-  return Number(match[1].replace(/\./g, '').replace(',', '.')) || 0;
+  return volcanToNumber_(match[1]);
 }
 
-function volcanMonthNameLong_(value, timeZone) {
+function volcanMonthNameLong_(value) {
   if (!(value instanceof Date) || isNaN(value.getTime())) return '';
   const names = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   return names[value.getMonth()];
 }
 
-function volcanMonthNameShort_(value, timeZone) {
+function volcanMonthNameShort_(value) {
   if (!(value instanceof Date) || isNaN(value.getTime())) return '';
   const names = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Set','Oct','Nov','Dic'];
   return names[value.getMonth()];
 }
 
-function volcanPeriodUpper_(value, timeZone) {
+function volcanPeriodUpper_(value) {
   if (!(value instanceof Date) || isNaN(value.getTime())) return '';
   const names = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SET','OCT','NOV','DIC'];
   return `${names[value.getMonth()]}.${String(value.getFullYear()).slice(-2)}`;

@@ -1,4 +1,6 @@
 const VOLCAN_AUTOMATION = {
+  CONTROL_SHEET: 'CONTROL_AUTOMATIZACION',
+  CONTROL_PERIOD_CELL: 'B2',
   INC_REQ_SHEET: 'Incidentes vs Requerimientos',
   CONFIG_SHEET: 'CONFIG DASHBOARDS',
   PERIOD_CELL: 'Q2',
@@ -27,6 +29,8 @@ const VOLCAN_AUTOMATION = {
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('VOLCAN · Automatización')
+    .addItem('Sincronizar periodo desde CONTROL', 'volcanSyncPeriodFromControl')
+    .addSeparator()
     .addItem('Probar Inc/Req VOLCAN', 'testRenderIncReqVolcan')
     .addItem('Probar Inc/Req Andaychagua', 'testRenderIncReqAndaychagua')
     .addToUi();
@@ -41,7 +45,9 @@ function testRenderIncReqAndaychagua() {
 }
 
 function testRenderIncReq_(scopeKey) {
-  const period = getSelectedPeriod_();
+  // Regla del motor: CONTROL manda. Primero sincronizamos las hojas limpias.
+  const sync = volcanPrepareRun();
+  const period = sync.periodLabel;
   const payload = buildIncReqPayload_(scopeKey, period);
   const png = renderDashboard_(12, payload);
 
@@ -161,23 +167,20 @@ function readIncReqScopePeriod_(scopeKey, period) {
 
 function getSelectedPeriod_() {
   const ss = getVolcanSpreadsheet_();
-  const dashboard = ss.getSheetByName(VOLCAN_AUTOMATION.INC_REQ_SHEET);
+  const control = ss.getSheetByName(VOLCAN_AUTOMATION.CONTROL_SHEET);
+  if (!control) throw new Error(`No existe la hoja ${VOLCAN_AUTOMATION.CONTROL_SHEET}`);
 
-  if (dashboard) {
-    const selected = String(dashboard.getRange(VOLCAN_AUTOMATION.PERIOD_CELL).getDisplayValue() || '').trim();
-    if (selected) return selected;
+  const selected = String(
+    control.getRange(VOLCAN_AUTOMATION.CONTROL_PERIOD_CELL).getDisplayValue() || ''
+  ).trim();
+
+  if (!selected) {
+    throw new Error(
+      `No se pudo obtener el periodo maestro de ${VOLCAN_AUTOMATION.CONTROL_SHEET}!${VOLCAN_AUTOMATION.CONTROL_PERIOD_CELL}.`
+    );
   }
 
-  const config = ss.getSheetByName(VOLCAN_AUTOMATION.CONFIG_SHEET);
-  if (!config) throw new Error('No se pudo obtener el periodo seleccionado.');
-
-  const values = config.getRange(2, 1, Math.max(1, config.getLastRow() - 1), 1)
-    .getDisplayValues()
-    .flat()
-    .filter(Boolean);
-
-  if (!values.length) throw new Error('CONFIG DASHBOARDS no contiene periodos.');
-  return values[values.length - 1];
+  return selected;
 }
 
 function renderDashboard_(slideNumber, payload) {

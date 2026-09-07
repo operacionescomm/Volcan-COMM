@@ -1,5 +1,55 @@
 <%
-const rendered = include('top-ten-root-cause-compare-normalized');
+/*
+ * Slides 29–32 reciben los datos dinámicos en las claves históricas
+ * `junio` (mes anterior) y `julio` (mes actual). El template base conserva
+ * textos legacy Junio/Julio, así que aquí los sustituimos DESPUÉS de renderizar
+ * usando los labels reales que manda Apps Script. Los placeholders evitan
+ * colisiones cuando, por ejemplo, el mes anterior real es Julio.
+ */
+function monthNameFrom(month, fallback) {
+  const label = String((month && month.label) || '').trim();
+  const match = label.match(/^\s*([^:]+)\s*:/);
+  return (match && match[1] ? match[1].trim() : fallback);
+}
+
+function cap(text) {
+  const s = String(text || '');
+  return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : s;
+}
+
+const prevName = cap(monthNameFrom(junio, 'Junio'));
+const currName = cap(monthNameFrom(julio, 'Julio'));
+const prevUpper = prevName.toUpperCase();
+const currUpper = currName.toUpperCase();
+const prevLower = prevName.toLowerCase();
+const currLower = currName.toLowerCase();
+const prevAbbr = prevUpper.slice(0, 3);
+const currAbbr = currUpper.slice(0, 3);
+
+let rendered = include('top-ten-root-cause-compare-normalized');
+
+// Primero retirar todos los textos legacy a placeholders neutrales.
+rendered = rendered
+  .replace(/\bJUNIO\b/g, '__PREV_UPPER__')
+  .replace(/\bJunio\b/g, '__PREV_TITLE__')
+  .replace(/\bjunio\b/g, '__PREV_LOWER__')
+  .replace(/\bJUN\b/g, '__PREV_ABBR__')
+  .replace(/\bJULIO\b/g, '__CURR_UPPER__')
+  .replace(/\bJulio\b/g, '__CURR_TITLE__')
+  .replace(/\bjulio\b/g, '__CURR_LOWER__')
+  .replace(/\bJUL\b/g, '__CURR_ABBR__');
+
+// Luego insertar los meses reales del payload.
+rendered = rendered
+  .replace(/__PREV_UPPER__/g, prevUpper)
+  .replace(/__PREV_TITLE__/g, prevName)
+  .replace(/__PREV_LOWER__/g, prevLower)
+  .replace(/__PREV_ABBR__/g, prevAbbr)
+  .replace(/__CURR_UPPER__/g, currUpper)
+  .replace(/__CURR_TITLE__/g, currName)
+  .replace(/__CURR_LOWER__/g, currLower)
+  .replace(/__CURR_ABBR__/g, currAbbr);
+
 const overrides = `
 <style>
 /* Slides 29–32: executive summary enlarged for presentation readability. */

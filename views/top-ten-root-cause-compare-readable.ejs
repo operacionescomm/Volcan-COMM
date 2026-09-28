@@ -50,20 +50,13 @@ rendered = rendered
   .replace(/__CURR_LOWER__/g, currLower)
   .replace(/__CURR_ABBR__/g, currAbbr);
 
-// El SVG original mantiene proporción y deja demasiado espacio inferior en algunas tarjetas.
-// Se fuerza a ocupar todo el contenedor para que barras y línea sean el foco visual.
-rendered = rendered.replace(
-  /<svg class="chart-svg" viewBox="0 0 720 320">/g,
-  '<svg class="chart-svg" viewBox="0 0 720 320" preserveAspectRatio="none">'
-);
-
 const overrides = `
 <style>
-/* Slides 29–32: layout optimizado.
-   Objetivo: KPIs separados, gráficas protagonistas y tablas inferiores legibles sin recorte. */
+/* Slides 29–32: layout final optimizado.
+   Prioridad: gráficas protagonistas, separación limpia con KPIs y bloque inferior compacto. */
 
 .slide{
-  padding:16px 28px 70px!important;
+  padding:16px 28px 68px!important;
 }
 
 .header{
@@ -79,31 +72,31 @@ const overrides = `
   margin-top:8px!important;
 }
 
-/* KPIs: compactos y separados de las gráficas */
+/* KPIs compactos, sin invadir la zona de gráficos */
 .kpis{
-  height:78px!important;
+  height:76px!important;
   gap:14px!important;
   margin-top:4px!important;
-  margin-bottom:14px!important;
+  margin-bottom:16px!important;
   transform:none!important;
   position:relative!important;
   z-index:5!important;
 }
 
 .kpi{
-  grid-template-columns:48px 1fr!important;
-  padding:8px 13px!important;
+  grid-template-columns:47px 1fr!important;
+  padding:7px 12px!important;
   border-radius:14px!important;
 }
 
 .kpi-icon{
-  width:43px!important;
-  height:43px!important;
-  font-size:18px!important;
+  width:42px!important;
+  height:42px!important;
+  font-size:17px!important;
 }
 
 .kpi-label{
-  font-size:10.7px!important;
+  font-size:10.4px!important;
 }
 
 .kpi-value{
@@ -112,13 +105,13 @@ const overrides = `
 }
 
 .kpi-sub{
-  font-size:9.2px!important;
+  font-size:9px!important;
   white-space:nowrap!important;
 }
 
-/* Gráficas: mayor espacio visible y respiro con KPIs */
+/* Gráficas: foco principal */
 .charts{
-  height:382px!important;
+  height:404px!important;
   gap:16px!important;
   margin-top:10px!important;
   position:relative!important;
@@ -127,12 +120,12 @@ const overrides = `
 
 .chart-box{
   border-radius:14px!important;
-  padding:8px 10px 6px!important;
-  grid-template-rows:30px minmax(0,1fr)!important;
+  padding:6px 8px 4px!important;
+  grid-template-rows:29px minmax(0,1fr)!important;
 }
 
 .chart-head{
-  height:30px!important;
+  height:29px!important;
   gap:18px!important;
 }
 
@@ -150,31 +143,32 @@ const overrides = `
   width:100%!important;
   height:100%!important;
   min-height:0!important;
+  display:block!important;
 }
 
 .axis,
 .axis-r{
-  font-size:9.4px!important;
+  font-size:9.5px!important;
 }
 
 .cat{
-  font-size:7.05px!important;
+  font-size:7.2px!important;
 }
 
 .bar-value{
-  font-size:10.4px!important;
+  font-size:10.6px!important;
 }
 
 .pct-label{
-  font-size:8.7px!important;
+  font-size:8.8px!important;
 }
 
-/* Bloque inferior: más bajo y compacto para ceder espacio a las gráficas */
+/* Bloque inferior: compacto para ceder altura a las gráficas */
 .bottom{
-  height:214px!important;
-  grid-template-columns:1.05fr .78fr 1.05fr!important;
+  height:190px!important;
+  grid-template-columns:1.08fr .76fr 1.08fr!important;
   gap:12px!important;
-  margin-top:8px!important;
+  margin-top:10px!important;
   align-items:stretch!important;
 }
 
@@ -183,29 +177,34 @@ const overrides = `
 }
 
 .panel-title{
-  height:26px!important;
-  font-size:11.4px!important;
+  height:24px!important;
+  font-size:11.3px!important;
   font-weight:900!important;
   letter-spacing:.2px!important;
 }
 
-/* Tablas inferiores: compactas pero legibles */
+/* Tablas: 10 filas visibles dentro del bloque compacto */
+.cause-table{
+  height:auto!important;
+}
+
 .cause-table th{
-  font-size:7.7px!important;
-  padding:3.2px 4px!important;
-  line-height:1.05!important;
+  font-size:7.55px!important;
+  padding:2.6px 4px!important;
+  line-height:1!important;
 }
 
 .cause-table td{
-  font-size:7.8px!important;
-  padding:2.35px 4px!important;
-  line-height:1.03!important;
+  font-size:7.7px!important;
+  padding:1.95px 4px!important;
+  line-height:1.01!important;
   vertical-align:middle!important;
 }
 
 .cause-table td:first-child{
-  overflow-wrap:normal!important;
-  word-break:normal!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
 }
 
 .cause-table col.causa{width:62%!important}
@@ -213,7 +212,7 @@ const overrides = `
 .cause-table col.tiempo{width:15%!important}
 .cause-table col.porcentaje{width:12%!important}
 
-/* Resumen ejecutivo: compacto para no robar altura */
+/* Resumen ejecutivo compacto */
 .summary{
   background:linear-gradient(135deg,#062f69 0%,#0a4a98 55%,#174b9b 100%)!important;
   border:0!important;
@@ -224,21 +223,21 @@ const overrides = `
 }
 
 .summary-head{
-  height:30px!important;
+  height:28px!important;
   background:rgba(255,255,255,.08)!important;
   border-bottom:1px solid rgba(255,255,255,.20)!important;
-  font-size:13.6px!important;
+  font-size:13.2px!important;
   letter-spacing:.2px!important;
   color:#fff!important;
 }
 
 .summary-body{
-  padding:7px 9px!important;
+  padding:6px 8px!important;
   color:#fff!important;
   display:flex!important;
   flex-direction:column!important;
   justify-content:center!important;
-  gap:6px!important;
+  gap:5px!important;
 }
 
 .summary-kpis{
@@ -249,7 +248,7 @@ const overrides = `
   display:flex!important;
   flex-direction:column!important;
   justify-content:center!important;
-  gap:6px!important;
+  gap:5px!important;
   height:100%!important;
 }
 
@@ -257,48 +256,48 @@ const overrides = `
   border-left:0!important;
   border-radius:8px!important;
   background:rgba(255,255,255,.08)!important;
-  padding:6px 9px!important;
-  font-size:11.3px!important;
+  padding:5px 8px!important;
+  font-size:10.8px!important;
   font-weight:800!important;
-  line-height:1.10!important;
+  line-height:1.08!important;
   color:#fff!important;
   text-align:left!important;
 }
 
 .insight:first-child{
   display:grid!important;
-  grid-template-columns:.58fr 1.42fr!important;
+  grid-template-columns:.57fr 1.43fr!important;
   align-items:center!important;
-  column-gap:9px!important;
-  min-height:50px!important;
-  font-size:11.9px!important;
-  line-height:1.08!important;
+  column-gap:8px!important;
+  min-height:43px!important;
+  font-size:11.4px!important;
+  line-height:1.06!important;
   background:rgba(255,255,255,.10)!important;
 }
 
 .insight:first-child b{
   display:block!important;
-  font-size:13.2px!important;
-  line-height:1.05!important;
+  font-size:12.5px!important;
+  line-height:1.04!important;
   color:#fff!important;
 }
 
 .insight.orange{
   display:grid!important;
-  grid-template-columns:.58fr 1.42fr!important;
+  grid-template-columns:.57fr 1.43fr!important;
   align-items:center!important;
-  column-gap:9px!important;
+  column-gap:8px!important;
   background:rgba(242,107,18,.18)!important;
   color:#fff!important;
-  font-size:11.2px!important;
-  line-height:1.08!important;
-  min-height:44px!important;
+  font-size:10.7px!important;
+  line-height:1.06!important;
+  min-height:38px!important;
 }
 
 .insight.orange b{
   display:block!important;
-  font-size:12.6px!important;
-  line-height:1.05!important;
+  font-size:12px!important;
+  line-height:1.04!important;
   color:#fff!important;
 }
 
@@ -307,9 +306,9 @@ const overrides = `
   color:#fff!important;
 }
 
-/* Footer estándar COMM: un solo globo */
+/* Footer estándar COMM */
 .footer{
-  height:60px!important;
+  height:58px!important;
   padding-left:48px!important;
 }
 
@@ -337,8 +336,8 @@ const overrides = `
 }
 
 .footer-orange{
-  width:165px!important;
-  height:94px!important;
+  width:160px!important;
+  height:92px!important;
   right:-18px!important;
   bottom:-24px!important;
 }

@@ -63,10 +63,10 @@ rendered = rendered
 
 const overrides = `
 <style>
-/* Slides 29–32: tablas ajustadas al contenido y gráficas extendidas hacia abajo. */
+/* Slides 29–32: tablas completas sobre el footer y gráficas con tope superior fijo. */
 
 .slide{
-  padding:16px 28px 68px!important;
+  padding:16px 28px 96px!important;
 }
 
 .header{
@@ -119,10 +119,10 @@ const overrides = `
   white-space:nowrap!important;
 }
 
-/* Gráficas: mismo borde superior, más altura hacia abajo */
+/* Gráficas: mismo borde superior; se recorta solo desde abajo para liberar el footer */
 .charts{
-  height:472px!important;
-  max-height:472px!important;
+  height:430px!important;
+  max-height:430px!important;
   gap:16px!important;
   margin-top:28px!important;
   position:relative!important;
@@ -182,15 +182,15 @@ const overrides = `
   font-size:8.8px!important;
 }
 
-/* Bloque inferior: sin alto fijo excesivo; el borde termina cerca del contenido */
+/* Bloque inferior: subido y separado claramente del footer azul */
 .bottom{
   height:auto!important;
   min-height:0!important;
   max-height:none!important;
   grid-template-columns:1.08fr .76fr 1.08fr!important;
   gap:12px!important;
-  margin-top:14px!important;
-  margin-bottom:10px!important;
+  margin-top:16px!important;
+  margin-bottom:28px!important;
   align-items:start!important;
 }
 

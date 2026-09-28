@@ -50,8 +50,7 @@ rendered = rendered
   .replace(/__CURR_LOWER__/g, currLower)
   .replace(/__CURR_ABBR__/g, currAbbr);
 
-// El SVG se escala a la altura disponible, pero se desplazan las etiquetas superiores
-// para que "Incidencias" y "% Participación" no se salgan de la tarjeta blanca.
+// El SVG se escala a toda la tarjeta, con etiquetas superiores contenidas.
 rendered = rendered
   .replace(
     /<svg class="chart-svg" viewBox="0 0 720 320">/g,
@@ -64,7 +63,7 @@ rendered = rendered
 
 const overrides = `
 <style>
-/* Slides 29–32: KPIs separados, gráficas extendidas hacia abajo y tablas asentadas. */
+/* Slides 29–32: tablas ajustadas al contenido y gráficas extendidas hacia abajo. */
 
 .slide{
   padding:16px 28px 68px!important;
@@ -83,7 +82,7 @@ const overrides = `
   margin-top:8px!important;
 }
 
-/* KPIs compactos, sin margen negativo ni colisión visual */
+/* KPIs: NO se toca la separación superior ya aprobada */
 .kpis{
   height:76px!important;
   gap:14px!important;
@@ -120,10 +119,10 @@ const overrides = `
   white-space:nowrap!important;
 }
 
-/* Gráficas: se mantiene fijo el borde superior y crecen hacia abajo */
+/* Gráficas: mismo borde superior, más altura hacia abajo */
 .charts{
-  height:440px!important;
-  max-height:440px!important;
+  height:472px!important;
+  max-height:472px!important;
   gap:16px!important;
   margin-top:28px!important;
   position:relative!important;
@@ -183,13 +182,24 @@ const overrides = `
   font-size:8.8px!important;
 }
 
-/* Bloque inferior: mismo tamaño interno, desplazado hacia el footer */
+/* Bloque inferior: sin alto fijo excesivo; el borde termina cerca del contenido */
 .bottom{
-  height:190px!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
   grid-template-columns:1.08fr .76fr 1.08fr!important;
   gap:12px!important;
   margin-top:14px!important;
-  align-items:stretch!important;
+  margin-bottom:10px!important;
+  align-items:start!important;
+}
+
+.panel,
+.summary{
+  height:fit-content!important;
+  min-height:0!important;
+  max-height:none!important;
+  align-self:start!important;
 }
 
 .panel{
@@ -205,6 +215,7 @@ const overrides = `
 
 .cause-table{
   height:auto!important;
+  margin-bottom:0!important;
 }
 
 .cause-table th{
@@ -232,12 +243,14 @@ const overrides = `
 .cause-table col.porcentaje{width:12%!important}
 
 .summary{
+  display:block!important;
   background:linear-gradient(135deg,#062f69 0%,#0a4a98 55%,#174b9b 100%)!important;
   border:0!important;
   border-radius:13px!important;
   box-shadow:0 6px 14px rgba(7,49,104,.18)!important;
   color:#fff!important;
   overflow:hidden!important;
+  padding-bottom:8px!important;
 }
 
 .summary-head{
@@ -250,11 +263,13 @@ const overrides = `
 }
 
 .summary-body{
-  padding:6px 8px!important;
+  height:auto!important;
+  min-height:0!important;
+  padding:6px 8px 0!important;
   color:#fff!important;
   display:flex!important;
   flex-direction:column!important;
-  justify-content:center!important;
+  justify-content:flex-start!important;
   gap:5px!important;
 }
 
@@ -265,9 +280,10 @@ const overrides = `
 .summary-insights{
   display:flex!important;
   flex-direction:column!important;
-  justify-content:center!important;
+  justify-content:flex-start!important;
   gap:5px!important;
-  height:100%!important;
+  height:auto!important;
+  min-height:0!important;
 }
 
 .insight{

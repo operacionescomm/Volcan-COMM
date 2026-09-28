@@ -58,13 +58,13 @@ rendered = rendered
     '<svg class="chart-svg" viewBox="0 0 720 320" preserveAspectRatio="none">'
   )
   .replace(/<text class="axis" x="14" y="18">Incidencias<\/text>/g,
-    '<text class="axis" x="14" y="28">Incidencias</text>')
+    '<text class="axis chart-axis-label" x="14" y="34">Incidencias</text>')
   .replace(/<text class="axis" x="([^\"]+)" y="18" text-anchor="end">% Participación<\/text>/g,
-    '<text class="axis" x="$1" y="28" text-anchor="end">% Participación</text>');
+    '<text class="axis chart-axis-label" x="$1" y="34" text-anchor="end">% Participación</text>');
 
 const overrides = `
 <style>
-/* Slides 29–32: KPIs separados, gráficas contenidas y tablas inferiores compactas. */
+/* Slides 29–32: separación estricta entre KPIs y gráficas, sin desbordes de ejes. */
 
 .slide{
   padding:16px 28px 68px!important;
@@ -88,7 +88,7 @@ const overrides = `
   height:76px!important;
   gap:14px!important;
   margin-top:4px!important;
-  margin-bottom:16px!important;
+  margin-bottom:0!important;
   transform:none!important;
   position:relative!important;
   z-index:3!important;
@@ -120,24 +120,25 @@ const overrides = `
   white-space:nowrap!important;
 }
 
-/* Gráficas: separación superior estricta y expansión hacia abajo */
+/* Gráficas: ahora empiezan debajo de KPIs con respiro visible */
 .charts{
-  height:416px!important;
+  height:386px!important;
+  max-height:386px!important;
   gap:16px!important;
-  margin-top:18px!important;
+  margin-top:28px!important;
   position:relative!important;
   z-index:1!important;
 }
 
 .chart-box{
   border-radius:14px!important;
-  padding:12px 8px 4px!important;
-  grid-template-rows:34px minmax(0,1fr)!important;
+  padding:24px 10px 6px!important;
+  grid-template-rows:38px minmax(0,1fr)!important;
   overflow:hidden!important;
 }
 
 .chart-head{
-  height:32px!important;
+  height:36px!important;
   gap:18px!important;
   align-items:center!important;
 }
@@ -166,6 +167,10 @@ const overrides = `
   font-size:9.5px!important;
 }
 
+.chart-axis-label{
+  font-size:9.8px!important;
+}
+
 .cat{
   font-size:7.2px!important;
 }
@@ -183,7 +188,7 @@ const overrides = `
   height:190px!important;
   grid-template-columns:1.08fr .76fr 1.08fr!important;
   gap:12px!important;
-  margin-top:14px!important;
+  margin-top:16px!important;
   align-items:stretch!important;
 }
 

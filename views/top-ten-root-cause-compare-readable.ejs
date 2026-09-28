@@ -50,17 +50,21 @@ rendered = rendered
   .replace(/__CURR_LOWER__/g, currLower)
   .replace(/__CURR_ABBR__/g, currAbbr);
 
-// El espacio superior ya está calibrado. Este ajuste solo estira el SVG en la altura disponible
-// para que las gráficas crezcan hacia abajo y no floten dejando vacío intermedio.
-rendered = rendered.replace(
-  /<svg class="chart-svg" viewBox="0 0 720 320">/g,
-  '<svg class="chart-svg" viewBox="0 0 720 320" preserveAspectRatio="none">'
-);
+// El SVG se escala a la altura disponible, pero se desplazan las etiquetas superiores
+// para que "Incidencias" y "% Participación" no se salgan de la tarjeta blanca.
+rendered = rendered
+  .replace(
+    /<svg class="chart-svg" viewBox="0 0 720 320">/g,
+    '<svg class="chart-svg" viewBox="0 0 720 320" preserveAspectRatio="none">'
+  )
+  .replace(/<text class="axis" x="14" y="18">Incidencias<\/text>/g,
+    '<text class="axis" x="14" y="28">Incidencias</text>')
+  .replace(/<text class="axis" x="([^\"]+)" y="18" text-anchor="end">% Participación<\/text>/g,
+    '<text class="axis" x="$1" y="28" text-anchor="end">% Participación</text>');
 
 const overrides = `
 <style>
-/* Slides 29–32: layout final optimizado.
-   Prioridad: gráficas protagonistas, separación limpia con KPIs y bloque inferior compacto. */
+/* Slides 29–32: KPIs separados, gráficas contenidas y tablas inferiores compactas. */
 
 .slide{
   padding:16px 28px 68px!important;
@@ -79,7 +83,7 @@ const overrides = `
   margin-top:8px!important;
 }
 
-/* KPIs compactos, sin invadir la zona de gráficos */
+/* KPIs compactos, sin margen negativo ni colisión visual */
 .kpis{
   height:76px!important;
   gap:14px!important;
@@ -87,7 +91,7 @@ const overrides = `
   margin-bottom:16px!important;
   transform:none!important;
   position:relative!important;
-  z-index:5!important;
+  z-index:3!important;
 }
 
 .kpi{
@@ -116,29 +120,32 @@ const overrides = `
   white-space:nowrap!important;
 }
 
-/* Gráficas: se mantiene el margen superior y se estiran hacia abajo */
+/* Gráficas: separación superior estricta y expansión hacia abajo */
 .charts{
-  height:430px!important;
+  height:416px!important;
   gap:16px!important;
-  margin-top:10px!important;
+  margin-top:18px!important;
   position:relative!important;
-  z-index:2!important;
+  z-index:1!important;
 }
 
 .chart-box{
   border-radius:14px!important;
-  padding:6px 8px 4px!important;
-  grid-template-rows:29px minmax(0,1fr)!important;
+  padding:12px 8px 4px!important;
+  grid-template-rows:34px minmax(0,1fr)!important;
+  overflow:hidden!important;
 }
 
 .chart-head{
-  height:29px!important;
+  height:32px!important;
   gap:18px!important;
+  align-items:center!important;
 }
 
 .chart-title{
   font-size:19px!important;
   font-weight:900!important;
+  line-height:1!important;
 }
 
 .legend-inline{
@@ -151,6 +158,7 @@ const overrides = `
   height:100%!important;
   min-height:0!important;
   display:block!important;
+  overflow:hidden!important;
 }
 
 .axis,
@@ -170,12 +178,12 @@ const overrides = `
   font-size:8.8px!important;
 }
 
-/* Bloque inferior: anclado cerca del footer, con gap controlado desde las gráficas */
+/* Bloque inferior: compacto y asentado sobre el footer */
 .bottom{
   height:190px!important;
   grid-template-columns:1.08fr .76fr 1.08fr!important;
   gap:12px!important;
-  margin-top:16px!important;
+  margin-top:14px!important;
   align-items:stretch!important;
 }
 
@@ -190,7 +198,6 @@ const overrides = `
   letter-spacing:.2px!important;
 }
 
-/* Tablas: 10 filas visibles dentro del bloque compacto */
 .cause-table{
   height:auto!important;
 }
@@ -219,7 +226,6 @@ const overrides = `
 .cause-table col.tiempo{width:15%!important}
 .cause-table col.porcentaje{width:12%!important}
 
-/* Resumen ejecutivo compacto */
 .summary{
   background:linear-gradient(135deg,#062f69 0%,#0a4a98 55%,#174b9b 100%)!important;
   border:0!important;
@@ -313,7 +319,6 @@ const overrides = `
   color:#fff!important;
 }
 
-/* Footer estándar COMM */
 .footer{
   height:58px!important;
   padding-left:48px!important;

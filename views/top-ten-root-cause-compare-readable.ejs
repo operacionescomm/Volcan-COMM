@@ -50,6 +50,13 @@ rendered = rendered
   .replace(/__CURR_LOWER__/g, currLower)
   .replace(/__CURR_ABBR__/g, currAbbr);
 
+// El espacio superior ya está calibrado. Este ajuste solo estira el SVG en la altura disponible
+// para que las gráficas crezcan hacia abajo y no floten dejando vacío intermedio.
+rendered = rendered.replace(
+  /<svg class="chart-svg" viewBox="0 0 720 320">/g,
+  '<svg class="chart-svg" viewBox="0 0 720 320" preserveAspectRatio="none">'
+);
+
 const overrides = `
 <style>
 /* Slides 29–32: layout final optimizado.
@@ -109,9 +116,9 @@ const overrides = `
   white-space:nowrap!important;
 }
 
-/* Gráficas: foco principal */
+/* Gráficas: se mantiene el margen superior y se estiran hacia abajo */
 .charts{
-  height:404px!important;
+  height:430px!important;
   gap:16px!important;
   margin-top:10px!important;
   position:relative!important;
@@ -163,12 +170,12 @@ const overrides = `
   font-size:8.8px!important;
 }
 
-/* Bloque inferior: compacto para ceder altura a las gráficas */
+/* Bloque inferior: anclado cerca del footer, con gap controlado desde las gráficas */
 .bottom{
   height:190px!important;
   grid-template-columns:1.08fr .76fr 1.08fr!important;
   gap:12px!important;
-  margin-top:10px!important;
+  margin-top:16px!important;
   align-items:stretch!important;
 }
 

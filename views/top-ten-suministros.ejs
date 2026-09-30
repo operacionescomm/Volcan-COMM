@@ -6,6 +6,10 @@
 const money = v => Number(v || 0) ? '$ ' + Number(v).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 }) : '$ -';
 const pctText = v => (Number(v || 0) % 1 === 0 ? Number(v || 0).toFixed(0) : Number(v || 0).toFixed(1)) + '%';
 const clean = s => String(s || '').replace(/\s+/g, ' ').trim();
+const rawTitle = clean(typeof title !== 'undefined' ? title : '');
+const normalizedTitle = rawTitle.replace(/\bSUMINISTRO\b/gi, 'SUMINISTROS');
+const titleParts = normalizedTitle.split('|').map(clean).filter(Boolean);
+const periodLabel = clean(typeof periodo !== 'undefined' ? periodo : '') || 'el periodo seleccionado';
 const rowsSafe = Array.isArray(rows) ? rows : [];
 const topTotal = Number(totalTopTen || 0);
 const totalSupply = Number(totalSuministros || 0);
@@ -25,7 +29,7 @@ function fullName(value) {
 :root{--navy:#17366f;--blue:#2f5fae;--blue2:#143f86;--orange:#e8752a;--grid:#dfe7f1;--text:#0f1d3a;--muted:#6b778d;--light:#f3f7fc}
 *{box-sizing:border-box} body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif;color:var(--text)}
 .slide{position:relative;width:1600px;height:900px;overflow:hidden;background:#fff}
-.title{position:absolute;left:28px;top:28px;font-size:36px;font-weight:900;color:var(--navy);letter-spacing:.2px;max-width:1085px;white-space:nowrap}
+.title{position:absolute;left:28px;top:18px;width:1115px;font-size:31px;font-weight:900;color:var(--navy);letter-spacing:.1px;line-height:1.04;white-space:normal}.title .titleSecond{display:block;font-size:28px;margin-top:2px}
 .accent{position:absolute;top:33px;left:1080px;width:92px;height:5px;background:var(--orange);border-radius:12px}
 .brand{position:absolute;right:0;top:0;width:395px;height:86px;background:linear-gradient(145deg,#0d478e,#073772);border-bottom-left-radius:210px 92px;color:#fff;display:flex;align-items:center;justify-content:flex-end;padding-right:44px;gap:16px}.brand svg{width:43px;height:43px;stroke:#fff;fill:none;stroke-width:2.2}.brand b{font-size:40px;letter-spacing:.5px}
 .summary{position:absolute;top:105px;height:82px;border:1.5px solid #dbe5ef;border-radius:18px;background:#fff;box-shadow:0 10px 22px rgba(20,45,85,.045)}.s1{left:48px;width:470px}.s2{left:565px;width:470px}.s3{left:1082px;width:470px}.icon{position:absolute;left:24px;top:21px;width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,#174fa8,#2f70c7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}.summary .lbl{position:absolute;left:96px;top:20px;font-size:19px;font-weight:900;color:var(--navy)}.summary .val{position:absolute;left:96px;top:48px;font-size:27px;font-weight:900;color:var(--orange)}
@@ -36,7 +40,7 @@ function fullName(value) {
 </head>
 <body>
 <div class="slide">
-  <div class="title"><%= title %></div><div class="accent"></div>
+  <div class="title"><span><%= titleParts[0] || normalizedTitle %></span><% if (titleParts.length > 1) { %><span class="titleSecond"><%= titleParts.slice(1).join(" | ") %></span><% } %></div><div class="accent"></div>
   <div class="brand"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c5.8 5 8.8 11.1 8.8 18S29.8 37 24 42M24 6c-5.8 5-8.8 11.1-8.8 18S18.2 37 24 42M10 15c8.8 4 19.2 4 28 0M10 33c8.8-4 19.2-4 28 0"/></svg><b>COMM</b></div>
   <div class="summary s1"><div class="icon">S/</div><div class="lbl">Total Suministros</div><div class="val"><%= money(totalSupply) %></div></div>
   <div class="summary s2"><div class="icon">Σ</div><div class="lbl">Total Top Ten</div><div class="val"><%= money(topTotal) %></div></div>
@@ -54,7 +58,7 @@ function fullName(value) {
         <% }) %>
       </div>
     <% } else { %>
-      <div class="empty"><b>Sin suministros registrados</b>No se reportan costos de suministros para julio 2026.</div>
+      <div class="empty"><b>Sin suministros registrados</b>No se reportan costos de suministros para <%= periodLabel.toLowerCase() %>.</div>
     <% } %>
   </section>
   <section class="panel tablePanel">

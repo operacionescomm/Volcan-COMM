@@ -1,6 +1,7 @@
 const SUPPLY_SAMPLES = {
   44: {
-    title: 'Top Ten: Suministros para Volcan (% Costo Total)',
+    title: 'TOP TEN - SUMINISTROS VOLCAN | COSTO ACUMULADO 12 MESES HASTA SEPT-26',
+    periodo: 'Septiembre 2026',
     unit: 'VOLCAN',
     totalSuministros: 432527.77,
     rows: [

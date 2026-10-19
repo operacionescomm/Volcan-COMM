@@ -147,7 +147,8 @@ function normalizeYauliAtenciones(body = {}) {
     periodo, periodoRaw, totalMes, acumulado12, im, sup,
     promedioDia: Number(promedioDia.toFixed(1)), diasMes,
     seriesTotal, seriesImSup, maxTotal, maxImSup,
-    resumen1: body.resumen1 || `En ${periodo}, U.M. Yauli registró ${totalMes} atenciones.`,
+    
+    resumen1: body.resumen1 || `En ${periodo}, U.M. ${String(body.unidadNombre || 'Yauli').trim()} registró ${totalMes} atenciones.`,
     resumen2: body.resumen2 || `Interior Mina (IM) alcanzó ${im} atenciones y Superficie (SUP) ${sup}.`,
     resumen3: body.resumen3 || `La operación mantiene una demanda más alta en Interior Mina durante el periodo analizado.`
   };

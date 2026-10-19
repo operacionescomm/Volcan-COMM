@@ -52,7 +52,17 @@ function slide15Sample() {
   return normalizeYauliAtenciones({ periodo: 'jul-26', totalMes: 630, acumulado12: 7320, im: 483, sup: 147, promedioDia: 20.3, seriesTotal: [['ago-25',562],['sept-25',611],['oct-25',603],['nov-25',613],['dic-25',709],['ene-26',599],['feb-26',530],['mar-26',619],['abr-26',577],['may-26',617],['jun-26',650],['jul-26',630]], seriesImSup: [['ago-25',414,148,562],['sept-25',474,137,611],['oct-25',450,153,603],['nov-25',441,172,613],['dic-25',521,188,709],['ene-26',452,147,599],['feb-26',423,107,530],['mar-26',450,169,619],['abr-26',466,111,577],['may-26',464,153,617],['jun-26',463,187,650],['jul-26',483,147,630]] });
 }
 
-function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) { const normalized = normalizeYauliAtenciones({ ...body, titulo: body.titulo || titulo }); return { ...normalized, unidadNombre: body.unidadNombre || unidadNombre }; }
+function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) {
+  const normalized = normalizeYauliAtenciones({
+    ...body,
+    titulo: body.titulo || titulo
+  });
+
+  return {
+    ...normalized,
+    unidadNombre: body.unidadNombre || unidadNombre
+  };
+}
 
 const UNIT_ATENCIONES = {
   16: { unidadNombre: 'Chungar', titulo: 'CANTIDAD DE ATENCIONES – U.M. CHUNGAR', totalMes: 339, acumulado12: 3059, im: 245, sup: 94, promedioDia: 11.3, seriesTotal: [['ago-25',256],['sept-25',239],['oct-25',242],['nov-25',238],['dic-25',263],['ene-26',206],['feb-26',185],['mar-26',260],['abr-26',237],['may-26',265],['jun-26',329],['jul-26',339]], seriesImSup: [['ago-25',178,78,256],['sept-25',176,63,239],['oct-25',170,72,242],['nov-25',172,66,238],['dic-25',191,72,263],['ene-26',133,73,206],['feb-26',126,59,185],['mar-26',174,86,260],['abr-26',179,58,237],['may-26',157,108,265],['jun-26',243,86,329],['jul-26',245,94,339]], resumen3: 'Interior Mina mantiene la mayor participación de atenciones en Chungar durante el periodo analizado.' },

@@ -78,6 +78,7 @@ function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) {
 }
 
 
+
 const UNIT_ATENCIONES = {
   16: { unidadNombre: 'Chungar', titulo: 'CANTIDAD DE ATENCIONES – U.M. CHUNGAR', totalMes: 339, acumulado12: 3059, im: 245, sup: 94, promedioDia: 11.3, seriesTotal: [['ago-25',256],['sept-25',239],['oct-25',242],['nov-25',238],['dic-25',263],['ene-26',206],['feb-26',185],['mar-26',260],['abr-26',237],['may-26',265],['jun-26',329],['jul-26',339]], seriesImSup: [['ago-25',178,78,256],['sept-25',176,63,239],['oct-25',170,72,242],['nov-25',172,66,238],['dic-25',191,72,263],['ene-26',133,73,206],['feb-26',126,59,185],['mar-26',174,86,260],['abr-26',179,58,237],['may-26',157,108,265],['jun-26',243,86,329],['jul-26',245,94,339]], resumen3: 'Interior Mina mantiene la mayor participación de atenciones en Chungar durante el periodo analizado.' },
   17: { unidadNombre: 'Cerro Pasco', titulo: 'CANTIDAD DE ATENCIONES – U.M. CERRO PASCO', totalMes: 39, acumulado12: 856, im: 21, sup: 18, promedioDia: 1.3, seriesTotal: [['ago-25',80],['sept-25',81],['oct-25',83],['nov-25',83],['dic-25',86],['ene-26',83],['feb-26',79],['mar-26',66],['abr-26',77],['may-26',68],['jun-26',31],['jul-26',39]], seriesImSup: [['ago-25',41,39,80],['sept-25',52,29,81],['oct-25',37,46,83],['nov-25',22,61,83],['dic-25',10,76,86],['ene-26',47,36,83],['feb-26',25,54,79],['mar-26',40,26,66],['abr-26',30,47,77],['may-26',32,36,68],['jun-26',13,18,31],['jul-26',21,18,39]] },

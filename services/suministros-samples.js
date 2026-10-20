@@ -164,11 +164,32 @@ function normalizeSuministros(input = {}) {
   return { ...input, rows, totalTopTen, totalSuministros, participacion };
 }
 
+
 function getSuministrosSample(slideNumber, overrides = {}) {
   const base = SUPPLY_SAMPLES[Number(slideNumber)];
-  if (!base) throw new Error(`No hay muestra de suministros para slide ${slideNumber}`);
-  return normalizeSuministros({ ...base, slideNumber: Number(slideNumber), ...overrides, rows: overrides.rows || overrides.items || base.rows });
+
+  if (!base) {
+    throw new Error(
+      `No hay muestra de suministros para slide ${slideNumber}`
+    );
+  }
+
+  const datos = {
+    ...base,
+    slideNumber: Number(slideNumber),
+    ...overrides,
+    rows: overrides.rows || overrides.items || base.rows
+  };
+
+  // Priorizar siempre el periodo recibido desde Apps Script.
+  if (overrides.periodo != null &&
+      String(overrides.periodo).trim() !== '') {
+    datos.periodo = String(overrides.periodo).trim();
+  }
+
+  return normalizeSuministros(datos);
 }
+
 
 function getSuministrosCoverData(overrides = {}) {
   return {

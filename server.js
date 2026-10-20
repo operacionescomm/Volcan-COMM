@@ -53,7 +53,30 @@ function slide15Sample() {
 }
 
 
-function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) { const normalized = normalizeYauliAtenciones({ ...body, titulo: body.titulo || titulo }); return { ...normalized, unidadNombre: body.unidadNombre || unidadNombre }; }
+function normalizeUnidadAtenciones(body = {}, unidadNombre, titulo) {
+  const nombre = String(
+    body.unidadNombre || unidadNombre || ''
+  ).trim();
+
+  const datos = {
+    ...body,
+    unidadNombre: nombre,
+    titulo: body.titulo || titulo
+  };
+
+  const normalized = normalizeYauliAtenciones(datos);
+
+  // Generar el resumen con la unidad y el periodo actuales.
+  const resumen1 =
+    `En ${normalized.periodo}, U.M. ${nombre} registró ${normalized.totalMes} atenciones.`;
+
+  return {
+    ...normalized,
+    unidadNombre: nombre,
+    resumen1
+  };
+}
+
 
 
 const UNIT_ATENCIONES = {
